@@ -14,18 +14,18 @@ import eslint from "vite-plugin-eslint2";
 import tailwindcss from "@tailwindcss/vite";
 
 
-// Helper to create proxy config with Authorization header
+// Helper to create proxy config
 function createProxyConfig(target: string, authToken?: string) {
   return {
     target,
     changeOrigin: true,
-    configure: (proxy: any, _options: any) => {
-      proxy.on("proxyReq", (proxyReq: any, _req: any, _res: any) => {
-        if (authToken) {
+    ...(authToken && {
+      configure: (proxy: any) => {
+        proxy.on("proxyReq", (proxyReq: any) => {
           proxyReq.setHeader("Authorization", `c3auth=${authToken}`);
-        }
-      });
-    },
+        });
+      },
+    }),
   };
 }
 
@@ -34,7 +34,7 @@ export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE_");
   const port = parseInt(env.VITE_DEV_SERVER_PORT || '9000', 10);
   const pkgName = env.VITE_C3_PKG;
-  const authAuth = env.VITE_C3_AUTH_TOKEN;
+  const authToken = env.VITE_C3_AUTH_TOKEN;
   const appUrl = `${env.VITE_C3_BASE_URL}/${env.VITE_C3_ENV}/${env.VITE_C3_APP}/`;
   const base = command === 'serve' ? `/${env.VITE_C3_ENV}/${env.VITE_C3_APP}/uiservice/` : './';
 
@@ -80,10 +80,10 @@ export default defineConfig(({ command, mode }) => {
       port: port,
       strictPort: true,
       proxy: {
-        "^/api": createProxyConfig(appUrl, authAuth),
-        "^/remote": createProxyConfig(appUrl, authAuth),
-        "^/thirdparty": createProxyConfig(appUrl, authAuth),
-        "^/typesys": createProxyConfig(appUrl, authAuth)
+        "^/api": createProxyConfig(appUrl, authToken),
+        "^/remote": createProxyConfig(appUrl, authToken),
+        "^/thirdparty": createProxyConfig(appUrl, authToken),
+        "^/typesys": createProxyConfig(appUrl, authToken)
       },
     },
     base: base,

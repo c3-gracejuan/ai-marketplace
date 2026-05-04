@@ -8,6 +8,7 @@ import { Clock, ChevronDown, ChevronUp, AlertCircle, Info } from 'lucide-react';
 import { listForTriage, decideRequest } from '@/api/marketplace';
 import { Request, RequestStatus } from '@/types/marketplace';
 import StatusPill from '@/components/marketplace/StatusPill';
+import { TriageListSkeleton } from '@/components/marketplace/CardGridSkeleton';
 
 const TRIAGE_DECISIONS: RequestStatus[] = [
   'Triaging',
@@ -168,10 +169,11 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
 
 export default function AdminTriagePage() {
   const [reqs, setReqs] = useState<Request[]>([]);
+  const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState('');
 
   useEffect(() => {
-    listForTriage().then(setReqs).catch(() => {});
+    listForTriage().then(setReqs).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   const handleUpdate = async (id: string, status: RequestStatus, response: string) => {
@@ -234,9 +236,13 @@ export default function AdminTriagePage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col gap-4">
-        {sorted.map((r) => (
-          <RequestRow key={r.id} request={r} onUpdate={handleUpdate} />
-        ))}
+        {loading ? (
+          <TriageListSkeleton count={3} />
+        ) : (
+          sorted.map((r) => (
+            <RequestRow key={r.id} request={r} onUpdate={handleUpdate} />
+          ))
+        )}
       </div>
 
       {/* Toast */}

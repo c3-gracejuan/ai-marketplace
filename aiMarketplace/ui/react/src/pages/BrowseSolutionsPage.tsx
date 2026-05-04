@@ -8,18 +8,20 @@ import { Search, X } from 'lucide-react';
 import { listSolutions } from '@/api/marketplace';
 import { Solution, Domain, SolutionStatus } from '@/types/marketplace';
 import SolutionCard from '@/components/marketplace/SolutionCard';
+import { CardGridSkeleton } from '@/components/marketplace/CardGridSkeleton';
 
 const DOMAINS: Domain[] = ['FP&A', 'Sales Ops', 'Engineering', 'GTM', 'Customer Success', 'Cross-functional'];
 const STATUSES: SolutionStatus[] = ['Shipped', 'Building', 'Scoping', 'Triaging'];
 
 export default function BrowseSolutionsPage() {
   const [allSolutions, setAllSolutions] = useState<Solution[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<SolutionStatus[]>([]);
 
   useEffect(() => {
-    listSolutions().then(setAllSolutions).catch(() => {});
+    listSolutions().then(setAllSolutions).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   const toggleDomain = (d: Domain) =>
@@ -133,7 +135,9 @@ export default function BrowseSolutionsPage() {
             {filtered.length} solution{filtered.length !== 1 ? 's' : ''}
             {hasFilters ? ' matching your filters' : ''}
           </p>
-          {filtered.length > 0 ? (
+          {loading ? (
+            <CardGridSkeleton count={6} />
+          ) : filtered.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
               {filtered.map((s) => (
                 <SolutionCard key={s.id} solution={s} />

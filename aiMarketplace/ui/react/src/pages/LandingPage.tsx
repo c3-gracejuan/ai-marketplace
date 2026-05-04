@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useAnimatedCounter } from '@/hooks/useAnimatedCounter';
 import SolutionCard from '@/components/marketplace/SolutionCard';
+import { CardGridSkeleton } from '@/components/marketplace/CardGridSkeleton';
 import { featuredSolutions, recentlyShipped as recentlyShippedApi, landingStats } from '@/api/marketplace';
 import { Solution, MarketplaceStats } from '@/types/marketplace';
 
@@ -47,6 +48,8 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [featured, setFeatured] = useState<Solution[]>([]);
   const [recent, setRecent] = useState<Solution[]>([]);
+  const [loadingFeatured, setLoadingFeatured] = useState(true);
+  const [loadingRecent, setLoadingRecent] = useState(true);
   const [stats, setStats] = useState<MarketplaceStats>({
     requestsFielded: 0,
     solutionsInProgress: 0,
@@ -56,8 +59,8 @@ export default function LandingPage() {
   });
 
   useEffect(() => {
-    featuredSolutions(3).then(setFeatured).catch(() => {});
-    recentlyShippedApi(4).then(setRecent).catch(() => {});
+    featuredSolutions(3).then(setFeatured).catch(() => {}).finally(() => setLoadingFeatured(false));
+    recentlyShippedApi(4).then(setRecent).catch(() => {}).finally(() => setLoadingRecent(false));
     landingStats().then(setStats).catch(() => {});
   }, []);
 
@@ -120,11 +123,15 @@ export default function LandingPage() {
             View all <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {featured.map((s) => (
-            <SolutionCard key={s.id} solution={s} />
-          ))}
-        </div>
+        {loadingFeatured ? (
+          <CardGridSkeleton count={3} />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {featured.map((s) => (
+              <SolutionCard key={s.id} solution={s} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Recently shipped */}
@@ -142,11 +149,15 @@ export default function LandingPage() {
               Full catalog <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {recent.map((s) => (
-              <SolutionCard key={s.id} solution={s} />
-            ))}
-          </div>
+          {loadingRecent ? (
+            <CardGridSkeleton count={4} />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {recent.map((s) => (
+                <SolutionCard key={s.id} solution={s} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

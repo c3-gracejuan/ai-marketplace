@@ -8,15 +8,19 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { listTeamMembers, listSolutions } from '@/api/marketplace';
 import { TeamMember, Solution } from '@/types/marketplace';
+import { TeamGridSkeleton } from '@/components/marketplace/CardGridSkeleton';
 
 export default function TeamPage() {
   const navigate = useNavigate();
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [allSolutions, setAllSolutions] = useState<Solution[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    listTeamMembers().then(setTeamMembers).catch(() => {});
-    listSolutions().then(setAllSolutions).catch(() => {});
+    Promise.all([
+      listTeamMembers().then(setTeamMembers),
+      listSolutions().then(setAllSolutions),
+    ]).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   return (
@@ -33,7 +37,8 @@ export default function TeamPage() {
 
       <div className="max-w-5xl mx-auto px-6 py-10">
         {/* Team roster */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        {loading && <div className="mb-16"><TeamGridSkeleton count={6} /></div>}
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 ${loading ? 'hidden' : ''}`}>
           {teamMembers.map((member) => {
             const memberSolutions = allSolutions.filter((s) =>
               s.builders.some((b) => b.id === member.id)
