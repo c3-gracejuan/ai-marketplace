@@ -3,9 +3,9 @@
  * Confidential and Proprietary C3 Materials.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { solutions } from '@/data/mockData';
+import { listSolutions } from '@/api/marketplace';
 import { Solution, SolutionStatus } from '@/types/marketplace';
 import DomainChip from '@/components/marketplace/DomainChip';
 import BuilderCard from '@/components/marketplace/BuilderCard';
@@ -54,6 +54,11 @@ function ProjectKanbanCard({ solution, onClick }: { solution: Solution; onClick:
 
 export default function InFlightProjectsPage() {
   const navigate = useNavigate();
+  const [solutions, setSolutions] = useState<Solution[]>([]);
+
+  useEffect(() => {
+    listSolutions().then(setSolutions).catch(console.error);
+  }, []);
 
   return (
     <div className="min-h-full bg-primary">

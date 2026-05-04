@@ -1,0 +1,18 @@
+/*
+ * Copyright 2009-2026 C3 AI (www.c3.ai). All Rights Reserved.
+ * Confidential and Proprietary C3 Materials.
+ */
+
+entity type SupportingMaterial {
+  solution: !SwatSolution
+  materialType: string
+  title: !string
+  url: string
+  content: string
+  language: string
+  thumbnail: string
+  filename: string
+  filesize: int
+  description: string
+  displayOrder: int
+}

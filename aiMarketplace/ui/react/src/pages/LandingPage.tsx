@@ -6,9 +6,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { solutions, stats } from '@/data/mockData';
 import { useAnimatedCounter } from '@/hooks/useAnimatedCounter';
 import SolutionCard from '@/components/marketplace/SolutionCard';
+import { featuredSolutions, recentlyShipped as recentlyShippedApi, landingStats } from '@/api/marketplace';
+import { Solution, MarketplaceStats } from '@/types/marketplace';
 
 function StatCounter({ target, label, prefix = '', suffix = '' }: { target: number; label: string; prefix?: string; suffix?: string }) {
   const [visible, setVisible] = useState(false);
@@ -44,11 +45,21 @@ function StatCounter({ target, label, prefix = '', suffix = '' }: { target: numb
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const featured = solutions.filter((s) => s.featured).slice(0, 3);
-  const recentlyShipped = solutions
-    .filter((s) => s.status === 'Shipped' && s.dateShipped)
-    .sort((a, b) => new Date(b.dateShipped!).getTime() - new Date(a.dateShipped!).getTime())
-    .slice(0, 4);
+  const [featured, setFeatured] = useState<Solution[]>([]);
+  const [recent, setRecent] = useState<Solution[]>([]);
+  const [stats, setStats] = useState<MarketplaceStats>({
+    requestsFielded: 0,
+    solutionsInProgress: 0,
+    solutionsShipped: 0,
+    engineerHoursSaved: 0,
+    companyDollarsSaved: 0,
+  });
+
+  useEffect(() => {
+    featuredSolutions(3).then(setFeatured).catch(console.error);
+    recentlyShippedApi(4).then(setRecent).catch(console.error);
+    landingStats().then(setStats).catch(console.error);
+  }, []);
 
   return (
     <div className="min-h-full">
@@ -91,7 +102,7 @@ export default function LandingPage() {
           <StatCounter target={stats.solutionsInProgress} label="Solutions in progress" />
           <StatCounter target={stats.solutionsShipped} label="Solutions shipped" />
           <StatCounter target={stats.engineerHoursSaved} label="Engineer hours saved" suffix="+" />
-          <StatCounter target={stats.companydollarsSaved} label="Dollars saved" prefix="$" />
+          <StatCounter target={stats.companyDollarsSaved} label="Dollars saved" prefix="$" />
         </div>
       </section>
 
@@ -132,7 +143,7 @@ export default function LandingPage() {
             </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {recentlyShipped.map((s) => (
+            {recent.map((s) => (
               <SolutionCard key={s.id} solution={s} />
             ))}
           </div>

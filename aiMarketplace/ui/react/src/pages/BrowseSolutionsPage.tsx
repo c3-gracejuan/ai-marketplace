@@ -3,19 +3,24 @@
  * Confidential and Proprietary C3 Materials.
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
-import { solutions } from '@/data/mockData';
-import { Domain, SolutionStatus } from '@/types/marketplace';
+import { listSolutions } from '@/api/marketplace';
+import { Solution, Domain, SolutionStatus } from '@/types/marketplace';
 import SolutionCard from '@/components/marketplace/SolutionCard';
 
 const DOMAINS: Domain[] = ['FP&A', 'Sales Ops', 'Engineering', 'GTM', 'Customer Success', 'Cross-functional'];
 const STATUSES: SolutionStatus[] = ['Shipped', 'Building', 'Scoping', 'Triaging'];
 
 export default function BrowseSolutionsPage() {
+  const [allSolutions, setAllSolutions] = useState<Solution[]>([]);
   const [search, setSearch] = useState('');
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<SolutionStatus[]>([]);
+
+  useEffect(() => {
+    listSolutions().then(setAllSolutions).catch(console.error);
+  }, []);
 
   const toggleDomain = (d: Domain) =>
     setSelectedDomains((prev) => prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]);
@@ -23,14 +28,14 @@ export default function BrowseSolutionsPage() {
     setSelectedStatuses((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
 
   const filtered = useMemo(() => {
-    return solutions.filter((sol) => {
+    return allSolutions.filter((sol) => {
       const q = search.toLowerCase();
       const matchSearch = !q || sol.title.toLowerCase().includes(q) || sol.problem.toLowerCase().includes(q);
       const matchDomain = !selectedDomains.length || sol.domain.some((d) => selectedDomains.includes(d));
       const matchStatus = !selectedStatuses.length || selectedStatuses.includes(sol.status);
       return matchSearch && matchDomain && matchStatus;
     });
-  }, [search, selectedDomains, selectedStatuses]);
+  }, [allSolutions, search, selectedDomains, selectedStatuses]);
 
   const clearFilters = () => {
     setSearch('');

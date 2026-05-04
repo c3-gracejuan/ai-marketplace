@@ -3,10 +3,11 @@
  * Confidential and Proprietary C3 Materials.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Clock, DollarSign, Layers, ArrowRight } from 'lucide-react';
-import { solutions } from '@/data/mockData';
+import { getSolution } from '@/api/marketplace';
+import { Solution } from '@/types/marketplace';
 import DomainChip from '@/components/marketplace/DomainChip';
 import StackChip from '@/components/marketplace/StackChip';
 import StatusPill from '@/components/marketplace/StatusPill';
@@ -16,7 +17,22 @@ import SupportingMaterialRenderer from '@/components/marketplace/SupportingMater
 export default function SolutionDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const solution = solutions.find((s) => s.id === id);
+  const [solution, setSolution] = useState<Solution | null | undefined>(undefined);
+
+  useEffect(() => {
+    if (!id) return;
+    getSolution(id)
+      .then(setSolution)
+      .catch(() => setSolution(null));
+  }, [id]);
+
+  if (solution === undefined) {
+    return (
+      <div className="min-h-full flex items-center justify-center">
+        <p className="text-secondary">Loading…</p>
+      </div>
+    );
+  }
 
   if (!solution) {
     return (
@@ -64,15 +80,15 @@ export default function SolutionDetailPage() {
             </div>
 
             {/* Impact metrics */}
-            {(solution.hourssaved || solution.dollarsSaved) && (
+            {(solution.hoursSaved || solution.dollarsSaved) && (
               <div className="grid grid-cols-2 gap-4 mb-8 p-5 bg-green-50 dark:bg-green-950/30 rounded-xl border border-green-200 dark:border-green-800">
-                {solution.hourssaved && (
+                {solution.hoursSaved && (
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
                       <Clock className="w-5 h-5 text-green-700 dark:text-green-300" />
                     </div>
                     <div>
-                      <p className="text-lg font-bold text-green-700 dark:text-green-300">{solution.hourssaved.toLocaleString()} hrs</p>
+                      <p className="text-lg font-bold text-green-700 dark:text-green-300">{solution.hoursSaved.toLocaleString()} hrs</p>
                       <p className="text-xs text-green-600 dark:text-green-400">Engineer hours saved</p>
                     </div>
                   </div>

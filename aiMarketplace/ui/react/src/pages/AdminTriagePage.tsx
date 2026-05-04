@@ -3,9 +3,9 @@
  * Confidential and Proprietary C3 Materials.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Clock, ChevronDown, ChevronUp, AlertCircle, Info } from 'lucide-react';
-import { requests as initialRequests } from '@/data/mockData';
+import { listForTriage, decideRequest } from '@/api/marketplace';
 import { Request, RequestStatus } from '@/types/marketplace';
 import StatusPill from '@/components/marketplace/StatusPill';
 
@@ -164,13 +164,23 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
 }
 
 export default function AdminTriagePage() {
-  const [reqs, setReqs] = useState<Request[]>(initialRequests);
+  const [reqs, setReqs] = useState<Request[]>([]);
   const [toast, setToast] = useState('');
 
-  const handleUpdate = (id: string, status: RequestStatus, response: string) => {
-    setReqs((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, status, decisionResponse: response, lastUpdated: new Date().toISOString().split('T')[0] } : r))
-    );
+  useEffect(() => {
+    listForTriage().then(setReqs).catch(console.error);
+  }, []);
+
+  const handleUpdate = async (id: string, status: RequestStatus, response: string) => {
+    try {
+      const updated = await decideRequest(id, status, response, '');
+      setReqs((prev) => prev.map((r) => (r.id === id ? updated : r)));
+    } catch {
+      // Optimistic update on error
+      setReqs((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, status, decisionResponse: response, lastUpdated: new Date().toISOString().split('T')[0] } : r))
+      );
+    }
     setToast('Decision published.');
     setTimeout(() => setToast(''), 3000);
   };

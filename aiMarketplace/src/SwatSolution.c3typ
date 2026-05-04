@@ -1,0 +1,21 @@
+/*
+ * Copyright 2009-2026 C3 AI (www.c3.ai). All Rights Reserved.
+ * Confidential and Proprietary C3 Materials.
+ */
+
+entity type SwatSolution {
+  title: !string
+  problem: string
+  solutionDescription: string
+  impactSummary: string
+  hoursSaved: int
+  dollarsSaved: int
+  domain: [string]
+  stack: [string]
+  solutionStatus: string
+  builders: [TeamMember]
+  requesterOrg: string
+  dateShipped: datetime
+  reusabilityNote: string
+  featured: boolean
+}

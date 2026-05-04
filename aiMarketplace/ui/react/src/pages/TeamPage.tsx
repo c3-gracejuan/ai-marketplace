@@ -3,13 +3,21 @@
  * Confidential and Proprietary C3 Materials.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { teamMembers, solutions } from '@/data/mockData';
+import { listTeamMembers, listSolutions } from '@/api/marketplace';
+import { TeamMember, Solution } from '@/types/marketplace';
 
 export default function TeamPage() {
   const navigate = useNavigate();
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [allSolutions, setAllSolutions] = useState<Solution[]>([]);
+
+  useEffect(() => {
+    listTeamMembers().then(setTeamMembers).catch(console.error);
+    listSolutions().then(setAllSolutions).catch(console.error);
+  }, []);
 
   return (
     <div className="min-h-full bg-primary">
@@ -27,7 +35,7 @@ export default function TeamPage() {
         {/* Team roster */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {teamMembers.map((member) => {
-            const memberSolutions = solutions.filter((s) =>
+            const memberSolutions = allSolutions.filter((s) =>
               s.builders.some((b) => b.id === member.id)
             );
             return (

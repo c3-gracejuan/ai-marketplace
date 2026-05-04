@@ -1,0 +1,12 @@
+/*
+ * Copyright 2009-2026 C3 AI (www.c3.ai). All Rights Reserved.
+ * Confidential and Proprietary C3 Materials.
+ */
+
+type MarketplaceStats {
+  requestsFielded: int
+  solutionsInProgress: int
+  solutionsShipped: int
+  engineerHoursSaved: int
+  companyDollarsSaved: int
+}

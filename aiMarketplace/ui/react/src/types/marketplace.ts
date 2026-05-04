@@ -62,7 +62,7 @@ export interface Solution {
   problem: string;
   solutionDescription: string;
   impactSummary: string;
-  hourssaved?: number;
+  hoursSaved?: number;
   dollarsSaved?: number;
   domain: Domain[];
   stack: string[];
@@ -102,5 +102,5 @@ export interface MarketplaceStats {
   solutionsInProgress: number;
   solutionsShipped: number;
   engineerHoursSaved: number;
-  companydollarsSaved: number;
+  companyDollarsSaved: number;
 }

@@ -1,0 +1,25 @@
+/*
+ * Copyright 2009-2026 C3 AI (www.c3.ai). All Rights Reserved.
+ * Confidential and Proprietary C3 Materials.
+ */
+
+entity type SwatRequest {
+  title: !string
+  problem: string
+  currentProcess: string
+  affectedTeam: string
+  affectedCount: int
+  frequency: string
+  burdenEstimate: string
+  desiredOutcome: string
+  urgency: string
+  requesterName: !string
+  requesterTeam: string
+  relatedLinks: [string]
+  requestStatus: string
+  decisionResponse: string
+  assignedOwner: string
+  createdAt: datetime
+  lastUpdated: datetime
+  slaDueAt: datetime
+}

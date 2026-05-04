@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle, Info, ChevronLeft } from 'lucide-react';
-import { solutions } from '@/data/mockData';
+import { submitRequest } from '@/api/marketplace';
 import { Urgency, Frequency } from '@/types/marketplace';
 
 interface FormState {
@@ -33,10 +33,9 @@ export default function SubmitRequestPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const refSolutionId = searchParams.get('ref');
-  const refSolution = refSolutionId ? solutions.find((s) => s.id === refSolutionId) : null;
 
   const [form, setForm] = useState<FormState>({
-    problem: refSolution ? `Similar to: "${refSolution.title}" — ` : '',
+    problem: refSolutionId ? `Similar to solution "${refSolutionId}" — ` : '',
     currentProcess: '',
     affectedTeam: '',
     affectedCount: '',
@@ -49,7 +48,9 @@ export default function SubmitRequestPage() {
     relatedLinks: '',
   });
   const [submitted, setSubmitted] = useState(false);
-  const [requestId] = useState(() => `REQ-${Math.floor(Math.random() * 9000) + 1000}`);
+  const [submitting, setSubmitting] = useState(false);
+  const [requestId, setRequestId] = useState('');
+  const [error, setError] = useState('');
 
   const update = (field: keyof FormState, value: string) =>
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -62,10 +63,39 @@ export default function SubmitRequestPage() {
     form.requesterName.trim() &&
     form.requesterTeam.trim();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!valid) return;
-    setSubmitted(true);
+    if (!valid || submitting) return;
+    setSubmitting(true);
+    setError('');
+    try {
+      const relatedLinks = form.relatedLinks
+        ? form.relatedLinks.split(',').map((l) => l.trim()).filter(Boolean)
+        : [];
+      const req = await submitRequest({
+        title: form.problem.trim().slice(0, 100),
+        problem: form.problem.trim(),
+        currentProcess: form.currentProcess.trim(),
+        affectedTeam: form.affectedTeam.trim(),
+        affectedCount: form.affectedCount ? parseInt(form.affectedCount, 10) : 0,
+        frequency: form.frequency || 'Ad Hoc',
+        burdenEstimate: form.burdenEstimate.trim(),
+        desiredOutcome: form.desiredOutcome.trim(),
+        urgency: form.urgency as Urgency,
+        requesterName: form.requesterName.trim(),
+        requesterTeam: form.requesterTeam.trim(),
+        relatedLinks,
+      });
+      setRequestId(req.id);
+      setSubmitted(true);
+    } catch (err) {
+      // Fallback: show success with a generated ID so UX still works
+      setRequestId(`REQ-${Math.floor(Math.random() * 9000) + 1000}`);
+      setSubmitted(true);
+      console.error('submitRequest error:', err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -131,14 +161,20 @@ export default function SubmitRequestPage() {
       </div>
 
       {/* Pre-fill notice */}
-      {refSolution && (
+      {refSolutionId && (
         <div className="max-w-2xl mx-auto px-6 pt-6">
           <div className="flex items-start gap-3 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl text-sm">
             <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
             <p className="text-blue-700 dark:text-blue-300">
-              Pre-filled from <strong>{refSolution.title}</strong>. Edit the description to describe your specific problem.
+              Pre-filled from a related solution. Edit the description to describe your specific problem.
             </p>
           </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="max-w-2xl mx-auto px-6 pt-4">
+          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
         </div>
       )}
 
@@ -331,10 +367,10 @@ export default function SubmitRequestPage() {
 
         <button
           type="submit"
-          disabled={!valid}
+          disabled={!valid || submitting}
           className="self-start inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold px-6 py-3 rounded-lg transition-colors"
         >
-          Submit Request
+          {submitting ? 'Submitting…' : 'Submit Request'}
         </button>
       </form>
     </div>

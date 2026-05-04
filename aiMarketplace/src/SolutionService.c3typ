@@ -1,0 +1,11 @@
+/*
+ * Copyright 2009-2026 C3 AI (www.c3.ai). All Rights Reserved.
+ * Confidential and Proprietary C3 Materials.
+ */
+
+type SolutionService {
+  listSolutions: function(domain: string, solutionStatus: string, search: string): [SwatSolution] js-server
+  getSolution: function(id: string): SwatSolution js-server
+  featuredSolutions: function(n: int): [SwatSolution] js-server
+  recentlyShipped: function(n: int): [SwatSolution] js-server
+}
