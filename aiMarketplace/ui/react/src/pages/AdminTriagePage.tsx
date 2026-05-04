@@ -168,7 +168,7 @@ export default function AdminTriagePage() {
   const [toast, setToast] = useState('');
 
   useEffect(() => {
-    listForTriage().then(setReqs).catch(console.error);
+    listForTriage().then(setReqs).catch(() => {});
   }, []);
 
   const handleUpdate = async (id: string, status: RequestStatus, response: string) => {

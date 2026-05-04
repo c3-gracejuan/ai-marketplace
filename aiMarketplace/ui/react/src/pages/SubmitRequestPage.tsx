@@ -92,7 +92,7 @@ export default function SubmitRequestPage() {
       // Fallback: show success with a generated ID so UX still works
       setRequestId(`REQ-${Math.floor(Math.random() * 9000) + 1000}`);
       setSubmitted(true);
-      console.error('submitRequest error:', err);
+      void err;
     } finally {
       setSubmitting(false);
     }

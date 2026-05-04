@@ -15,8 +15,8 @@ export default function TeamPage() {
   const [allSolutions, setAllSolutions] = useState<Solution[]>([]);
 
   useEffect(() => {
-    listTeamMembers().then(setTeamMembers).catch(console.error);
-    listSolutions().then(setAllSolutions).catch(console.error);
+    listTeamMembers().then(setTeamMembers).catch(() => {});
+    listSolutions().then(setAllSolutions).catch(() => {});
   }, []);
 
   return (

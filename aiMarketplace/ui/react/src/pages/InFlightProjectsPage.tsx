@@ -57,7 +57,7 @@ export default function InFlightProjectsPage() {
   const [solutions, setSolutions] = useState<Solution[]>([]);
 
   useEffect(() => {
-    listSolutions().then(setSolutions).catch(console.error);
+    listSolutions().then(setSolutions).catch(() => {});
   }, []);
 
   return (

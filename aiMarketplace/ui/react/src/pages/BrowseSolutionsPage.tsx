@@ -19,7 +19,7 @@ export default function BrowseSolutionsPage() {
   const [selectedStatuses, setSelectedStatuses] = useState<SolutionStatus[]>([]);
 
   useEffect(() => {
-    listSolutions().then(setAllSolutions).catch(console.error);
+    listSolutions().then(setAllSolutions).catch(() => {});
   }, []);
 
   const toggleDomain = (d: Domain) =>

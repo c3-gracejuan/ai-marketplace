@@ -56,9 +56,9 @@ export default function LandingPage() {
   });
 
   useEffect(() => {
-    featuredSolutions(3).then(setFeatured).catch(console.error);
-    recentlyShippedApi(4).then(setRecent).catch(console.error);
-    landingStats().then(setStats).catch(console.error);
+    featuredSolutions(3).then(setFeatured).catch(() => {});
+    recentlyShippedApi(4).then(setRecent).catch(() => {});
+    landingStats().then(setStats).catch(() => {});
   }, []);
 
   return (
