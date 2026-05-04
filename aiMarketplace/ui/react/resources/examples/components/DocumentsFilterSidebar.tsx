@@ -14,8 +14,30 @@
 import React from 'react';
 
 import { Input } from '@/components/ui/input';
-import { projects, programs, owners, checklists, uploadedBy } from '@/data/sampleData';
 import { cn } from '@/lib/utils';
+
+type SelectOption = { text: string; value: string };
+
+const projects: SelectOption[] = [
+  { text: 'Project Alpha', value: 'alpha' },
+  { text: 'Project Beta', value: 'beta' },
+];
+const programs: SelectOption[] = [
+  { text: 'Program A', value: 'program-a' },
+  { text: 'Program B', value: 'program-b' },
+];
+const owners: SelectOption[] = [
+  { text: 'Alice Johnson', value: 'alice' },
+  { text: 'Bob Smith', value: 'bob' },
+];
+const checklists: SelectOption[] = [
+  { text: 'Standard Review', value: 'standard' },
+  { text: 'Compliance Review', value: 'compliance' },
+];
+const uploadedBy: SelectOption[] = [
+  { text: 'Alice Johnson', value: 'alice' },
+  { text: 'Bob Smith', value: 'bob' },
+];
 import { FilterSection } from './FilterSection/FilterSection';
 import { OptionSelect } from './OptionSelect/OptionSelect';
 

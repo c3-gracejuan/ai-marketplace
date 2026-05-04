@@ -4,10 +4,11 @@
  */
 
 entity type TeamMember {
-  displayName: !string
+  // name is inherited from Persistable — no need to declare
   role: string
   expertise: [string]
   avatarUrl: string
-  projectsShipped: int
-  projectIds: [string]
+  solutions: [SwatSolution](builders)
+  projectsShipped: int calc count(solutions)
+  projectIds: [string] calc solutions.id
 }

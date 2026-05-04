@@ -16,7 +16,7 @@ entity type SwatRequest {
   requesterName: !string
   requesterTeam: string
   relatedLinks: [string]
-  requestStatus: string
+  status: string
   decisionResponse: string
   assignedOwner: string
   createdAt: datetime

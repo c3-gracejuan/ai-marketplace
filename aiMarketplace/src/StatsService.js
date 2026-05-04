@@ -7,15 +7,19 @@ function landingStats() {
   var requestsFielded = SwatRequest.fetchCount();
 
   var solutionsShipped = SwatSolution.fetchCount({
-    filter: Filter.eq('solutionStatus', 'Shipped'),
+    filter: Filter.eq('status', 'Shipped'),
   });
 
+  var inProgressFilter = Filter.eq('status', 'Building')
+    .or().eq('status', 'Scoping')
+    .or().eq('status', 'Triaging');
+
   var solutionsInProgress = SwatSolution.fetchCount({
-    filter: Filter.ne('solutionStatus', 'Shipped'),
+    filter: inProgressFilter,
   });
 
   var shippedObjs = SwatSolution.fetch({
-    filter: Filter.eq('solutionStatus', 'Shipped'),
+    filter: Filter.eq('status', 'Shipped'),
     include: 'hoursSaved,dollarsSaved',
     limit: -1,
   }).objs || [];

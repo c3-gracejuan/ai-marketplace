@@ -7,40 +7,18 @@ import { c3Action } from '@/c3Action';
 import { Solution, TeamMember, Request, MarketplaceStats, SupportingMaterial } from '@/types/marketplace';
 
 // ---------------------------------------------------------------------------
-// Internal helpers — map C3 field names to frontend interface field names
+// Internal helpers — field names now match C3 entity types exactly
 // ---------------------------------------------------------------------------
 
 function mapMember(raw: Record<string, unknown>): TeamMember {
   return {
     id: raw.id as string,
-    name: (raw.displayName ?? raw.name ?? '') as string,
+    name: (raw.name ?? '') as string,
     role: (raw.role ?? '') as string,
     expertise: (raw.expertise as string[]) ?? [],
     avatarUrl: (raw.avatarUrl ?? '') as string,
     projectsShipped: (raw.projectsShipped ?? 0) as number,
     projectIds: (raw.projectIds as string[]) ?? [],
-  };
-}
-
-function mapSolution(raw: Record<string, unknown>): Solution {
-  const builders = ((raw.builders as Record<string, unknown>[]) ?? []).map(mapMember);
-  return {
-    id: raw.id as string,
-    title: (raw.title ?? '') as string,
-    problem: (raw.problem ?? '') as string,
-    solutionDescription: (raw.solutionDescription ?? '') as string,
-    impactSummary: (raw.impactSummary ?? '') as string,
-    hoursSaved: raw.hoursSaved as number | undefined,
-    dollarsSaved: raw.dollarsSaved as number | undefined,
-    domain: ((raw.domain as string[]) ?? []) as Solution['domain'],
-    stack: (raw.stack as string[]) ?? [],
-    status: (raw.solutionStatus ?? 'Triaging') as Solution['status'],
-    builders,
-    requesterOrg: (raw.requesterOrg ?? '') as string,
-    dateShipped: raw.dateShipped as string | undefined,
-    reusabilityNote: (raw.reusabilityNote ?? '') as string,
-    supportingMaterials: [],
-    featured: (raw.featured ?? false) as boolean,
   };
 }
 
@@ -56,7 +34,30 @@ function mapMaterial(raw: Record<string, unknown>): SupportingMaterial {
     filename: raw.filename as string | undefined,
     filesize: raw.filesize as number | undefined,
     description: raw.description as string | undefined,
-    order: (raw.displayOrder ?? 0) as number,
+    order: (raw.order ?? 0) as number,
+  };
+}
+
+function mapSolution(raw: Record<string, unknown>): Solution {
+  const builders = ((raw.builders as Record<string, unknown>[]) ?? []).map(mapMember);
+  const supportingMaterials = ((raw.supportingMaterials as Record<string, unknown>[]) ?? []).map(mapMaterial);
+  return {
+    id: raw.id as string,
+    title: (raw.title ?? '') as string,
+    problem: (raw.problem ?? '') as string,
+    solutionDescription: (raw.solutionDescription ?? '') as string,
+    impactSummary: (raw.impactSummary ?? '') as string,
+    hoursSaved: raw.hoursSaved as number | undefined,
+    dollarsSaved: raw.dollarsSaved as number | undefined,
+    domain: ((raw.domain as string[]) ?? []) as Solution['domain'],
+    stack: (raw.stack as string[]) ?? [],
+    status: (raw.status ?? 'Triaging') as Solution['status'],
+    builders,
+    requesterOrg: (raw.requesterOrg ?? '') as string,
+    dateShipped: raw.dateShipped as string | undefined,
+    reusabilityNote: (raw.reusabilityNote ?? '') as string,
+    supportingMaterials,
+    featured: (raw.featured ?? false) as boolean,
   };
 }
 
@@ -75,7 +76,7 @@ function mapRequest(raw: Record<string, unknown>): Request {
     requesterName: (raw.requesterName ?? '') as string,
     requesterTeam: (raw.requesterTeam ?? '') as string,
     relatedLinks: (raw.relatedLinks as string[]) ?? [],
-    status: (raw.requestStatus ?? 'New') as Request['status'],
+    status: (raw.status ?? 'New') as Request['status'],
     decisionResponse: raw.decisionResponse as string | undefined,
     assignedOwner: raw.assignedOwner as string | undefined,
     createdAt: (raw.createdAt ?? '') as string,
@@ -90,13 +91,17 @@ function mapRequest(raw: Record<string, unknown>): Request {
 
 export async function listSolutions(
   domain?: string,
-  solutionStatus?: string,
+  status?: string,
   search?: string,
+  stack?: string,
+  requesterOrg?: string,
 ): Promise<Solution[]> {
   const raw: Record<string, unknown>[] = await c3Action('SolutionService', 'listSolutions', [
     domain ?? null,
-    solutionStatus ?? null,
+    status ?? null,
     search ?? null,
+    stack ?? null,
+    requesterOrg ?? null,
   ]);
   return (raw ?? []).map(mapSolution);
 }
@@ -104,15 +109,10 @@ export async function listSolutions(
 export async function getSolution(id: string): Promise<Solution | null> {
   const raw: Record<string, unknown> | null = await c3Action('SolutionService', 'getSolution', [id]);
   if (!raw) return null;
-  const solution = mapSolution(raw);
-
-  // Fetch supporting materials for this solution
-  const materials = await listMaterialsForSolution(id);
-  solution.supportingMaterials = materials;
-  return solution;
+  return mapSolution(raw);
 }
 
-export async function featuredSolutions(n = 6): Promise<Solution[]> {
+export async function featuredSolutions(n = 3): Promise<Solution[]> {
   const raw: Record<string, unknown>[] = await c3Action('SolutionService', 'featuredSolutions', [n]);
   return (raw ?? []).map(mapSolution);
 }
@@ -123,27 +123,13 @@ export async function recentlyShipped(n = 6): Promise<Solution[]> {
 }
 
 // ---------------------------------------------------------------------------
-// SupportingMaterial — direct fetch via c3Action on the entity
-// ---------------------------------------------------------------------------
-
-export async function listMaterialsForSolution(solutionId: string): Promise<SupportingMaterial[]> {
-  const result: { objs?: Record<string, unknown>[] } = await c3Action('SupportingMaterial', 'fetch', {
-    filter: `solution.id == "${solutionId}"`,
-    include: 'this',
-    order: 'ascending(displayOrder)',
-    limit: -1,
-  });
-  return (result?.objs ?? []).map(mapMaterial);
-}
-
-// ---------------------------------------------------------------------------
 // TeamMember — direct fetch
 // ---------------------------------------------------------------------------
 
 export async function listTeamMembers(): Promise<TeamMember[]> {
   const result: { objs?: Record<string, unknown>[] } = await c3Action('TeamMember', 'fetch', {
     include: 'this',
-    order: 'ascending(displayName)',
+    order: 'ascending(name)',
     limit: -1,
   });
   return (result?.objs ?? []).map(mapMember);
@@ -201,6 +187,11 @@ export async function decideRequest(
 
 export async function listForTriage(): Promise<Request[]> {
   const raw: Record<string, unknown>[] = await c3Action('RequestService', 'listForTriage', []);
+  return (raw ?? []).map(mapRequest);
+}
+
+export async function listInFlight(): Promise<Request[]> {
+  const raw: Record<string, unknown>[] = await c3Action('RequestService', 'listInFlight', []);
   return (raw ?? []).map(mapRequest);
 }
 

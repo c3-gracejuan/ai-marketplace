@@ -14,5 +14,5 @@ entity type SupportingMaterial {
   filename: string
   filesize: int
   description: string
-  displayOrder: int
+  order: int
 }

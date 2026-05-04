@@ -6,7 +6,7 @@
     "title": "Live Headcount Dashboard",
     "url": "https://app.c3.ai/headcount-variance",
     "description": "Production dashboard used by FP&A every month-end close.",
-    "displayOrder": 1
+    "order": 1
   },
   {
     "id": "sm1b",
@@ -15,7 +15,7 @@
     "title": "Technical Design — Headcount Variance Pipeline",
     "url": "https://confluence.c3.ai/pages/headcount-variance-design",
     "description": "Architecture decisions, data model, and runbook.",
-    "displayOrder": 2
+    "order": 2
   },
   {
     "id": "sm1c",
@@ -24,7 +24,7 @@
     "title": "Variance Computation Logic",
     "content": "def compute_variance(workday_df, adaptive_df):\n    \"\"\"\n    Compute headcount variance between Workday actuals and Adaptive forecast.\n    Returns a DataFrame with dept, cost_center, actual, forecast, delta, pct_delta.\n    \"\"\"\n    merged = workday_df.merge(adaptive_df, on=['dept', 'cost_center'], suffixes=('_actual', '_forecast'))\n    merged['delta'] = merged['headcount_actual'] - merged['headcount_forecast']\n    merged['pct_delta'] = (merged['delta'] / merged['headcount_forecast'].replace(0, float('nan'))) * 100\n    return merged[abs(merged['pct_delta']) > 2.0]",
     "language": "python",
-    "displayOrder": 3
+    "order": 3
   },
   {
     "id": "sm1d",
@@ -33,7 +33,7 @@
     "title": "Dashboard Screenshot — Month-End View",
     "thumbnail": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop",
     "description": "The variance table view showing FP&A the delta by cost center.",
-    "displayOrder": 4
+    "order": 4
   },
   {
     "id": "sm2a",
@@ -43,7 +43,7 @@
     "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
     "thumbnail": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop",
     "description": "3-minute demo showing the full approval flow from deal creation to approval notification.",
-    "displayOrder": 1
+    "order": 1
   },
   {
     "id": "sm2b",
@@ -52,7 +52,7 @@
     "title": "Policy Engine — Tier Classification",
     "content": "function classifyDeal(deal) {\n  const { arr, discountPct, nonStandardTerms, region } = deal;\n\n  if (arr < 50_000 && discountPct <= 0.10 && !nonStandardTerms) {\n    return { tier: 'auto_approve', reason: 'Standard small deal' };\n  }\n\n  if (arr >= 500_000 || nonStandardTerms || region === 'APAC') {\n    return { tier: 'vp_review', reason: 'High-value or non-standard' };\n  }\n\n  return { tier: 'manager_review', reason: 'Mid-market standard' };\n}",
     "language": "javascript",
-    "displayOrder": 2
+    "order": 2
   },
   {
     "id": "sm2c",
@@ -61,7 +61,7 @@
     "title": "Deal Desk Policy Rules v2.1",
     "url": "https://confluence.c3.ai/pages/deal-desk-policy",
     "description": "Full policy matrix maintained by Sales Ops leadership.",
-    "displayOrder": 3
+    "order": 3
   },
   {
     "id": "sm3a",
@@ -70,7 +70,7 @@
     "title": "Digest Email Sample",
     "thumbnail": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&auto=format&fit=crop",
     "description": "The Monday morning email sent to each VP with their regional view.",
-    "displayOrder": 1
+    "order": 1
   },
   {
     "id": "sm3b",
@@ -79,7 +79,7 @@
     "title": "Quota Bookings Logic Documentation",
     "url": "https://confluence.c3.ai/pages/quota-bookings-logic",
     "description": "How bookings are attributed across segments, and edge case handling.",
-    "displayOrder": 2
+    "order": 2
   },
   {
     "id": "sm4a",
@@ -88,7 +88,7 @@
     "title": "CS Health Score Dashboard",
     "url": "https://app.c3.ai/cs-health",
     "description": "Live health score view used by all CSMs.",
-    "displayOrder": 1
+    "order": 1
   },
   {
     "id": "sm4b",
@@ -97,7 +97,7 @@
     "title": "Health Score Computation",
     "content": "def compute_health_score(account_id: str, as_of: datetime) -> float:\n    \"\"\"\n    Composite health score [0, 100].\n    Weights: usage 40%, support 25%, nps 20%, renewal_proximity 15%\n    \"\"\"\n    usage   = get_usage_score(account_id, as_of)      # 0-100\n    support = get_support_score(account_id, as_of)    # 0-100\n    nps     = get_nps_score(account_id, as_of)        # 0-100\n    renewal = get_renewal_proximity_score(account_id) # 0-100\n\n    return 0.40*usage + 0.25*support + 0.20*nps + 0.15*renewal",
     "language": "python",
-    "displayOrder": 2
+    "order": 2
   },
   {
     "id": "sm4c",
@@ -106,7 +106,7 @@
     "title": "Health Score Methodology",
     "url": "https://confluence.c3.ai/pages/cs-health-score",
     "description": "Signal selection, weight rationale, and threshold definitions.",
-    "displayOrder": 3
+    "order": 3
   },
   {
     "id": "sm5a",
@@ -115,7 +115,7 @@
     "title": "Sample Slack Alert",
     "thumbnail": "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&auto=format&fit=crop",
     "description": "The Slack message sent to VPs when coverage drops below threshold.",
-    "displayOrder": 1
+    "order": 1
   },
   {
     "id": "sm5b",
@@ -124,7 +124,7 @@
     "title": "Coverage Thresholds Runbook",
     "url": "https://notion.so/c3ai/pipeline-coverage-thresholds",
     "description": "How to adjust thresholds per segment and fiscal quarter.",
-    "displayOrder": 2
+    "order": 2
   },
   {
     "id": "sm6a",
@@ -134,7 +134,7 @@
     "filename": "incident_cost_report_sample.xlsx",
     "filesize": 245000,
     "description": "Anonymized sample output from a real P1 incident.",
-    "displayOrder": 1
+    "order": 1
   },
   {
     "id": "sm6b",
@@ -143,7 +143,7 @@
     "title": "Incident Cost Model Architecture",
     "url": "https://confluence.c3.ai/pages/incident-cost-model",
     "description": "Data sources, cost formulas, and update cadence.",
-    "displayOrder": 2
+    "order": 2
   },
   {
     "id": "sm7a",
@@ -153,7 +153,7 @@
     "filename": "partner_qbr_template_v3.pptx",
     "filesize": 1200000,
     "description": "The PowerPoint template used by the pipeline.",
-    "displayOrder": 1
+    "order": 1
   },
   {
     "id": "sm7b",
@@ -163,7 +163,7 @@
     "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
     "thumbnail": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&auto=format&fit=crop",
     "description": "5-minute demo of the pipeline generating a QBR deck end-to-end.",
-    "displayOrder": 2
+    "order": 2
   },
   {
     "id": "sm8a",
@@ -172,6 +172,6 @@
     "title": "Collections Scoring Model — Design Doc",
     "url": "https://confluence.c3.ai/pages/ar-collections-scoring",
     "description": "In-progress design document for the scoring model.",
-    "displayOrder": 1
+    "order": 1
   }
 ]
