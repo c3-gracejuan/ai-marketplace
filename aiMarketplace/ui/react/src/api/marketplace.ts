@@ -128,7 +128,7 @@ export async function recentlyShipped(n = 6): Promise<Solution[]> {
 
 export async function listTeamMembers(): Promise<TeamMember[]> {
   const result: { objs?: Record<string, unknown>[] } = await c3Action('TeamMember', 'fetch', {
-    include: 'this',
+    include: 'this,projectsShipped',
     order: 'ascending(name)',
     limit: -1,
   });

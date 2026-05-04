@@ -10,6 +10,7 @@ import { submitRequest } from '@/api/marketplace';
 import { Urgency, Frequency } from '@/types/marketplace';
 
 interface FormState {
+  title: string;
   problem: string;
   currentProcess: string;
   affectedTeam: string;
@@ -35,6 +36,7 @@ export default function SubmitRequestPage() {
   const refSolutionId = searchParams.get('ref');
 
   const [form, setForm] = useState<FormState>({
+    title: '',
     problem: refSolutionId ? `Similar to solution "${refSolutionId}" — ` : '',
     currentProcess: '',
     affectedTeam: '',
@@ -56,6 +58,7 @@ export default function SubmitRequestPage() {
     setForm((prev) => ({ ...prev, [field]: value }));
 
   const valid =
+    form.title.trim() &&
     form.problem.trim() &&
     form.currentProcess.trim() &&
     form.affectedTeam.trim() &&
@@ -73,7 +76,7 @@ export default function SubmitRequestPage() {
         ? form.relatedLinks.split(',').map((l) => l.trim()).filter(Boolean)
         : [];
       const req = await submitRequest({
-        title: form.problem.trim().slice(0, 100),
+        title: form.title.trim(),
         problem: form.problem.trim(),
         currentProcess: form.currentProcess.trim(),
         affectedTeam: form.affectedTeam.trim(),
@@ -89,10 +92,7 @@ export default function SubmitRequestPage() {
       setRequestId(req.id);
       setSubmitted(true);
     } catch (err) {
-      // Fallback: show success with a generated ID so UX still works
-      setRequestId(`REQ-${Math.floor(Math.random() * 9000) + 1000}`);
-      setSubmitted(true);
-      void err;
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -179,6 +179,24 @@ export default function SubmitRequestPage() {
       )}
 
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto px-6 py-8 flex flex-col gap-7">
+        {/* Title */}
+        <div>
+          <label htmlFor="title" className="block text-sm font-semibold text-primary mb-1.5">
+            Request title <span className="text-red-500">*</span>
+          </label>
+          <input
+            id="title"
+            type="text"
+            value={form.title}
+            onChange={(e) => update('title', e.target.value)}
+            maxLength={120}
+            placeholder="e.g., Automate monthly commission reconciliation"
+            className="w-full rounded-lg border border-weak bg-primary text-primary px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary"
+            required
+          />
+          <p className="text-xs text-secondary mt-1">A short name shown in triage and catalog cards.</p>
+        </div>
+
         {/* Problem */}
         <div>
           <label htmlFor="problem" className="block text-sm font-semibold text-primary mb-1.5">

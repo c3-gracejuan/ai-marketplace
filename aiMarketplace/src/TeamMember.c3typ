@@ -9,6 +9,6 @@ entity type TeamMember {
   expertise: [string]
   avatarUrl: string
   solutions: [SwatSolution](builders)
-  projectsShipped: int calc count(solutions)
+  projectsShipped: int calc count(solutions.(status == 'Shipped'))
   projectIds: [string] calc solutions.id
 }

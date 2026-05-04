@@ -27,10 +27,10 @@ function StatCounter({ target, label, prefix = '', suffix = '' }: { target: numb
     return () => observer.disconnect();
   }, []);
 
-  const formatted = count >= 1000
-    ? count >= 1_000_000
-      ? `${(count / 1_000_000).toFixed(1)}M`
-      : `${(count / 1000).toFixed(0)}K`
+  const formatted = count >= 1_000_000
+    ? `${(count / 1_000_000).toFixed(1)}M`
+    : count >= 1000
+    ? `${(count / 1000).toFixed(1).replace(/\.0$/, '')}K`
     : count.toString();
 
   return (

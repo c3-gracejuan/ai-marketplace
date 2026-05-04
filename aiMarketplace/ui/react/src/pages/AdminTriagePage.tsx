@@ -19,6 +19,9 @@ const TRIAGE_DECISIONS: RequestStatus[] = [
   "Won't Do",
 ];
 
+// Statuses that take a request out of the triage queue
+const NON_TRIAGE_STATUSES = new Set<RequestStatus>(['Accepted', 'Scoping', 'Building', 'Shipped', 'Deferred', 'Routed Elsewhere', "Won't Do"]);
+
 const RESPONSE_TEMPLATES: Partial<Record<RequestStatus, (title: string) => string>> = {
   Deferred: (title) =>
     `Thanks for submitting "${title}". We're not picking this up right now due to capacity constraints. Expected revisit: Q3 2026. In the meantime, you might try reviewing existing solutions in the catalog for forkable patterns. You can re-submit if priority or resourcing changes.`,
@@ -33,7 +36,7 @@ const RESPONSE_TEMPLATES: Partial<Record<RequestStatus, (title: string) => strin
 function slaDaysLeft(slaDueAt: string): number {
   const due = new Date(slaDueAt).getTime();
   const now = new Date().getTime();
-  return Math.round((due - now) / (1000 * 60 * 60 * 24));
+  return Math.ceil((due - now) / (1000 * 60 * 60 * 24));
 }
 
 function urgencyColor(urgency: string) {
@@ -78,9 +81,9 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
             {request.urgency}
           </span>
           <StatusPill status={request.status} />
-          <div className={`flex items-center gap-1 text-xs font-medium ${daysLeft < 2 ? 'text-red-600 dark:text-red-400' : 'text-secondary'}`}>
+          <div className={`flex items-center gap-1 text-xs font-medium ${daysLeft <= 0 ? 'text-red-600 dark:text-red-400' : daysLeft < 2 ? 'text-amber-600 dark:text-amber-400' : 'text-secondary'}`}>
             <Clock className="w-3.5 h-3.5" />
-            {daysLeft < 0 ? `${Math.abs(daysLeft)}d overdue` : `${daysLeft}d left`}
+            {daysLeft <= 0 ? `${Math.abs(daysLeft)}d overdue` : `${daysLeft}d left`}
           </div>
           {expanded ? <ChevronUp className="w-4 h-4 text-secondary" /> : <ChevronDown className="w-4 h-4 text-secondary" />}
         </div>
@@ -174,21 +177,38 @@ export default function AdminTriagePage() {
   const handleUpdate = async (id: string, status: RequestStatus, response: string) => {
     try {
       const updated = await decideRequest(id, status, response, '');
-      setReqs((prev) => prev.map((r) => (r.id === id ? updated : r)));
+      // If the new status exits triage, remove from queue; otherwise update in place
+      if (NON_TRIAGE_STATUSES.has(status)) {
+        setReqs((prev) => prev.filter((r) => r.id !== id));
+      } else {
+        setReqs((prev) => prev.map((r) => (r.id === id ? updated : r)));
+      }
     } catch {
       // Optimistic update on error
-      setReqs((prev) =>
-        prev.map((r) => (r.id === id ? { ...r, status, decisionResponse: response, lastUpdated: new Date().toISOString().split('T')[0] } : r))
-      );
+      if (NON_TRIAGE_STATUSES.has(status)) {
+        setReqs((prev) => prev.filter((r) => r.id !== id));
+      } else {
+        setReqs((prev) =>
+          prev.map((r) => (r.id === id ? { ...r, status, decisionResponse: response, lastUpdated: new Date().toISOString() } : r))
+        );
+      }
     }
     setToast('Decision published.');
     setTimeout(() => setToast(''), 3000);
   };
 
   const sorted = [...reqs].sort((a, b) => {
-    const urgOrder = { High: 0, Medium: 1, Low: 2 };
+    const aDaysLeft = slaDaysLeft(a.slaDueAt);
+    const bDaysLeft = slaDaysLeft(b.slaDueAt);
+    // Overdue items float to the top regardless of urgency
+    const aOverdue = aDaysLeft <= 0 ? 1 : 0;
+    const bOverdue = bDaysLeft <= 0 ? 1 : 0;
+    if (aOverdue !== bOverdue) return bOverdue - aOverdue;
+    // Then sort by urgency
+    const urgOrder: Record<string, number> = { High: 0, Medium: 1, Low: 2 };
     if (urgOrder[a.urgency] !== urgOrder[b.urgency]) return urgOrder[a.urgency] - urgOrder[b.urgency];
-    return new Date(a.slaDueAt).getTime() - new Date(b.slaDueAt).getTime();
+    // Then by SLA (soonest first)
+    return aDaysLeft - bDaysLeft;
   });
 
   return (

@@ -23,7 +23,7 @@ function urgencyColor(urgency: string) {
 function slaDaysLeft(slaDueAt: string): number {
   const due = new Date(slaDueAt).getTime();
   const now = new Date().getTime();
-  return Math.round((due - now) / (1000 * 60 * 60 * 24));
+  return Math.ceil((due - now) / (1000 * 60 * 60 * 24));
 }
 
 function RequestKanbanCard({ request }: { request: Request }) {
@@ -41,11 +41,11 @@ function RequestKanbanCard({ request }: { request: Request }) {
         </span>
         <div
           className={`flex items-center gap-1 text-xs font-medium ${
-            daysLeft < 2 ? 'text-red-600 dark:text-red-400' : 'text-secondary'
+            daysLeft <= 0 ? 'text-red-600 dark:text-red-400' : daysLeft < 2 ? 'text-amber-600 dark:text-amber-400' : 'text-secondary'
           }`}
         >
           <Clock className="w-3.5 h-3.5" />
-          {daysLeft < 0 ? `${Math.abs(daysLeft)}d overdue` : `${daysLeft}d left`}
+          {daysLeft <= 0 ? `${Math.abs(daysLeft)}d overdue` : `${daysLeft}d left`}
         </div>
       </div>
 
