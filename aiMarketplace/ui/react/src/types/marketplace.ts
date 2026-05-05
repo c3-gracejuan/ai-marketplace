@@ -19,10 +19,6 @@ export type RequestStatus =
   | 'Routed Elsewhere'
   | "Won't Do";
 
-export type Urgency = 'Low' | 'Medium' | 'High';
-
-export type Frequency = 'Daily' | 'Weekly' | 'Monthly' | 'Ad Hoc';
-
 export type SupportingMaterialType =
   | 'app_link'
   | 'confluence_doc'
@@ -84,10 +80,8 @@ export interface Request {
   currentProcess: string;
   affectedTeam: string;
   affectedCount: number;
-  frequency: Frequency;
   burdenEstimate: string;
   desiredOutcome: string;
-  urgency: Urgency;
   requesterName: string;
   requesterTeam: string;
   relatedLinks: string[];
@@ -96,7 +90,6 @@ export interface Request {
   assignedOwner?: string;
   createdAt: string;
   lastUpdated: string;
-  slaDueAt: string;
 }
 
 export interface MarketplaceStats {

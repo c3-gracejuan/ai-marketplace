@@ -96,7 +96,7 @@ export default function TeamPage() {
               {
                 step: '01',
                 title: 'Intake',
-                desc: 'Anyone at C3 submits a structured request via the Marketplace. Every request gets a triage review within 5 business days.',
+                desc: 'Anyone at C3 submits a structured request via the Marketplace. Every request gets a triage review.',
               },
               {
                 step: '02',

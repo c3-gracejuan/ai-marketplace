@@ -9,10 +9,8 @@ entity type SwatRequest {
   currentProcess: string
   affectedTeam: string
   affectedCount: int
-  frequency: string enum RequestFrequency
   burdenEstimate: string
   desiredOutcome: string
-  urgency: string enum RequestUrgency
   requesterName: !string
   requesterTeam: string
   relatedLinks: [string]
@@ -21,5 +19,4 @@ entity type SwatRequest {
   assignedOwner: string
   createdAt: datetime
   lastUpdated: datetime
-  slaDueAt: datetime
 }

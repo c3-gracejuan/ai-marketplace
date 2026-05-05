@@ -31,12 +31,13 @@ npm install
 npm run dev          # http://localhost:8000
 ```
 
-Create a `.env` in `ui/react/` (see `.env.sample`):
+Create a `.env` in `ui/react/`:
 
 ```
+VITE_C3_PKG=aiMarketplace
 VITE_C3_ENV=<env_name>
 VITE_C3_APP=<app_name>
-VITE_C3_URL=<cluster_url>
+VITE_C3_BASE_URL=<cluster_url>      # e.g. https://gkev8dev.c3dev.cloud
 VITE_C3_AUTH_TOKEN=<auth_token>
 ```
 

@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Clock, ChevronDown, ChevronUp, AlertCircle, Info } from 'lucide-react';
+import { ChevronDown, ChevronUp, AlertCircle, Info } from 'lucide-react';
 import { listForTriage, decideRequest } from '@/api/marketplace';
 import { Request, RequestStatus } from '@/types/marketplace';
 import StatusPill from '@/components/marketplace/StatusPill';
@@ -34,18 +34,6 @@ const RESPONSE_TEMPLATES: Partial<Record<RequestStatus, (title: string) => strin
     `Thanks for submitting "${title}". We're accepting this into our scoping queue. A SWAT engineer will reach out within the week to discuss requirements.`,
 };
 
-function slaDaysLeft(slaDueAt: string): number {
-  const due = new Date(slaDueAt).getTime();
-  const now = new Date().getTime();
-  return Math.ceil((due - now) / (1000 * 60 * 60 * 24));
-}
-
-function urgencyColor(urgency: string) {
-  if (urgency === 'High') return 'text-red-600 dark:text-red-400';
-  if (urgency === 'Medium') return 'text-amber-600 dark:text-amber-400';
-  return 'text-green-600 dark:text-green-400';
-}
-
 interface RequestRowProps {
   request: Request;
   onUpdate: (id: string, status: RequestStatus, response: string) => void;
@@ -55,7 +43,6 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
   const [expanded, setExpanded] = useState(false);
   const [decision, setDecision] = useState<RequestStatus>(request.status);
   const [response, setResponse] = useState(request.decisionResponse || '');
-  const daysLeft = slaDaysLeft(request.slaDueAt);
 
   const applyTemplate = (status: RequestStatus) => {
     const tpl = RESPONSE_TEMPLATES[status];
@@ -78,14 +65,7 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
         </div>
 
         <div className="shrink-0 flex items-center gap-3">
-          <span className={`text-xs font-semibold ${urgencyColor(request.urgency)}`}>
-            {request.urgency}
-          </span>
           <StatusPill status={request.status} />
-          <div className={`flex items-center gap-1 text-xs font-medium ${daysLeft <= 0 ? 'text-red-600 dark:text-red-400' : daysLeft < 2 ? 'text-amber-600 dark:text-amber-400' : 'text-secondary'}`}>
-            <Clock className="w-3.5 h-3.5" />
-            {daysLeft <= 0 ? `${Math.abs(daysLeft)}d overdue` : `${daysLeft}d left`}
-          </div>
           {expanded ? <ChevronUp className="w-4 h-4 text-secondary" /> : <ChevronDown className="w-4 h-4 text-secondary" />}
         </div>
       </div>
@@ -104,15 +84,9 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
                 <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Current process</p>
                 <p className="text-sm text-primary leading-relaxed">{request.currentProcess}</p>
               </div>
-              <div className="flex gap-6">
-                <div>
-                  <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Team</p>
-                  <p className="text-sm text-primary">{request.affectedTeam} (~{request.affectedCount} people)</p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Frequency</p>
-                  <p className="text-sm text-primary">{request.frequency}</p>
-                </div>
+              <div>
+                <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Team</p>
+                <p className="text-sm text-primary">{request.affectedTeam} (~{request.affectedCount} people)</p>
               </div>
               {request.burdenEstimate && (
                 <div>
@@ -199,20 +173,6 @@ export default function AdminTriagePage() {
     setTimeout(() => setToast(''), 3000);
   };
 
-  const sorted = [...reqs].sort((a, b) => {
-    const aDaysLeft = slaDaysLeft(a.slaDueAt);
-    const bDaysLeft = slaDaysLeft(b.slaDueAt);
-    // Overdue items float to the top regardless of urgency
-    const aOverdue = aDaysLeft <= 0 ? 1 : 0;
-    const bOverdue = bDaysLeft <= 0 ? 1 : 0;
-    if (aOverdue !== bOverdue) return bOverdue - aOverdue;
-    // Then sort by urgency
-    const urgOrder: Record<string, number> = { High: 0, Medium: 1, Low: 2 };
-    if (urgOrder[a.urgency] !== urgOrder[b.urgency]) return urgOrder[a.urgency] - urgOrder[b.urgency];
-    // Then by SLA (soonest first)
-    return aDaysLeft - bDaysLeft;
-  });
-
   return (
     <div className="min-h-full bg-primary">
       {/* Auth gate note */}
@@ -230,7 +190,7 @@ export default function AdminTriagePage() {
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl font-bold text-primary">Admin Triage</h1>
           <p className="text-secondary mt-2">
-            {sorted.length} request{sorted.length !== 1 ? 's' : ''} in queue · Sorted by urgency + SLA timer
+            {reqs.length} request{reqs.length !== 1 ? 's' : ''} in queue · Sorted by most recent.
           </p>
         </div>
       </div>
@@ -239,7 +199,7 @@ export default function AdminTriagePage() {
         {loading ? (
           <TriageListSkeleton count={3} />
         ) : (
-          sorted.map((r) => (
+          reqs.map((r) => (
             <RequestRow key={r.id} request={r} onUpdate={handleUpdate} />
           ))
         )}

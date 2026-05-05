@@ -3,22 +3,8 @@
  * Confidential and Proprietary C3 Materials.
  */
 
-function addBusinessDays(dateTime, days) {
-  var result = dateTime;
-  var added = 0;
-  while (added < days) {
-    result = result.plusDays(1);
-    var dow = result.dayOfWeek(); // 1=Mon … 7=Sun
-    if (dow !== 6 && dow !== 7) {
-      added++;
-    }
-  }
-  return result;
-}
-
-function submitRequest(title, problem, currentProcess, affectedTeam, affectedCount, frequency, burdenEstimate, desiredOutcome, urgency, requesterName, requesterTeam, relatedLinks) {
+function submitRequest(title, problem, currentProcess, affectedTeam, affectedCount, burdenEstimate, desiredOutcome, requesterName, requesterTeam, relatedLinks) {
   var now = DateTime.now();
-  var slaDueAt = addBusinessDays(now, 5);
 
   return SwatRequest.make({
     title: title,
@@ -26,17 +12,14 @@ function submitRequest(title, problem, currentProcess, affectedTeam, affectedCou
     currentProcess: currentProcess,
     affectedTeam: affectedTeam,
     affectedCount: affectedCount,
-    frequency: frequency,
     burdenEstimate: burdenEstimate,
     desiredOutcome: desiredOutcome,
-    urgency: urgency,
     requesterName: requesterName,
     requesterTeam: requesterTeam,
     relatedLinks: relatedLinks || [],
     status: 'New',
     createdAt: now,
     lastUpdated: now,
-    slaDueAt: slaDueAt,
   }).create();
 }
 
@@ -60,7 +43,7 @@ function listForTriage() {
   var result = SwatRequest.fetch({
     filter: filter,
     include: 'this',
-    order: 'ascending(slaDueAt)',
+    order: 'descending(createdAt)',
     limit: -1,
   });
   return result.objs || [];
@@ -73,7 +56,7 @@ function listInFlight() {
   var result = SwatRequest.fetch({
     filter: filter,
     include: 'this',
-    order: 'ascending(slaDueAt)',
+    order: 'descending(createdAt)',
     limit: -1,
   });
   return result.objs || [];

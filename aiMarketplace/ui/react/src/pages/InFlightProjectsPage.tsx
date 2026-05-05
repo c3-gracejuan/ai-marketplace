@@ -4,7 +4,6 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Clock } from 'lucide-react';
 import { listInFlight } from '@/api/marketplace';
 import { Request, RequestStatus } from '@/types/marketplace';
 import { KanbanSkeleton } from '@/components/marketplace/CardGridSkeleton';
@@ -15,42 +14,14 @@ const COLUMNS: { status: RequestStatus; label: string; color: string }[] = [
   { status: 'Building', label: 'Building', color: 'border-blue-400 dark:border-blue-600' },
 ];
 
-function urgencyColor(urgency: string) {
-  if (urgency === 'High') return 'text-red-600 dark:text-red-400';
-  if (urgency === 'Medium') return 'text-amber-600 dark:text-amber-400';
-  return 'text-green-600 dark:text-green-400';
-}
-
-function slaDaysLeft(slaDueAt: string): number {
-  const due = new Date(slaDueAt).getTime();
-  const now = new Date().getTime();
-  return Math.ceil((due - now) / (1000 * 60 * 60 * 24));
-}
-
 function RequestKanbanCard({ request }: { request: Request }) {
-  const daysLeft = slaDaysLeft(request.slaDueAt);
-
   return (
     <div className="bg-primary border border-weak rounded-xl p-4 flex flex-col gap-3">
       <p className="font-semibold text-sm text-primary leading-snug">{request.title}</p>
 
       <p className="text-xs text-secondary line-clamp-2">{request.problem}</p>
 
-      <div className="flex items-center justify-between pt-1 border-t border-weak">
-        <span className={`text-xs font-semibold ${urgencyColor(request.urgency)}`}>
-          {request.urgency}
-        </span>
-        <div
-          className={`flex items-center gap-1 text-xs font-medium ${
-            daysLeft <= 0 ? 'text-red-600 dark:text-red-400' : daysLeft < 2 ? 'text-amber-600 dark:text-amber-400' : 'text-secondary'
-          }`}
-        >
-          <Clock className="w-3.5 h-3.5" />
-          {daysLeft <= 0 ? `${Math.abs(daysLeft)}d overdue` : `${daysLeft}d left`}
-        </div>
-      </div>
-
-      <div className="text-xs text-secondary">
+      <div className="text-xs text-secondary pt-1 border-t border-weak">
         <span className="font-medium text-primary">{request.requesterName}</span>
         {' · '}
         {request.requesterTeam}

@@ -6,17 +6,14 @@
     "currentProcess": "Manual export from Salesforce → Xactly reconciliation spreadsheet → manual override tracking → email signoff chain.",
     "affectedTeam": "Sales Compensation",
     "affectedCount": 4,
-    "frequency": "Monthly",
     "burdenEstimate": "6 person-days/month, ~$18k/month in analyst time",
     "desiredOutcome": "A dashboard and automated reconciliation that flags discrepancies only, reducing effort to <4 hours.",
-    "urgency": "High",
     "requesterName": "Jordan Kim",
     "requesterTeam": "Sales Compensation",
     "relatedLinks": ["https://docs.google.com/spreadsheets/commission-recon"],
     "status": "Triaging",
     "createdAt": "2026-04-28T00:00:00.000Z",
-    "lastUpdated": "2026-04-29T00:00:00.000Z",
-    "slaDueAt": "2026-05-05T00:00:00.000Z"
+    "lastUpdated": "2026-04-29T00:00:00.000Z"
   },
   {
     "id": "req2",
@@ -25,18 +22,15 @@
     "currentProcess": "Manual status updates in a shared Notion doc, updated ad hoc.",
     "affectedTeam": "Professional Services",
     "affectedCount": 12,
-    "frequency": "Daily",
     "burdenEstimate": "~45 min/day per PM in status coordination",
     "desiredOutcome": "A structured milestone tracker with customer-facing view and automated status updates when key events complete.",
-    "urgency": "Medium",
     "requesterName": "Taylor Chen",
     "requesterTeam": "Professional Services",
     "relatedLinks": [],
     "status": "Awaiting Info",
     "decisionResponse": "Thanks for submitting. We need more detail on the milestone taxonomy before we can scope this. Can you share the current milestone list and what triggers completion?",
     "createdAt": "2026-04-22T00:00:00.000Z",
-    "lastUpdated": "2026-04-25T00:00:00.000Z",
-    "slaDueAt": "2026-04-29T00:00:00.000Z"
+    "lastUpdated": "2026-04-25T00:00:00.000Z"
   },
   {
     "id": "req3",
@@ -45,17 +39,14 @@
     "currentProcess": "UTM tracking in Hubspot with manual Salesforce matching — ~60% attribution accuracy.",
     "affectedTeam": "Marketing",
     "affectedCount": 6,
-    "frequency": "Weekly",
     "burdenEstimate": "~4 hours/week in manual matching + $X in misspent ad budget",
     "desiredOutcome": "Full-funnel attribution from first touch to closed-won, with dashboard for CMO and channel owners.",
-    "urgency": "High",
     "requesterName": "Alex Rivera",
     "requesterTeam": "Marketing",
     "relatedLinks": ["https://app.hubspot.com/reports/marketing-attribution"],
     "status": "New",
     "createdAt": "2026-05-02T00:00:00.000Z",
-    "lastUpdated": "2026-05-02T00:00:00.000Z",
-    "slaDueAt": "2026-05-09T00:00:00.000Z"
+    "lastUpdated": "2026-05-02T00:00:00.000Z"
   },
   {
     "id": "req4",
@@ -64,17 +55,14 @@
     "currentProcess": "Manual review of CSM health scores + ad hoc Salesforce queries. No systematic early warning.",
     "affectedTeam": "Customer Success",
     "affectedCount": 8,
-    "frequency": "Weekly",
     "burdenEstimate": "~6 hours/week in manual pipeline reviews",
     "desiredOutcome": "A dashboard surfacing at-risk renewals 120+ days out, with signals on usage, support, and engagement.",
-    "urgency": "High",
     "requesterName": "Morgan Lee",
     "requesterTeam": "Customer Success",
     "relatedLinks": [],
     "status": "Scoping",
     "createdAt": "2026-04-10T00:00:00.000Z",
-    "lastUpdated": "2026-04-20T00:00:00.000Z",
-    "slaDueAt": "2026-04-17T00:00:00.000Z"
+    "lastUpdated": "2026-04-20T00:00:00.000Z"
   },
   {
     "id": "req5",
@@ -83,16 +71,13 @@
     "currentProcess": "Manual Excel analysis combining Salesforce exports, rep capacity spreadsheets, and geo mapping.",
     "affectedTeam": "Revenue Operations",
     "affectedCount": 3,
-    "frequency": "Ad Hoc",
     "burdenEstimate": "~3 weeks/year, ~$30k in analyst time",
     "desiredOutcome": "A tool that ingests live data and runs territory optimization scenarios, reducing analysis time to <3 days.",
-    "urgency": "Medium",
     "requesterName": "Casey Nguyen",
     "requesterTeam": "Revenue Operations",
     "relatedLinks": [],
     "status": "Building",
     "createdAt": "2026-03-15T00:00:00.000Z",
-    "lastUpdated": "2026-04-01T00:00:00.000Z",
-    "slaDueAt": "2026-03-22T00:00:00.000Z"
+    "lastUpdated": "2026-04-01T00:00:00.000Z"
   }
 ]

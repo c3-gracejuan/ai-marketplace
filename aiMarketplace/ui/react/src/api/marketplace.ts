@@ -71,10 +71,8 @@ function mapRequest(raw: Record<string, unknown>): Request {
     currentProcess: (raw.currentProcess ?? '') as string,
     affectedTeam: (raw.affectedTeam ?? '') as string,
     affectedCount: (raw.affectedCount ?? 0) as number,
-    frequency: (raw.frequency ?? 'Ad Hoc') as Request['frequency'],
     burdenEstimate: (raw.burdenEstimate ?? '') as string,
     desiredOutcome: (raw.desiredOutcome ?? '') as string,
-    urgency: (raw.urgency ?? 'Low') as Request['urgency'],
     requesterName: (raw.requesterName ?? '') as string,
     requesterTeam: (raw.requesterTeam ?? '') as string,
     relatedLinks: (raw.relatedLinks as string[]) ?? [],
@@ -83,7 +81,6 @@ function mapRequest(raw: Record<string, unknown>): Request {
     assignedOwner: raw.assignedOwner as string | undefined,
     createdAt: (raw.createdAt ?? '') as string,
     lastUpdated: (raw.lastUpdated ?? '') as string,
-    slaDueAt: (raw.slaDueAt ?? '') as string,
   };
 }
 
@@ -147,10 +144,8 @@ export async function submitRequest(params: {
   currentProcess: string;
   affectedTeam: string;
   affectedCount: number;
-  frequency: string;
   burdenEstimate: string;
   desiredOutcome: string;
-  urgency: string;
   requesterName: string;
   requesterTeam: string;
   relatedLinks: string[];
@@ -161,10 +156,8 @@ export async function submitRequest(params: {
     params.currentProcess,
     params.affectedTeam,
     params.affectedCount,
-    params.frequency,
     params.burdenEstimate,
     params.desiredOutcome,
-    params.urgency,
     params.requesterName,
     params.requesterTeam,
     params.relatedLinks,

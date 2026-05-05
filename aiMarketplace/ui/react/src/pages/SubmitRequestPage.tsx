@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle, Info, ChevronLeft } from 'lucide-react';
 import { submitRequest } from '@/api/marketplace';
-import { Urgency, Frequency } from '@/types/marketplace';
 
 interface FormState {
   title: string;
@@ -15,20 +14,12 @@ interface FormState {
   currentProcess: string;
   affectedTeam: string;
   affectedCount: string;
-  frequency: Frequency | '';
   burdenEstimate: string;
   desiredOutcome: string;
-  urgency: Urgency | '';
   requesterName: string;
   requesterTeam: string;
   relatedLinks: string;
 }
-
-const urgencyDefinitions: Record<Urgency, string> = {
-  Low: 'Nice to have; no hard deadline.',
-  Medium: 'Important but manageable; needed within ~2 months.',
-  High: 'Significant business impact; urgent timeline.',
-};
 
 export default function SubmitRequestPage() {
   const [searchParams] = useSearchParams();
@@ -41,10 +32,8 @@ export default function SubmitRequestPage() {
     currentProcess: '',
     affectedTeam: '',
     affectedCount: '',
-    frequency: '',
     burdenEstimate: '',
     desiredOutcome: '',
-    urgency: '',
     requesterName: '',
     requesterTeam: '',
     relatedLinks: '',
@@ -62,7 +51,6 @@ export default function SubmitRequestPage() {
     form.problem.trim() &&
     form.currentProcess.trim() &&
     form.affectedTeam.trim() &&
-    form.urgency &&
     form.requesterName.trim() &&
     form.requesterTeam.trim();
 
@@ -81,10 +69,8 @@ export default function SubmitRequestPage() {
         currentProcess: form.currentProcess.trim(),
         affectedTeam: form.affectedTeam.trim(),
         affectedCount: form.affectedCount ? parseInt(form.affectedCount, 10) : 0,
-        frequency: form.frequency || 'Ad Hoc',
         burdenEstimate: form.burdenEstimate.trim(),
         desiredOutcome: form.desiredOutcome.trim(),
-        urgency: form.urgency as Urgency,
         requesterName: form.requesterName.trim(),
         requesterTeam: form.requesterTeam.trim(),
         relatedLinks,
@@ -107,16 +93,12 @@ export default function SubmitRequestPage() {
           </div>
           <h1 className="text-2xl font-bold text-primary mb-2">Request submitted!</h1>
           <p className="text-secondary mb-6">
-            Your request has been received and will be triaged within 5 business days. We&apos;ll be in touch.
+            Your request has been received. We&apos;ll be in touch.
           </p>
           <div className="bg-secondary border border-weak rounded-xl p-5 text-left mb-6">
             <div className="flex justify-between text-sm mb-2">
               <span className="text-secondary">Request ID</span>
               <span className="font-mono font-semibold text-primary">{requestId}</span>
-            </div>
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-secondary">Triage SLA</span>
-              <span className="text-primary">5 business days</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-secondary">Status</span>
@@ -156,7 +138,7 @@ export default function SubmitRequestPage() {
             Back
           </button>
           <h1 className="text-2xl font-bold text-primary">Submit a Request</h1>
-          <p className="text-secondary mt-1">Tell us about your problem. We triage every request within 5 business days.</p>
+          <p className="text-secondary mt-1">Tell us about your problem.</p>
         </div>
       </div>
 
@@ -259,27 +241,6 @@ export default function SubmitRequestPage() {
           </div>
         </div>
 
-        {/* Frequency */}
-        <div>
-          <p className="block text-sm font-semibold text-primary mb-1.5">How often does this happen?</p>
-          <div className="flex flex-wrap gap-2">
-            {(['Daily', 'Weekly', 'Monthly', 'Ad Hoc'] as Frequency[]).map((f) => (
-              <button
-                key={f}
-                type="button"
-                onClick={() => update('frequency', form.frequency === f ? '' : f)}
-                className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
-                  form.frequency === f
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-primary text-secondary border-weak hover:border-blue-400'
-                }`}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Burden */}
         <div>
           <label htmlFor="burdenEstimate" className="block text-sm font-semibold text-primary mb-1.5">Estimated time or cost burden</label>
@@ -304,38 +265,6 @@ export default function SubmitRequestPage() {
             placeholder="What does success look like? What would you do with the time back?"
             className="w-full rounded-lg border border-weak bg-primary text-primary px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary resize-none"
           />
-        </div>
-
-        {/* Urgency */}
-        <div>
-          <p className="block text-sm font-semibold text-primary mb-1.5">
-            Urgency <span className="text-red-500">*</span>
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {(['Low', 'Medium', 'High'] as Urgency[]).map((u) => (
-              <div key={u} className="relative group">
-                <button
-                  type="button"
-                  onClick={() => update('urgency', form.urgency === u ? '' : u)}
-                  className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
-                    form.urgency === u
-                      ? u === 'High'
-                        ? 'bg-red-600 text-white border-red-600'
-                        : u === 'Medium'
-                        ? 'bg-amber-500 text-white border-amber-500'
-                        : 'bg-green-600 text-white border-green-600'
-                      : 'bg-primary text-secondary border-weak hover:border-blue-400'
-                  }`}
-                >
-                  {u}
-                </button>
-                <div className="absolute bottom-full mb-2 left-0 w-48 bg-gray-900 text-white text-xs rounded-lg p-2 hidden group-hover:block z-10 pointer-events-none">
-                  {urgencyDefinitions[u]}
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-secondary mt-1.5">Hover a level for its definition.</p>
         </div>
 
         {/* Requester */}
