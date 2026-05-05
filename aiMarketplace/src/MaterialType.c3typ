@@ -1,0 +1,17 @@
+/*
+ * Copyright 2009-2026 C3 AI (www.c3.ai). All Rights Reserved.
+ * Confidential and Proprietary C3 Materials.
+ */
+
+/**
+ * Type of a SupportingMaterial attached to a SwatSolution.
+ */
+enum type MaterialType {
+  APP_LINK = 'app_link'
+  CONFLUENCE_DOC = 'confluence_doc'
+  CODE_SNIPPET = 'code_snippet'
+  IMAGE = 'image'
+  DEMO_VIDEO = 'demo_video'
+  EXTERNAL_FILE = 'external_file'
+  OTHER = 'other'
+}

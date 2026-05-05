@@ -1,0 +1,20 @@
+/*
+ * Copyright 2009-2026 C3 AI (www.c3.ai). All Rights Reserved.
+ * Confidential and Proprietary C3 Materials.
+ */
+
+/**
+ * Lifecycle status for a SwatRequest.
+ */
+enum type RequestStatus {
+  NEW = 'New'
+  TRIAGING = 'Triaging'
+  AWAITING_INFO = 'Awaiting Info'
+  ACCEPTED = 'Accepted'
+  SCOPING = 'Scoping'
+  BUILDING = 'Building'
+  SHIPPED = 'Shipped'
+  DEFERRED = 'Deferred'
+  ROUTED_ELSEWHERE = 'Routed Elsewhere'
+  WONT_DO = "Won't Do"
+}

@@ -5,7 +5,7 @@
 
 entity type SupportingMaterial {
   solution: !SwatSolution
-  materialType: string
+  materialType: string enum MaterialType
   title: !string
   url: string
   content: string

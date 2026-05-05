@@ -6,21 +6,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { listTeamMembers, listSolutions } from '@/api/marketplace';
-import { TeamMember, Solution } from '@/types/marketplace';
+import { listTeamMembers } from '@/api/marketplace';
+import { TeamMember } from '@/types/marketplace';
 import { TeamGridSkeleton } from '@/components/marketplace/CardGridSkeleton';
 
 export default function TeamPage() {
   const navigate = useNavigate();
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [allSolutions, setAllSolutions] = useState<Solution[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      listTeamMembers().then(setTeamMembers),
-      listSolutions().then(setAllSolutions),
-    ]).catch(() => {}).finally(() => setLoading(false));
+    listTeamMembers().then(setTeamMembers).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   return (
@@ -40,9 +36,7 @@ export default function TeamPage() {
         {loading && <div className="mb-16"><TeamGridSkeleton count={6} /></div>}
         <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 ${loading ? 'hidden' : ''}`}>
           {teamMembers.map((member) => {
-            const memberSolutions = allSolutions.filter((s) =>
-              s.builders.some((b) => b.id === member.id)
-            );
+            const memberSolutions = member.solutions ?? [];
             return (
               <div key={member.id} className="bg-secondary border border-weak rounded-xl p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-start gap-4 mb-4">
