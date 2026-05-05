@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
 import { listInFlight } from '@/api/marketplace';
 import { Request, RequestStatus } from '@/types/marketplace';
+import { KanbanSkeleton } from '@/components/marketplace/CardGridSkeleton';
 
 const COLUMNS: { status: RequestStatus; label: string; color: string }[] = [
   { status: 'Triaging', label: 'Triaging', color: 'border-purple-300 dark:border-purple-700' },
@@ -23,7 +24,7 @@ function urgencyColor(urgency: string) {
 function slaDaysLeft(slaDueAt: string): number {
   const due = new Date(slaDueAt).getTime();
   const now = new Date().getTime();
-  return Math.round((due - now) / (1000 * 60 * 60 * 24));
+  return Math.ceil((due - now) / (1000 * 60 * 60 * 24));
 }
 
 function RequestKanbanCard({ request }: { request: Request }) {
@@ -41,11 +42,11 @@ function RequestKanbanCard({ request }: { request: Request }) {
         </span>
         <div
           className={`flex items-center gap-1 text-xs font-medium ${
-            daysLeft < 2 ? 'text-red-600 dark:text-red-400' : 'text-secondary'
+            daysLeft <= 0 ? 'text-red-600 dark:text-red-400' : daysLeft < 2 ? 'text-amber-600 dark:text-amber-400' : 'text-secondary'
           }`}
         >
           <Clock className="w-3.5 h-3.5" />
-          {daysLeft < 0 ? `${Math.abs(daysLeft)}d overdue` : `${daysLeft}d left`}
+          {daysLeft <= 0 ? `${Math.abs(daysLeft)}d overdue` : `${daysLeft}d left`}
         </div>
       </div>
 
@@ -60,9 +61,10 @@ function RequestKanbanCard({ request }: { request: Request }) {
 
 export default function InFlightProjectsPage() {
   const [requests, setRequests] = useState<Request[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    listInFlight().then(setRequests).catch(() => {});
+    listInFlight().then(setRequests).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   return (
@@ -79,7 +81,8 @@ export default function InFlightProjectsPage() {
 
       {/* Kanban */}
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {loading ? <KanbanSkeleton columns={3} cardsPerCol={2} /> : null}
+        <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 ${loading ? 'hidden' : ''}`}>
           {COLUMNS.map(({ status, label, color }) => {
             const col = requests.filter((r) => r.status === status);
             return (

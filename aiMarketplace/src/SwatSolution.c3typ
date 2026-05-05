@@ -12,7 +12,7 @@ entity type SwatSolution {
   dollarsSaved: int
   domain: [string]
   stack: [string]
-  status: string
+  status: string enum SolutionStatus
   builders: [TeamMember]
   requesterOrg: string
   dateShipped: datetime

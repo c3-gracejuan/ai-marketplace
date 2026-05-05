@@ -1,0 +1,14 @@
+/*
+ * Copyright 2009-2026 C3 AI (www.c3.ai). All Rights Reserved.
+ * Confidential and Proprietary C3 Materials.
+ */
+
+/**
+ * Build/delivery status for a SwatSolution.
+ */
+enum type SolutionStatus {
+  TRIAGING = 'Triaging'
+  SCOPING = 'Scoping'
+  BUILDING = 'Building'
+  SHIPPED = 'Shipped'
+}

@@ -7,7 +7,7 @@
     "skipLibCheck": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
-    "strict": false,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -21,6 +21,6 @@
       "@/shared/*": ["./resources/examples/shared/*"]
     }
   },
-  "include": ["src", "tests", "resources/examples"],
+  "include": ["src", "tests"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

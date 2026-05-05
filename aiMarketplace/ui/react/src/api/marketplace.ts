@@ -11,6 +11,7 @@ import { Solution, TeamMember, Request, MarketplaceStats, SupportingMaterial } f
 // ---------------------------------------------------------------------------
 
 function mapMember(raw: Record<string, unknown>): TeamMember {
+  const rawSolutions = raw.solutions as Record<string, unknown>[] | undefined;
   return {
     id: raw.id as string,
     name: (raw.name ?? '') as string,
@@ -19,6 +20,7 @@ function mapMember(raw: Record<string, unknown>): TeamMember {
     avatarUrl: (raw.avatarUrl ?? '') as string,
     projectsShipped: (raw.projectsShipped ?? 0) as number,
     projectIds: (raw.projectIds as string[]) ?? [],
+    solutions: rawSolutions ? rawSolutions.map(mapSolution) : undefined,
   };
 }
 
@@ -128,7 +130,7 @@ export async function recentlyShipped(n = 6): Promise<Solution[]> {
 
 export async function listTeamMembers(): Promise<TeamMember[]> {
   const result: { objs?: Record<string, unknown>[] } = await c3Action('TeamMember', 'fetch', {
-    include: 'this',
+    include: 'this,projectsShipped,solutions.this',
     order: 'ascending(name)',
     limit: -1,
   });

@@ -54,6 +54,8 @@ export interface TeamMember {
   avatarUrl: string;
   projectsShipped: number;
   projectIds: string[];
+  /** Solutions this member built — populated when fetching via listTeamMembers */
+  solutions?: Solution[];
 }
 
 export interface Solution {

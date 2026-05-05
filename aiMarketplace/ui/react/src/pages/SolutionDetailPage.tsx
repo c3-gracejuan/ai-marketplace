@@ -100,9 +100,11 @@ export default function SolutionDetailPage() {
                     </div>
                     <div>
                       <p className="text-lg font-bold text-green-700 dark:text-green-300">
-                        ${(solution.dollarsSaved >= 1_000_000
+                        ${solution.dollarsSaved >= 1_000_000
                           ? `${(solution.dollarsSaved / 1_000_000).toFixed(1)}M`
-                          : `${(solution.dollarsSaved / 1000).toFixed(0)}K`)}
+                          : solution.dollarsSaved >= 1000
+                          ? `${(solution.dollarsSaved / 1000).toFixed(1).replace(/\.0$/, '')}K`
+                          : solution.dollarsSaved.toLocaleString()}
                       </p>
                       <p className="text-xs text-green-600 dark:text-green-400">Estimated impact</p>
                     </div>
