@@ -1,9 +1,9 @@
 {
-  "author": "{{author}}",
+  "author": "Grace Juan",
   "name": "aiMarketplace",
-  "description": "{{description}}",
+  "description": "AI Marketplace for the SWAT Team",
   "dependencies": {
-    "mcpServer": "8.10"
+    "mcpServer": "8.9"
   },
   "version": "1.0.0"
 }
