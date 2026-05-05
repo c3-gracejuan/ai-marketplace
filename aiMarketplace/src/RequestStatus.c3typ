@@ -4,17 +4,12 @@
  */
 
 /**
- * Lifecycle status for a SwatRequest.
+ * Intake-side lifecycle status for a SwatRequest.
+ * Build-side status lives on SwatSolution.
  */
 enum type RequestStatus {
-  NEW = 'New'
   TRIAGING = 'Triaging'
-  AWAITING_INFO = 'Awaiting Info'
   ACCEPTED = 'Accepted'
-  SCOPING = 'Scoping'
-  BUILDING = 'Building'
-  SHIPPED = 'Shipped'
   DEFERRED = 'Deferred'
-  ROUTED_ELSEWHERE = 'Routed Elsewhere'
-  WONT_DO = "Won't Do"
+  REJECTED = 'Rejected'
 }

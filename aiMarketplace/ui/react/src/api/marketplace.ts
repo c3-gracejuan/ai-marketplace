@@ -7,7 +7,7 @@ import { c3Action } from '@/c3Action';
 import { Solution, TeamMember, Request, MarketplaceStats, SupportingMaterial } from '@/types/marketplace';
 
 // ---------------------------------------------------------------------------
-// Internal helpers — field names now match C3 entity types exactly
+// Internal helpers — field names match C3 entity types exactly
 // ---------------------------------------------------------------------------
 
 function mapMember(raw: Record<string, unknown>): TeamMember {
@@ -40,29 +40,6 @@ function mapMaterial(raw: Record<string, unknown>): SupportingMaterial {
   };
 }
 
-function mapSolution(raw: Record<string, unknown>): Solution {
-  const builders = ((raw.builders as Record<string, unknown>[]) ?? []).map(mapMember);
-  const supportingMaterials = ((raw.supportingMaterials as Record<string, unknown>[]) ?? []).map(mapMaterial);
-  return {
-    id: raw.id as string,
-    title: (raw.title ?? '') as string,
-    problem: (raw.problem ?? '') as string,
-    solutionDescription: (raw.solutionDescription ?? '') as string,
-    impactSummary: (raw.impactSummary ?? '') as string,
-    hoursSaved: raw.hoursSaved as number | undefined,
-    dollarsSaved: raw.dollarsSaved as number | undefined,
-    domain: ((raw.domain as string[]) ?? []) as Solution['domain'],
-    stack: (raw.stack as string[]) ?? [],
-    status: (raw.status ?? 'Triaging') as Solution['status'],
-    builders,
-    requesterOrg: (raw.requesterOrg ?? '') as string,
-    dateShipped: raw.dateShipped as string | undefined,
-    reusabilityNote: (raw.reusabilityNote ?? '') as string,
-    supportingMaterials,
-    featured: (raw.featured ?? false) as boolean,
-  };
-}
-
 function mapRequest(raw: Record<string, unknown>): Request {
   return {
     id: raw.id as string,
@@ -76,11 +53,34 @@ function mapRequest(raw: Record<string, unknown>): Request {
     requesterName: (raw.requesterName ?? '') as string,
     requesterTeam: (raw.requesterTeam ?? '') as string,
     relatedLinks: (raw.relatedLinks as string[]) ?? [],
-    status: (raw.status ?? 'New') as Request['status'],
+    status: (raw.status ?? 'Triaging') as Request['status'],
     decisionResponse: raw.decisionResponse as string | undefined,
-    assignedOwner: raw.assignedOwner as string | undefined,
     createdAt: (raw.createdAt ?? '') as string,
     lastUpdated: (raw.lastUpdated ?? '') as string,
+  };
+}
+
+function mapSolution(raw: Record<string, unknown>): Solution {
+  const builders = ((raw.builders as Record<string, unknown>[]) ?? []).map(mapMember);
+  const supportingMaterials = ((raw.supportingMaterials as Record<string, unknown>[]) ?? []).map(mapMaterial);
+  const originatingRequests = ((raw.originatingRequests as Record<string, unknown>[]) ?? []).map(mapRequest);
+  return {
+    id: raw.id as string,
+    title: (raw.title ?? '') as string,
+    problem: (raw.problem ?? '') as string,
+    solutionDescription: (raw.solutionDescription ?? '') as string,
+    impactSummary: (raw.impactSummary ?? '') as string,
+    hoursSaved: raw.hoursSaved as number | undefined,
+    dollarsSaved: raw.dollarsSaved as number | undefined,
+    domain: ((raw.domain as string[]) ?? []) as Solution['domain'],
+    stack: (raw.stack as string[]) ?? [],
+    status: (raw.status ?? 'Queued') as Solution['status'],
+    builders,
+    originatingRequests,
+    dateShipped: raw.dateShipped as string | undefined,
+    reusabilityNote: (raw.reusabilityNote ?? '') as string,
+    supportingMaterials,
+    featured: (raw.featured ?? false) as boolean,
   };
 }
 
@@ -90,17 +90,13 @@ function mapRequest(raw: Record<string, unknown>): Request {
 
 export async function listSolutions(
   domain?: string,
-  status?: string,
   search?: string,
   stack?: string,
-  requesterOrg?: string,
 ): Promise<Solution[]> {
   const raw: Record<string, unknown>[] = await c3Action('SolutionService', 'listSolutions', [
     domain ?? null,
-    status ?? null,
     search ?? null,
     stack ?? null,
-    requesterOrg ?? null,
   ]);
   return (raw ?? []).map(mapSolution);
 }
@@ -119,6 +115,42 @@ export async function featuredSolutions(n = 3): Promise<Solution[]> {
 export async function recentlyShipped(n = 6): Promise<Solution[]> {
   const raw: Record<string, unknown>[] = await c3Action('SolutionService', 'recentlyShipped', [n]);
   return (raw ?? []).map(mapSolution);
+}
+
+export async function listQueuedSolutions(): Promise<Solution[]> {
+  const raw: Record<string, unknown>[] = await c3Action('SolutionService', 'listQueued', []);
+  return (raw ?? []).map(mapSolution);
+}
+
+export async function updateSolutionDraft(params: {
+  solutionId: string;
+  solutionDescription: string;
+  impactSummary: string;
+  hoursSaved: number;
+  dollarsSaved: number;
+  domain: string[];
+  stack: string[];
+  reusabilityNote: string;
+}): Promise<Solution> {
+  const raw: Record<string, unknown> = await c3Action('SolutionService', 'updateDraft', [
+    params.solutionId,
+    params.solutionDescription,
+    params.impactSummary,
+    params.hoursSaved,
+    params.dollarsSaved,
+    params.domain,
+    params.stack,
+    params.reusabilityNote,
+  ]);
+  return mapSolution(raw);
+}
+
+export async function assignBuilders(solutionId: string, builderIds: string[]): Promise<Solution> {
+  const raw: Record<string, unknown> = await c3Action('SolutionService', 'assignBuilders', [
+    solutionId,
+    builderIds,
+  ]);
+  return mapSolution(raw);
 }
 
 // ---------------------------------------------------------------------------
@@ -169,13 +201,11 @@ export async function decideRequest(
   requestId: string,
   newStatus: string,
   response: string,
-  owner: string,
 ): Promise<Request> {
   const raw: Record<string, unknown> = await c3Action('RequestService', 'decide', [
     requestId,
     newStatus,
     response,
-    owner,
   ]);
   return mapRequest(raw);
 }
@@ -185,8 +215,8 @@ export async function listForTriage(): Promise<Request[]> {
   return (raw ?? []).map(mapRequest);
 }
 
-export async function listInFlight(): Promise<Request[]> {
-  const raw: Record<string, unknown>[] = await c3Action('RequestService', 'listInFlight', []);
+export async function listAllRequests(): Promise<Request[]> {
+  const raw: Record<string, unknown>[] = await c3Action('RequestService', 'listAll', []);
   return (raw ?? []).map(mapRequest);
 }
 

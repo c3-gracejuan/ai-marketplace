@@ -5,7 +5,7 @@
 
 type RequestService {
   submitRequest: function(title: string, problem: string, currentProcess: string, affectedTeam: string, affectedCount: int, burdenEstimate: string, desiredOutcome: string, requesterName: string, requesterTeam: string, relatedLinks: [string]): SwatRequest js-server
-  decide: function(requestId: string, newStatus: string, response: string, owner: string): SwatRequest js-server
+  decide: function(requestId: string, newStatus: string, response: string): SwatRequest js-server
   listForTriage: function(): [SwatRequest] js-server
-  listInFlight: function(): [SwatRequest] js-server
+  listAll: function(): [SwatRequest] js-server
 }

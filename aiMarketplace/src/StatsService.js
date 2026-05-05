@@ -10,12 +10,8 @@ function landingStats() {
     filter: Filter.eq('status', 'Shipped'),
   });
 
-  var inProgressFilter = Filter.eq('status', 'Building')
-    .or().eq('status', 'Scoping')
-    .or().eq('status', 'Triaging');
-
   var solutionsInProgress = SwatSolution.fetchCount({
-    filter: inProgressFilter,
+    filter: Filter.eq('status', 'Building'),
   });
 
   var shippedObjs = SwatSolution.fetch({

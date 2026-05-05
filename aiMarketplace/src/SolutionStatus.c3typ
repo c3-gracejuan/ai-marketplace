@@ -4,11 +4,11 @@
  */
 
 /**
- * Build/delivery status for a SwatSolution.
+ * Build-side lifecycle status for a SwatSolution.
+ * Queued solutions are auto-created when a SwatRequest is accepted.
  */
 enum type SolutionStatus {
-  TRIAGING = 'Triaging'
-  SCOPING = 'Scoping'
+  QUEUED = 'Queued'
   BUILDING = 'Building'
   SHIPPED = 'Shipped'
 }

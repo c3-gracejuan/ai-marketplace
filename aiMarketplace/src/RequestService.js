@@ -3,6 +3,20 @@
  * Confidential and Proprietary C3 Materials.
  */
 
+// Allowed status transitions. Self-edges are always allowed (response edits, no-op saves).
+var ALLOWED_TRANSITIONS = {
+  'Triaging': ['Triaging', 'Accepted', 'Deferred', 'Rejected'],
+  'Deferred': ['Deferred', 'Triaging'],
+  'Accepted': ['Accepted'],
+  'Rejected': ['Rejected'],
+};
+
+function isTransitionAllowed(fromStatus, toStatus) {
+  var allowed = ALLOWED_TRANSITIONS[fromStatus];
+  if (!allowed) return false;
+  return allowed.indexOf(toStatus) !== -1;
+}
+
 function submitRequest(title, problem, currentProcess, affectedTeam, affectedCount, burdenEstimate, desiredOutcome, requesterName, requesterTeam, relatedLinks) {
   var now = DateTime.now();
 
@@ -17,44 +31,55 @@ function submitRequest(title, problem, currentProcess, affectedTeam, affectedCou
     requesterName: requesterName,
     requesterTeam: requesterTeam,
     relatedLinks: relatedLinks || [],
-    status: 'New',
+    status: 'Triaging',
     createdAt: now,
     lastUpdated: now,
   }).create();
 }
 
-function decide(requestId, newStatus, response, owner) {
+function decide(requestId, newStatus, response) {
   var request = SwatRequest.forId(requestId).get('this');
   if (!request) {
     throw new Error('SwatRequest not found with id: ' + requestId);
   }
-  return request
+  if (!isTransitionAllowed(request.status, newStatus)) {
+    throw new Error('Invalid transition: ' + request.status + ' -> ' + newStatus);
+  }
+
+  var updated = request
     .withField('status', newStatus)
     .withField('decisionResponse', response)
-    .withField('assignedOwner', owner)
     .withField('lastUpdated', DateTime.now())
     .merge();
+
+  // Auto-create a stub Solution when transitioning into Accepted.
+  // The engineer fills in remaining fields via the Admin Triage page's
+  // "Queued Solutions" section before transitioning the Solution to Building.
+  if (newStatus === 'Accepted' && request.status !== 'Accepted') {
+    SwatSolution.make({
+      title: request.title,
+      problem: request.problem,
+      status: 'Queued',
+      originatingRequests: [{id: request.id}],
+      featured: false,
+    }).create();
+  }
+
+  return updated;
 }
 
 function listForTriage() {
-  var filter = Filter.eq('status', 'New')
-    .or().eq('status', 'Triaging')
-    .or().eq('status', 'Awaiting Info');
   var result = SwatRequest.fetch({
-    filter: filter,
+    filter: Filter.eq('status', 'Triaging'),
     include: 'this',
-    order: 'descending(createdAt)',
+    order: 'ascending(createdAt)',
     limit: -1,
   });
   return result.objs || [];
 }
 
-function listInFlight() {
-  var filter = Filter.eq('status', 'Triaging')
-    .or().eq('status', 'Scoping')
-    .or().eq('status', 'Building');
+function listAll() {
   var result = SwatRequest.fetch({
-    filter: filter,
     include: 'this',
     order: 'descending(createdAt)',
     limit: -1,

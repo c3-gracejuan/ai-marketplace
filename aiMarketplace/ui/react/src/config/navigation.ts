@@ -34,7 +34,7 @@ export const navigationConfig: NavigationItem[] = [
     icon: Zap,
     iconActive: Zap,
     label: 'Projects',
-    tooltip: 'In-Flight Projects',
+    tooltip: 'Requests Received',
   },
   {
     id: 'team',

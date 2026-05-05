@@ -14,7 +14,7 @@ entity type SwatSolution {
   stack: [string]
   status: string enum SolutionStatus
   builders: [TeamMember]
-  requesterOrg: string
+  originatingRequests: [SwatRequest]
   dateShipped: datetime
   reusabilityNote: string
   featured: boolean

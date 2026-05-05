@@ -102,7 +102,7 @@ export default function LandingPage() {
       <section className="bg-primary border-b border-weak px-6 py-8">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-6 divide-x-0 md:divide-x divide-weak">
           <StatCounter target={stats.requestsFielded} label="Requests fielded" />
-          <StatCounter target={stats.solutionsInProgress} label="Solutions in progress" />
+          <StatCounter target={stats.solutionsInProgress} label="Solutions in build" />
           <StatCounter target={stats.solutionsShipped} label="Solutions shipped" />
           <StatCounter target={stats.engineerHoursSaved} label="Engineer hours saved" suffix="+" />
           <StatCounter target={stats.companyDollarsSaved} label="Dollars saved" prefix="$" />
@@ -179,7 +179,7 @@ export default function LandingPage() {
             onClick={() => navigate('/projects')}
             className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
           >
-            See in-flight projects
+            See all requests
           </button>
         </div>
       </section>

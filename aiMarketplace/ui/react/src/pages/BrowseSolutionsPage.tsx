@@ -11,7 +11,7 @@ import SolutionCard from '@/components/marketplace/SolutionCard';
 import { CardGridSkeleton } from '@/components/marketplace/CardGridSkeleton';
 
 const DOMAINS: Domain[] = ['FP&A', 'Sales Ops', 'Engineering', 'GTM', 'Customer Success', 'Cross-functional'];
-const STATUSES: SolutionStatus[] = ['Shipped', 'Building', 'Scoping', 'Triaging'];
+const STATUSES: SolutionStatus[] = ['Shipped', 'Building'];
 
 export default function BrowseSolutionsPage() {
   const [allSolutions, setAllSolutions] = useState<Solution[]>([]);

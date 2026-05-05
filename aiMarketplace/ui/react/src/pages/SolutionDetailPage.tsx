@@ -79,6 +79,13 @@ export default function SolutionDetailPage() {
               </div>
             </div>
 
+            {/* Draft banner for Queued solutions */}
+            {solution.status === 'Queued' && (
+              <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl text-sm text-amber-800 dark:text-amber-200">
+                <strong>Draft.</strong> This solution hasn&apos;t started yet — fields will be filled in once a SWAT engineer picks it up.
+              </div>
+            )}
+
             {/* Impact metrics */}
             {(solution.hoursSaved || solution.dollarsSaved) && (
               <div className="grid grid-cols-2 gap-4 mb-8 p-5 bg-green-50 dark:bg-green-950/30 rounded-xl border border-green-200 dark:border-green-800">
@@ -120,34 +127,42 @@ export default function SolutionDetailPage() {
             </section>
 
             {/* Solution */}
-            <section className="mb-8">
-              <h2 className="text-base font-semibold text-primary mb-2">Solution</h2>
-              <p className="text-secondary leading-relaxed">{solution.solutionDescription}</p>
-            </section>
+            {solution.solutionDescription && (
+              <section className="mb-8">
+                <h2 className="text-base font-semibold text-primary mb-2">Solution</h2>
+                <p className="text-secondary leading-relaxed">{solution.solutionDescription}</p>
+              </section>
+            )}
 
             {/* Impact */}
-            <section className="mb-8">
-              <h2 className="text-base font-semibold text-primary mb-2">Impact</h2>
-              <p className="text-secondary leading-relaxed">{solution.impactSummary}</p>
-            </section>
+            {solution.impactSummary && (
+              <section className="mb-8">
+                <h2 className="text-base font-semibold text-primary mb-2">Impact</h2>
+                <p className="text-secondary leading-relaxed">{solution.impactSummary}</p>
+              </section>
+            )}
 
             {/* Stack */}
-            <section className="mb-8">
-              <h2 className="text-base font-semibold text-primary mb-3 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-secondary" />
-                Stack
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {solution.stack.map((s) => <StackChip key={s} label={s} />)}
-              </div>
-            </section>
+            {solution.stack.length > 0 && (
+              <section className="mb-8">
+                <h2 className="text-base font-semibold text-primary mb-3 flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-secondary" />
+                  Stack
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {solution.stack.map((s) => <StackChip key={s} label={s} />)}
+                </div>
+              </section>
+            )}
 
             {/* Reusability */}
-            <section className="mb-10 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl">
-              <p className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                🔁 {solution.reusabilityNote}
-              </p>
-            </section>
+            {solution.reusabilityNote && (
+              <section className="mb-10 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl">
+                <p className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                  🔁 {solution.reusabilityNote}
+                </p>
+              </section>
+            )}
 
             {/* Supporting Materials */}
             {solution.supportingMaterials.length > 0 && (
@@ -179,18 +194,33 @@ export default function SolutionDetailPage() {
               <div>
                 <h2 className="text-sm font-semibold text-secondary uppercase tracking-wide mb-3">Built by</h2>
                 <div className="flex flex-col gap-3">
-                  {solution.builders.map((b) => (
-                    <BuilderCard key={b.id} member={b} />
-                  ))}
+                  {solution.builders.length > 0 ? (
+                    solution.builders.map((b) => (
+                      <BuilderCard key={b.id} member={b} />
+                    ))
+                  ) : (
+                    <p className="text-xs text-secondary italic">No builders assigned yet.</p>
+                  )}
                 </div>
               </div>
 
               <div className="bg-secondary rounded-xl p-4 border border-weak">
                 <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-3">Details</p>
-                <div className="flex flex-col gap-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-secondary">Requester org</span>
-                    <span className="text-primary font-medium">{solution.requesterOrg}</span>
+                <div className="flex flex-col gap-2.5 text-sm">
+                  <div className="flex justify-between items-start gap-3">
+                    <span className="text-secondary shrink-0">Originating</span>
+                    <div className="text-right">
+                      {solution.originatingRequests.length === 0 ? (
+                        <span className="text-primary font-medium">SWAT-initiated</span>
+                      ) : (
+                        solution.originatingRequests.map((req) => (
+                          <div key={req.id} className="text-primary text-xs leading-snug">
+                            <span className="font-medium">{req.requesterTeam}</span>
+                            <span className="text-secondary"> · {req.requesterName}</span>
+                          </div>
+                        ))
+                      )}
+                    </div>
                   </div>
                   {solution.dateShipped && (
                     <div className="flex justify-between">

@@ -4,8 +4,11 @@
  */
 
 type SolutionService {
-  listSolutions: function(domain: string, status: string, search: string, stack: string, requesterOrg: string): [SwatSolution] js-server
+  listSolutions: function(domain: string, search: string, stack: string): [SwatSolution] js-server
   getSolution: function(id: string): SwatSolution js-server
   featuredSolutions: function(n: int): [SwatSolution] js-server
   recentlyShipped: function(n: int): [SwatSolution] js-server
+  listQueued: function(): [SwatSolution] js-server
+  updateDraft: function(solutionId: string, solutionDescription: string, impactSummary: string, hoursSaved: int, dollarsSaved: int, domain: [string], stack: [string], reusabilityNote: string): SwatSolution js-server
+  assignBuilders: function(solutionId: string, builderIds: [string]): SwatSolution js-server
 }

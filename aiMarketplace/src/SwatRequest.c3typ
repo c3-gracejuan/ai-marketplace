@@ -16,7 +16,6 @@ entity type SwatRequest {
   relatedLinks: [string]
   status: string enum RequestStatus
   decisionResponse: string
-  assignedOwner: string
   createdAt: datetime
   lastUpdated: datetime
 }

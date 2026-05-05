@@ -102,7 +102,7 @@ export default function SubmitRequestPage() {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-secondary">Status</span>
-              <span className="text-primary font-medium">New → Triaging</span>
+              <span className="text-primary font-medium">Triaging</span>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -110,7 +110,7 @@ export default function SubmitRequestPage() {
               onClick={() => navigate('/projects')}
               className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
             >
-              View in-flight projects
+              View all requests
             </button>
             <span className="text-secondary hidden sm:inline">·</span>
             <button

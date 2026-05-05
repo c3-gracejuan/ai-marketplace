@@ -5,19 +5,9 @@
 
 export type Domain = 'FP&A' | 'Sales Ops' | 'Engineering' | 'GTM' | 'Customer Success' | 'Cross-functional';
 
-export type SolutionStatus = 'Shipped' | 'Building' | 'Scoping' | 'Triaging';
+export type SolutionStatus = 'Queued' | 'Building' | 'Shipped';
 
-export type RequestStatus =
-  | 'New'
-  | 'Triaging'
-  | 'Awaiting Info'
-  | 'Accepted'
-  | 'Scoping'
-  | 'Building'
-  | 'Shipped'
-  | 'Deferred'
-  | 'Routed Elsewhere'
-  | "Won't Do";
+export type RequestStatus = 'Triaging' | 'Accepted' | 'Deferred' | 'Rejected';
 
 export type SupportingMaterialType =
   | 'app_link'
@@ -66,7 +56,7 @@ export interface Solution {
   stack: string[];
   status: SolutionStatus;
   builders: TeamMember[];
-  requesterOrg: string;
+  originatingRequests: Request[];
   dateShipped?: string;
   reusabilityNote: string;
   supportingMaterials: SupportingMaterial[];
@@ -87,7 +77,6 @@ export interface Request {
   relatedLinks: string[];
   status: RequestStatus;
   decisionResponse?: string;
-  assignedOwner?: string;
   createdAt: string;
   lastUpdated: string;
 }
