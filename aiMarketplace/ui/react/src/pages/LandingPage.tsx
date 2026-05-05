@@ -9,7 +9,7 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { useAnimatedCounter } from '@/hooks/useAnimatedCounter';
 import SolutionCard from '@/components/marketplace/SolutionCard';
 import { CardGridSkeleton } from '@/components/marketplace/CardGridSkeleton';
-import { featuredSolutions, recentlyShipped as recentlyShippedApi, landingStats } from '@/api/marketplace';
+import { featuredSolutions, landingStats } from '@/api/marketplace';
 import { Solution, MarketplaceStats } from '@/types/marketplace';
 
 function StatCounter({ target, label, prefix = '', suffix = '' }: { target: number; label: string; prefix?: string; suffix?: string }) {
@@ -47,9 +47,7 @@ function StatCounter({ target, label, prefix = '', suffix = '' }: { target: numb
 export default function LandingPage() {
   const navigate = useNavigate();
   const [featured, setFeatured] = useState<Solution[]>([]);
-  const [recent, setRecent] = useState<Solution[]>([]);
   const [loadingFeatured, setLoadingFeatured] = useState(true);
-  const [loadingRecent, setLoadingRecent] = useState(true);
   const [stats, setStats] = useState<MarketplaceStats>({
     requestsFielded: 0,
     solutionsInProgress: 0,
@@ -60,7 +58,6 @@ export default function LandingPage() {
 
   useEffect(() => {
     featuredSolutions(3).then(setFeatured).catch(() => {}).finally(() => setLoadingFeatured(false));
-    recentlyShippedApi(4).then(setRecent).catch(() => {}).finally(() => setLoadingRecent(false));
     landingStats().then(setStats).catch(() => {});
   }, []);
 
@@ -132,33 +129,6 @@ export default function LandingPage() {
             ))}
           </div>
         )}
-      </section>
-
-      {/* Recently shipped */}
-      <section className="bg-secondary px-6 py-14">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-primary">Recently Shipped</h2>
-              <p className="text-secondary text-sm mt-1">Hot off the press.</p>
-            </div>
-            <button
-              onClick={() => navigate('/solutions')}
-              className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
-            >
-              Full catalog <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-          {loadingRecent ? (
-            <CardGridSkeleton count={4} />
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {recent.map((s) => (
-                <SolutionCard key={s.id} solution={s} />
-              ))}
-            </div>
-          )}
-        </div>
       </section>
 
       {/* About strip */}
