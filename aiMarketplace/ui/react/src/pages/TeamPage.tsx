@@ -25,8 +25,8 @@ export default function TeamPage() {
       <div className="border-b border-weak px-6 py-8 bg-secondary">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl font-bold text-primary">The SWAT Team</h1>
-          <p className="text-secondary mt-2">
-            A small, high-output engineering unit embedded within C3 AI. Every solution is credited to the engineer who built it.
+          <p className="text-secondary mt-2 leading-relaxed">
+            The SWAT team is a small, high-output engineering unit embedded within C3 AI. We tackle the internal automation problems that compound the most — FP&amp;A bottlenecks, Sales Ops friction, CS tooling gaps, and cross-functional data plumbing. We triage every request, work in public, and credit every engineer by name.
           </p>
         </div>
       </div>

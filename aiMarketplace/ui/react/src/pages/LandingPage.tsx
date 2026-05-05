@@ -130,29 +130,6 @@ export default function LandingPage() {
           </div>
         )}
       </section>
-
-      {/* About strip */}
-      <section className="px-6 py-14 max-w-4xl mx-auto text-center">
-        <h2 className="text-xl font-bold text-primary mb-3">About SWAT</h2>
-        <p className="text-secondary leading-relaxed mb-6">
-          The SWAT team is a small, high-output engineering unit embedded within C3 AI. We tackle the internal automation problems that compound the most — FP&A bottlenecks, Sales Ops friction, CS tooling gaps, and cross-functional data plumbing. We triage every request, work in public, and credit every engineer by name.
-        </p>
-        <div className="flex justify-center gap-4">
-          <button
-            onClick={() => navigate('/team')}
-            className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            Meet the team
-          </button>
-          <span className="text-secondary">·</span>
-          <button
-            onClick={() => navigate('/projects')}
-            className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            See all requests
-          </button>
-        </div>
-      </section>
     </div>
   );
 }
