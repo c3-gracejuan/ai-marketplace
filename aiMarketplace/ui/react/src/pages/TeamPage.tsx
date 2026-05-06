@@ -21,7 +21,7 @@ export default function TeamPage() {
   return (
     <div className="min-h-full bg-primary">
       {/* Header */}
-      <div className="border-b border-weak px-6 py-8 bg-secondary">
+      <div className="border-b border-weak px-6 py-8">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl font-bold text-primary">The SWAT Team</h1>
           <p className="text-secondary mt-2 leading-relaxed">
@@ -33,45 +33,59 @@ export default function TeamPage() {
       <div className="max-w-5xl mx-auto px-6 py-10">
         {/* Team roster */}
         {loading && <TeamGridSkeleton count={6} />}
-        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ${loading ? 'hidden' : ''}`}>
-          {teamMembers.map((member) => {
-            const memberSolutions = member.solutions ?? [];
-            return (
-              <div key={member.id} className="bg-secondary border border-weak rounded-xl p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-start gap-4 mb-4">
-                  <img
-                    src={member.avatarUrl}
-                    alt={member.name}
-                    className="w-14 h-14 rounded-full shrink-0"
-                  />
-                  <div className="min-w-0">
-                    <h3 className="font-bold text-primary text-base">{member.name}</h3>
-                    <p className="text-sm text-secondary">{member.role}</p>
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${loading ? 'hidden' : ''}`}>
+          {[...teamMembers]
+            .sort((a, b) => (b.solutions?.length ?? 0) - (a.solutions?.length ?? 0))
+            .map((member) => {
+              const memberSolutions = member.solutions ?? [];
+              const count = memberSolutions.length;
+              return (
+                <div
+                  key={member.id}
+                  className="border border-weak rounded-xl p-6 hover:border-strong transition-colors flex flex-col"
+                >
+                  {/* Header: identity left, hero stat right */}
+                  <div className="flex items-start justify-between gap-4 mb-5">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <img
+                        src={member.avatarUrl}
+                        alt={member.name}
+                        className="w-11 h-11 rounded-full shrink-0"
+                      />
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-primary text-base truncate leading-tight">{member.name}</h3>
+                        <p className="text-xs text-secondary mt-0.5 truncate">{member.role}</p>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <div className="text-3xl font-bold text-primary tabular-nums leading-none">{count}</div>
+                      <div className="text-[10px] uppercase tracking-wider text-secondary mt-1.5">
+                        Shipped
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                {/* Solutions */}
-                {memberSolutions.length > 0 && (
-                  <div className="border-t border-weak pt-4">
-                    <div className="flex flex-col gap-1">
-                      {memberSolutions.slice(0, 3).map((s) => (
+                  {/* Solutions */}
+                  {count > 0 ? (
+                    <div className="border-t border-weak pt-4 flex flex-col gap-1.5">
+                      {memberSolutions.map((s) => (
                         <button
                           key={s.id}
                           onClick={() => navigate(`/solutions/${s.id}`)}
-                          className="text-xs text-left text-blue-600 dark:text-blue-400 hover:underline truncate"
+                          className="text-left text-sm text-secondary hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate"
                         >
-                          → {s.title}
+                          {s.title}
                         </button>
                       ))}
-                      {memberSolutions.length > 3 && (
-                        <span className="text-xs text-secondary">+{memberSolutions.length - 3} more</span>
-                      )}
                     </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  ) : (
+                    <div className="border-t border-weak pt-4">
+                      <p className="text-xs text-secondary italic">No solutions shipped yet.</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
         </div>
       </div>
     </div>

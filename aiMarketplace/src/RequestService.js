@@ -36,7 +36,7 @@ function decide(requestId, newStatus, response) {
     throw new Error('Invalid transition: ' + request.status + ' -> ' + newStatus);
   }
 
-  var updated = request
+  request
     .withField('status', newStatus)
     .withField('decisionResponse', response)
     .merge();
@@ -53,7 +53,7 @@ function decide(requestId, newStatus, response) {
     }).create();
   }
 
-  return updated;
+  return SwatRequest.forId(requestId).get('this');
 }
 
 function listForTriage() {

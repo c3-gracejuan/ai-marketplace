@@ -99,7 +99,7 @@ export default function SubmitRequestPage() {
   return (
     <div className="min-h-full bg-primary">
       {/* Header */}
-      <div className="border-b border-weak px-6 py-6 bg-secondary">
+      <div className="border-b border-weak px-6 py-6">
         <div className="max-w-3xl mx-auto">
           <button
             onClick={() => navigate(-1)}
