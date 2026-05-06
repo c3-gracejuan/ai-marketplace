@@ -32,7 +32,16 @@ export default function BrowseSolutionsPage() {
   const filtered = useMemo(() => {
     return allSolutions.filter((sol) => {
       const q = search.toLowerCase();
-      const matchSearch = !q || sol.title.toLowerCase().includes(q) || sol.problem.toLowerCase().includes(q);
+      const matchSearch =
+        !q ||
+        sol.title.toLowerCase().includes(q) ||
+        sol.problem.toLowerCase().includes(q) ||
+        sol.solutionDescription.toLowerCase().includes(q) ||
+        sol.builders.some(
+          (b) =>
+            b.name.toLowerCase().includes(q) ||
+            b.expertise.some((e) => e.toLowerCase().includes(q))
+        );
       const matchDomain = !selectedDomains.length || sol.domain.some((d) => selectedDomains.includes(d));
       const matchStatus = !selectedStatuses.length || selectedStatuses.includes(sol.status);
       return matchSearch && matchDomain && matchStatus;
@@ -78,52 +87,64 @@ export default function BrowseSolutionsPage() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col lg:flex-row gap-8">
+      <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col lg:flex-row gap-10">
         {/* Filter rail */}
         <aside className="lg:w-56 shrink-0">
-          <div className="sticky top-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-primary text-sm">Filters</h2>
-              {hasFilters && (
-                <button onClick={clearFilters} className="text-xs text-blue-600 dark:text-blue-400 hover:underline">
-                  Clear all
-                </button>
-              )}
-            </div>
-
+          <div className="sticky top-4 space-y-6">
             {/* Domain filter */}
-            <div className="mb-6">
-              <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-2">Domain</p>
-              <div className="flex flex-col gap-1.5">
-                {DOMAINS.map((d) => (
-                  <label key={d} className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedDomains.includes(d)}
-                      onChange={() => toggleDomain(d)}
-                      className="w-3.5 h-3.5 rounded accent-blue-600"
-                    />
-                    <span className="text-sm text-primary">{d}</span>
-                  </label>
-                ))}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-[11px] font-semibold text-secondary uppercase tracking-wider">Domain</p>
+                {hasFilters && (
+                  <button onClick={clearFilters} className="text-[11px] text-blue-600 dark:text-blue-400 hover:underline">
+                    Clear
+                  </button>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {DOMAINS.map((d) => {
+                  const active = selectedDomains.includes(d);
+                  return (
+                    <button
+                      key={d}
+                      type="button"
+                      onClick={() => toggleDomain(d)}
+                      className={
+                        'inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ' +
+                        (active
+                          ? 'bg-blue-600 text-white border-blue-600 dark:bg-blue-500 dark:border-blue-500'
+                          : 'bg-transparent text-secondary border-weak hover:text-primary hover:border-strong')
+                      }
+                    >
+                      {d}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
             {/* Status filter */}
             <div>
-              <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-2">Status</p>
-              <div className="flex flex-col gap-1.5">
-                {STATUSES.map((s) => (
-                  <label key={s} className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedStatuses.includes(s)}
-                      onChange={() => toggleStatus(s)}
-                      className="w-3.5 h-3.5 rounded accent-blue-600"
-                    />
-                    <span className="text-sm text-primary">{s}</span>
-                  </label>
-                ))}
+              <p className="text-[11px] font-semibold text-secondary uppercase tracking-wider mb-3">Status</p>
+              <div className="flex flex-wrap gap-1.5">
+                {STATUSES.map((s) => {
+                  const active = selectedStatuses.includes(s);
+                  return (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => toggleStatus(s)}
+                      className={
+                        'inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ' +
+                        (active
+                          ? 'bg-blue-600 text-white border-blue-600 dark:bg-blue-500 dark:border-blue-500'
+                          : 'bg-transparent text-secondary border-weak hover:text-primary hover:border-strong')
+                      }
+                    >
+                      {s}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>

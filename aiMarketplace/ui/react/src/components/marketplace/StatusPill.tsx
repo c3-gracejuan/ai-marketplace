@@ -8,16 +8,23 @@ import { SolutionStatus, RequestStatus } from '@/types/marketplace';
 
 type AnyStatus = SolutionStatus | RequestStatus;
 
+const NEUTRAL = 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+const ACCENT = 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+const SUCCESS = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+const WARNING = 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200';
+
 const statusStyles: Record<AnyStatus, string> = {
-  // Request statuses
-  Triaging: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-  Accepted: 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200',
-  Deferred: 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200',
-  Rejected: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-  // Solution statuses
-  Queued: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
-  Building: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-  Shipped: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+  // Pre-decision / pre-work
+  Triaging: NEUTRAL,
+  Queued: NEUTRAL,
+  // Active / committed
+  Accepted: ACCENT,
+  Building: ACCENT,
+  // Done
+  Shipped: SUCCESS,
+  // Not happening (now or ever)
+  Deferred: WARNING,
+  Rejected: WARNING,
 };
 
 interface StatusPillProps {

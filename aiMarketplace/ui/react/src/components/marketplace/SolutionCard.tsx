@@ -31,7 +31,7 @@ export default function SolutionCard({ solution }: SolutionCardProps) {
     <div
       role="button"
       tabIndex={0}
-      className="bg-primary border border-weak rounded-xl p-5 cursor-pointer hover:shadow-md hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200 flex flex-col gap-3 group"
+      className="bg-primary dark:bg-secondary border border-weak rounded-xl p-5 cursor-pointer hover:shadow-md hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200 flex flex-col gap-3 group"
       onClick={() => navigate(`/solutions/${solution.id}`)}
       onKeyDown={(e) => e.key === 'Enter' && navigate(`/solutions/${solution.id}`)}
     >

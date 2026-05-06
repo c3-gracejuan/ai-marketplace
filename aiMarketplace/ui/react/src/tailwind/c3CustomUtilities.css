@@ -61,6 +61,46 @@
   }
 }
 
+/* Fluid Responsive Utilities
+
+   Continuous scaling via clamp(). Padding curves pass exactly through
+   (1500px, floor) and (1920px, ceiling): laptops sit at the tight floor,
+   true large monitors hit the generous ceiling, and the range between is
+   a smooth fluid transition. Typography clamps reach their ceilings earlier
+   (around 1000–1600px) and stay there — by design, so headings and body
+   look intentional on every screen ≥ ~laptop. */
+
+@utility py-fluid-hero {
+  padding-top: clamp(3rem, calc(7.619vw - 66.3px), 5rem);
+  padding-bottom: clamp(3rem, calc(7.619vw - 66.3px), 5rem);
+}
+
+@utility py-fluid-strip {
+  padding-top: clamp(1.5rem, calc(1.905vw - 4.57px), 2rem);
+  padding-bottom: clamp(1.5rem, calc(1.905vw - 4.57px), 2rem);
+}
+
+@utility py-fluid-section {
+  padding-top: clamp(2rem, calc(5.714vw - 53.71px), 3.5rem);
+  padding-bottom: clamp(2rem, calc(5.714vw - 53.71px), 3.5rem);
+}
+
+@utility p-fluid-card {
+  padding: clamp(1.5rem, calc(1.905vw - 4.57px), 2rem);
+}
+
+@utility text-fluid-display {
+  font-size: clamp(1.875rem, calc(1rem + 2.5vw), 3rem);
+}
+
+@utility text-fluid-lead {
+  font-size: clamp(1rem, calc(0.875rem + 0.4vw), 1.125rem);
+}
+
+@utility text-fluid-stat {
+  font-size: clamp(1.875rem, calc(1.25rem + 1vw), 2.25rem);
+}
+
 /* Animation Utilities */
 @utility animate-fade-in {
   animation: fadeIn 0.2s ease-in-out;

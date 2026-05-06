@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Clock, DollarSign } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { getSolution } from '@/api/marketplace';
 import { Solution } from '@/types/marketplace';
 import { formatDollars } from '@/lib/formatImpact';
@@ -53,20 +53,15 @@ export default function SolutionDetailPage() {
 
   return (
     <div className="min-h-full bg-primary">
-      {/* Breadcrumb */}
-      <div className="border-b border-weak px-6 py-4 bg-secondary">
-        <div className="max-w-5xl mx-auto">
-          <button
-            onClick={() => navigate('/solutions')}
-            className="flex items-center gap-1.5 text-sm text-secondary hover:text-primary transition-colors"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            Solutions Catalog
-          </button>
-        </div>
-      </div>
+      <div className="max-w-5xl mx-auto px-6 py-8">
+        <button
+          onClick={() => navigate('/solutions')}
+          className="flex items-center gap-1.5 text-sm text-secondary hover:text-primary transition-colors mb-6"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Solutions Catalog
+        </button>
 
-      <div className="max-w-5xl mx-auto px-6 py-10">
         <div className="flex flex-col lg:flex-row gap-10">
           {/* Main content */}
           <div className="flex-1 min-w-0">
@@ -124,37 +119,32 @@ export default function SolutionDetailPage() {
 
           {/* Sidebar */}
           <aside className="lg:w-72 shrink-0">
-            <div className="sticky top-6 flex flex-col gap-5">
+            <div className="sticky top-6 flex flex-col">
               {/* Impact */}
               {showImpact && (
-                <div className="p-5 bg-green-50 dark:bg-green-950/30 rounded-xl border border-green-200 dark:border-green-800 flex flex-col gap-4">
+                <div className="pb-8">
                   {solution.hoursSaved ? (
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-                        <Clock className="w-5 h-5 text-green-700 dark:text-green-300" />
-                      </div>
-                      <div>
-                        <p className="text-lg font-bold text-green-700 dark:text-green-300">{solution.hoursSaved.toLocaleString()} hrs</p>
-                        <p className="text-xs text-green-600 dark:text-green-400">Engineer hours saved</p>
-                      </div>
+                    <div className={solution.dollarsSaved ? 'mb-7' : ''}>
+                      <p className="text-5xl font-bold tabular-nums text-green-600 dark:text-green-400 tracking-tight leading-none">
+                        {solution.hoursSaved.toLocaleString()}
+                        <span className="text-2xl font-semibold ml-1.5 tracking-normal">hrs</span>
+                      </p>
+                      <p className="text-xs text-secondary uppercase tracking-wide mt-2.5 font-medium">Engineer hours saved</p>
                     </div>
                   ) : null}
                   {solution.dollarsSaved ? (
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-                        <DollarSign className="w-5 h-5 text-green-700 dark:text-green-300" />
-                      </div>
-                      <div>
-                        <p className="text-lg font-bold text-green-700 dark:text-green-300">{formatDollars(solution.dollarsSaved)}</p>
-                        <p className="text-xs text-green-600 dark:text-green-400">Estimated impact</p>
-                      </div>
+                    <div>
+                      <p className="text-5xl font-bold tabular-nums text-green-600 dark:text-green-400 tracking-tight leading-none">
+                        {formatDollars(solution.dollarsSaved)}
+                      </p>
+                      <p className="text-xs text-secondary uppercase tracking-wide mt-2.5 font-medium">Estimated impact</p>
                     </div>
                   ) : null}
                 </div>
               )}
 
               {/* Built by */}
-              <div>
+              <div className={showImpact ? 'pt-8 border-t border-weak' : ''}>
                 <h2 className="text-sm font-semibold text-secondary uppercase tracking-wide mb-3">Built by</h2>
                 <div className="flex flex-col gap-3">
                   {solution.builders.length > 0 ? (

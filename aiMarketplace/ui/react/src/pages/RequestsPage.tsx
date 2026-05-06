@@ -12,10 +12,10 @@ import StatusPill from '@/components/marketplace/StatusPill';
 import { KanbanSkeleton } from '@/components/marketplace/CardGridSkeleton';
 
 const COLUMNS: { status: RequestStatus; label: string; color: string }[] = [
-  { status: 'Triaging', label: 'Triaging', color: 'border-purple-300 dark:border-purple-700' },
-  { status: 'Accepted', label: 'Accepted', color: 'border-teal-300 dark:border-teal-700' },
+  { status: 'Triaging', label: 'Triaging', color: 'border-gray-300 dark:border-gray-700' },
+  { status: 'Accepted', label: 'Accepted', color: 'border-blue-300 dark:border-blue-700' },
   { status: 'Deferred', label: 'Deferred', color: 'border-amber-300 dark:border-amber-700' },
-  { status: 'Rejected', label: 'Rejected', color: 'border-red-300 dark:border-red-700' },
+  { status: 'Rejected', label: 'Rejected', color: 'border-amber-300 dark:border-amber-700' },
 ];
 
 interface RequestCardProps {
@@ -28,7 +28,7 @@ function RequestCard({ request, linkedSolutions, onReopen }: RequestCardProps) {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-primary border border-weak rounded-xl p-4 flex flex-col gap-3">
+    <div className="bg-primary dark:bg-secondary border border-weak rounded-xl p-4 flex flex-col gap-3">
       <p className="font-semibold text-sm text-primary leading-snug">{request.title}</p>
 
       <p className="text-xs text-secondary line-clamp-2 leading-relaxed">{request.problem}</p>
@@ -45,7 +45,7 @@ function RequestCard({ request, linkedSolutions, onReopen }: RequestCardProps) {
             <button
               key={sol.id}
               onClick={() => navigate(`/solutions/${sol.id}`)}
-              className="flex items-center justify-between gap-2 text-left text-xs px-2 py-1.5 rounded-md hover:bg-secondary transition-colors group"
+              className="flex items-center justify-between gap-2 text-left text-xs px-2 py-1.5 rounded-md hover:bg-tertiary transition-colors group"
             >
               <span className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-medium group-hover:underline truncate">
                 <ArrowRight className="w-3 h-3 shrink-0" />
