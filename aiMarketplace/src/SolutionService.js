@@ -10,15 +10,11 @@ function publishedFilter() {
   return Filter.eq('status', 'Building').or().eq('status', 'Shipped');
 }
 
-function listSolutions(domain, search, stack) {
+function listSolutions(domain, search) {
   var filter = publishedFilter();
 
   if (domain) {
     filter = filter.and().paren(Filter.contains('domain', domain));
-  }
-
-  if (stack) {
-    filter = filter.and().paren(Filter.contains('stack', stack));
   }
 
   if (search) {
@@ -59,7 +55,7 @@ function listQueued() {
   return result.objs || [];
 }
 
-function updateDraft(solutionId, solutionDescription, impactSummary, hoursSaved, dollarsSaved, domain, stack, reusabilityNote) {
+function updateDraft(solutionId, solutionDescription, impactSummary, hoursSaved, dollarsSaved, domain, reusabilityNote) {
   var solution = SwatSolution.forId(solutionId).get('this');
   if (!solution) {
     throw new Error('SwatSolution not found with id: ' + solutionId);
@@ -70,7 +66,6 @@ function updateDraft(solutionId, solutionDescription, impactSummary, hoursSaved,
     .withField('hoursSaved', hoursSaved || 0)
     .withField('dollarsSaved', dollarsSaved || 0)
     .withField('domain', domain || [])
-    .withField('stack', stack || [])
     .withField('reusabilityNote', reusabilityNote || '')
     .merge();
 }
@@ -91,9 +86,6 @@ function assignBuilders(solutionId, builderIds) {
   }
   if (!solution.domain || solution.domain.length === 0) {
     throw new Error('At least one domain is required before starting.');
-  }
-  if (!solution.stack || solution.stack.length === 0) {
-    throw new Error('At least one stack item is required before starting.');
   }
 
   var builders = builderIds.map(function (id) { return {id: id}; });

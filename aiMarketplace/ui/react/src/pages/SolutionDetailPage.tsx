@@ -5,11 +5,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Clock, DollarSign, Layers, ArrowRight } from 'lucide-react';
+import { ChevronLeft, Clock, DollarSign, ArrowRight } from 'lucide-react';
 import { getSolution } from '@/api/marketplace';
 import { Solution } from '@/types/marketplace';
-import DomainChip from '@/components/marketplace/DomainChip';
-import StackChip from '@/components/marketplace/StackChip';
 import StatusPill from '@/components/marketplace/StatusPill';
 import BuilderCard from '@/components/marketplace/BuilderCard';
 import SupportingMaterialRenderer from '@/components/marketplace/SupportingMaterialRenderer';
@@ -68,14 +66,11 @@ export default function SolutionDetailPage() {
           <div className="flex-1 min-w-0">
             {/* Title block */}
             <div className="mb-6">
-              <div className="flex items-start gap-3 mb-3">
+              <div className="flex items-start gap-3">
                 <h1 className="text-2xl md:text-3xl font-bold text-primary leading-tight flex-1">
                   {solution.title}
                 </h1>
                 <StatusPill status={solution.status} size="md" />
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {solution.domain.map((d) => <DomainChip key={d} domain={d} size="md" />)}
               </div>
             </div>
 
@@ -139,19 +134,6 @@ export default function SolutionDetailPage() {
               <section className="mb-8">
                 <h2 className="text-base font-semibold text-primary mb-2">Impact</h2>
                 <p className="text-secondary leading-relaxed">{solution.impactSummary}</p>
-              </section>
-            )}
-
-            {/* Stack */}
-            {solution.stack.length > 0 && (
-              <section className="mb-8">
-                <h2 className="text-base font-semibold text-primary mb-3 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-secondary" />
-                  Stack
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {solution.stack.map((s) => <StackChip key={s} label={s} />)}
-                </div>
               </section>
             )}
 

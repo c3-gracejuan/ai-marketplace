@@ -2,31 +2,43 @@
   {
     "id": "sol1",
     "title": "Pipeline coverage early-warning email",
-    "problem": "Marketing and GTM leaders only learn about pipeline coverage gaps at the weekly forecast review — by then the window to act has closed. We want a daily digest that flags any segment slipping below 3x coverage with the responsible AE and the at-risk amount.",
+    "problem": "Marketing and GTM leaders only learn about pipeline coverage gaps at the weekly forecast review \u2014 by then the window to act has closed. We want a daily digest that flags any segment slipping below 3x coverage with the responsible AE and the at-risk amount.",
     "solutionDescription": "",
     "impactSummary": "",
     "hoursSaved": 0,
     "dollarsSaved": 0,
     "domain": [],
-    "stack": [],
     "status": "Queued",
     "builders": [],
-    "originatingRequests": [{"id": "req3"}],
+    "originatingRequests": [
+      {
+        "id": "req3"
+      }
+    ],
     "reusabilityNote": ""
   },
   {
     "id": "sol2",
     "title": "Renewal Risk Dashboard",
     "problem": "The renewal team has no proactive view of accounts at risk before the 90-day window. By the time they react, the customer has already made up their mind.",
-    "solutionDescription": "Building a renewal risk dashboard that scores accounts on a 0–100 risk scale based on usage telemetry, support tickets, NPS, and contract proximity. CSM-facing view shows top 20 at-risk accounts with drill-down into signals.",
+    "solutionDescription": "Building a renewal risk dashboard that scores accounts on a 0\u2013100 risk scale based on usage telemetry, support tickets, NPS, and contract proximity. CSM-facing view shows top 20 at-risk accounts with drill-down into signals.",
     "impactSummary": "",
     "hoursSaved": 0,
     "dollarsSaved": 0,
-    "domain": ["Customer Success"],
-    "stack": ["Python", "C3 AI", "Salesforce"],
+    "domain": [
+      "Customer Success"
+    ],
     "status": "Building",
-    "builders": [{"id": "tm5"}],
-    "originatingRequests": [{"id": "req4"}],
+    "builders": [
+      {
+        "id": "tm5"
+      }
+    ],
+    "originatingRequests": [
+      {
+        "id": "req4"
+      }
+    ],
     "reusabilityNote": ""
   },
   {
@@ -37,10 +49,16 @@
     "impactSummary": "",
     "hoursSaved": 0,
     "dollarsSaved": 0,
-    "domain": ["FP&A", "Cross-functional"],
-    "stack": ["Python", "C3 AI", "NetSuite"],
+    "domain": [
+      "FP&A",
+      "Cross-functional"
+    ],
     "status": "Building",
-    "builders": [{"id": "tm4"}],
+    "builders": [
+      {
+        "id": "tm4"
+      }
+    ],
     "originatingRequests": [],
     "reusabilityNote": ""
   },
@@ -52,26 +70,47 @@
     "impactSummary": "Single source of truth for GTM health adopted by CRO/CMO/VP CS staff meetings. Eliminated 3 standalone weekly reports. Caught 6 at-risk renewals in the first quarter.",
     "hoursSaved": 320,
     "dollarsSaved": 1800000,
-    "domain": ["GTM", "Customer Success", "Cross-functional"],
-    "stack": ["Python", "C3 AI", "Salesforce", "Tableau"],
+    "domain": [
+      "GTM",
+      "Customer Success",
+      "Cross-functional"
+    ],
     "status": "Shipped",
-    "builders": [{"id": "tm1"}, {"id": "tm5"}, {"id": "tm6"}],
+    "builders": [
+      {
+        "id": "tm1"
+      },
+      {
+        "id": "tm5"
+      },
+      {
+        "id": "tm6"
+      }
+    ],
     "originatingRequests": [],
     "dateShipped": "2026-04-08T00:00:00.000Z",
-    "reusabilityNote": "The cross-signal join pattern — joining pipeline, health, and attribution into one entity model with role-based views — is forkable for any cross-functional health dashboard."
+    "reusabilityNote": "The cross-signal join pattern \u2014 joining pipeline, health, and attribution into one entity model with role-based views \u2014 is forkable for any cross-functional health dashboard."
   },
   {
     "id": "sol5",
     "title": "Automated Headcount Variance Report",
-    "problem": "The FP&A team spent 6–8 hours every month manually reconciling headcount data across Workday, Adaptive, and internal spreadsheets. Discrepancies went undetected until close, causing last-minute reforecasts.",
+    "problem": "The FP&A team spent 6\u20138 hours every month manually reconciling headcount data across Workday, Adaptive, and internal spreadsheets. Discrepancies went undetected until close, causing last-minute reforecasts.",
     "solutionDescription": "Built a C3 AI pipeline that pulls from Workday and Adaptive APIs on a nightly schedule, computes variance by department and cost center, and surfaces a self-refreshing dashboard. Threshold alerts flag anomalies >2% before month-end close.",
     "impactSummary": "Eliminated 8 hours/month of manual reconciliation. Zero close-day surprises in the 3 months since launch.",
     "hoursSaved": 96,
     "dollarsSaved": 48000,
-    "domain": ["FP&A"],
-    "stack": ["Python", "C3 AI", "Adaptive", "Workday"],
+    "domain": [
+      "FP&A"
+    ],
     "status": "Shipped",
-    "builders": [{"id": "tm1"}, {"id": "tm4"}],
+    "builders": [
+      {
+        "id": "tm1"
+      },
+      {
+        "id": "tm4"
+      }
+    ],
     "originatingRequests": [],
     "dateShipped": "2025-11-15T00:00:00.000Z",
     "reusabilityNote": "Forkable for any team reconciling data across two or more HR/planning systems."
@@ -84,10 +123,18 @@
     "impactSummary": "68% of deals now auto-approved. Average approval latency down from 4.2 days to 11 hours for routed deals.",
     "hoursSaved": 240,
     "dollarsSaved": 320000,
-    "domain": ["Sales Ops"],
-    "stack": ["JavaScript", "Salesforce", "C3 AI", "REST APIs"],
+    "domain": [
+      "Sales Ops"
+    ],
     "status": "Shipped",
-    "builders": [{"id": "tm2"}, {"id": "tm6"}],
+    "builders": [
+      {
+        "id": "tm2"
+      },
+      {
+        "id": "tm6"
+      }
+    ],
     "originatingRequests": [],
     "dateShipped": "2025-12-02T00:00:00.000Z",
     "reusabilityNote": "The policy engine pattern is forkable for any multi-tier approval workflow."
@@ -100,10 +147,19 @@
     "impactSummary": "Eliminated 5 hours/week of analyst time. Sales leadership has data by Monday 7am instead of Tuesday afternoon.",
     "hoursSaved": 260,
     "dollarsSaved": 130000,
-    "domain": ["Sales Ops", "FP&A"],
-    "stack": ["Python", "Salesforce", "C3 AI"],
+    "domain": [
+      "Sales Ops",
+      "FP&A"
+    ],
     "status": "Shipped",
-    "builders": [{"id": "tm1"}, {"id": "tm6"}],
+    "builders": [
+      {
+        "id": "tm1"
+      },
+      {
+        "id": "tm6"
+      }
+    ],
     "originatingRequests": [],
     "dateShipped": "2025-10-28T00:00:00.000Z",
     "reusabilityNote": "Digest template is forkable for any recurring operational report."
@@ -116,10 +172,18 @@
     "impactSummary": "Health scores now refresh daily. CSMs caught 4 at-risk accounts in Q4 that would have churned without intervention. Estimated $2.1M ARR protected.",
     "hoursSaved": 400,
     "dollarsSaved": 2100000,
-    "domain": ["Customer Success"],
-    "stack": ["Python", "C3 AI", "Salesforce", "Slack API"],
+    "domain": [
+      "Customer Success"
+    ],
     "status": "Shipped",
-    "builders": [{"id": "tm3"}, {"id": "tm6"}],
+    "builders": [
+      {
+        "id": "tm3"
+      },
+      {
+        "id": "tm6"
+      }
+    ],
     "originatingRequests": [],
     "dateShipped": "2025-09-12T00:00:00.000Z",
     "reusabilityNote": "Health score framework forkable for any account-based risk scoring use case."
@@ -127,15 +191,23 @@
   {
     "id": "sol9",
     "title": "Eng Incident Cost Estimator",
-    "problem": "Engineering leadership had no way to quantify the cost of incidents — downtime was tracked in PagerDuty, but the business impact (eng hours, customer ARR at risk, support load) was never rolled up.",
+    "problem": "Engineering leadership had no way to quantify the cost of incidents \u2014 downtime was tracked in PagerDuty, but the business impact (eng hours, customer ARR at risk, support load) was never rolled up.",
     "solutionDescription": "Built an incident cost model that joins PagerDuty data with ARR exposure, support ticket surge metrics, and eng time estimates. Generates a cost report for every P1/P2 within 48 hours of resolution.",
     "impactSummary": "Every major incident now has a quantified cost within 48 hours. Engineering and Finance use the data to prioritize reliability investments.",
     "hoursSaved": 120,
     "dollarsSaved": 600000,
-    "domain": ["Engineering"],
-    "stack": ["Python", "PagerDuty", "C3 AI"],
+    "domain": [
+      "Engineering"
+    ],
     "status": "Shipped",
-    "builders": [{"id": "tm2"}, {"id": "tm5"}],
+    "builders": [
+      {
+        "id": "tm2"
+      },
+      {
+        "id": "tm5"
+      }
+    ],
     "originatingRequests": [],
     "dateShipped": "2026-01-14T00:00:00.000Z",
     "reusabilityNote": "Cost model is forkable for any operational process where you need to attach a dollar figure to a time-series event."

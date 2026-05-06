@@ -173,7 +173,6 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
   const [hoursSaved, setHoursSaved] = useState(solution.hoursSaved?.toString() ?? '');
   const [dollarsSaved, setDollarsSaved] = useState(solution.dollarsSaved?.toString() ?? '');
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>(solution.domain);
-  const [stackInput, setStackInput] = useState(solution.stack.join(', '));
   const [reusabilityNote, setReusabilityNote] = useState(solution.reusabilityNote);
   const [selectedBuilderIds, setSelectedBuilderIds] = useState<string[]>(solution.builders.map((b) => b.id));
   const [savingDraft, setSavingDraft] = useState(false);
@@ -181,7 +180,6 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
   const [error, setError] = useState('');
 
   const originating = solution.originatingRequests[0];
-  const stack = stackInput.split(',').map((s) => s.trim()).filter(Boolean);
 
   const toggleDomain = (d: Domain) =>
     setSelectedDomains((prev) => (prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]));
@@ -191,7 +189,6 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
   const canAssign =
     solutionDescription.trim().length > 0 &&
     selectedDomains.length > 0 &&
-    stack.length > 0 &&
     selectedBuilderIds.length > 0;
 
   const handleSaveDraft = async () => {
@@ -205,7 +202,6 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
         hoursSaved: hoursSaved ? parseInt(hoursSaved, 10) || 0 : 0,
         dollarsSaved: dollarsSaved ? parseInt(dollarsSaved, 10) || 0 : 0,
         domain: selectedDomains,
-        stack,
         reusabilityNote,
       });
       onChange(updated);
@@ -228,7 +224,6 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
         hoursSaved: hoursSaved ? parseInt(hoursSaved, 10) || 0 : 0,
         dollarsSaved: dollarsSaved ? parseInt(dollarsSaved, 10) || 0 : 0,
         domain: selectedDomains,
-        stack,
         reusabilityNote,
       });
       await assignBuilders(solution.id, selectedBuilderIds);
@@ -304,19 +299,6 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
                     </button>
                   ))}
                 </div>
-              </div>
-
-              <div>
-                <p className="block text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
-                  Stack <span className="text-red-500">*</span>
-                </p>
-                <input
-                  type="text"
-                  value={stackInput}
-                  onChange={(e) => setStackInput(e.target.value)}
-                  placeholder="Python, C3 AI, Salesforce (comma-separated)"
-                  className="w-full rounded-lg border border-weak bg-primary text-primary px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary"
-                />
               </div>
 
               <div>
@@ -420,7 +402,7 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
             </button>
             {!canAssign && (
               <span className="text-xs text-secondary italic">
-                Description, domain, stack, and at least one builder are required to start.
+                Description, domain, and at least one builder are required to start.
               </span>
             )}
           </div>

@@ -11,7 +11,6 @@ entity type SwatSolution {
   hoursSaved: int
   dollarsSaved: int
   domain: [string]
-  stack: [string]
   status: string enum SolutionStatus
   builders: [TeamMember]
   originatingRequests: [SwatRequest]

@@ -48,7 +48,6 @@ export interface Solution {
   hoursSaved?: number;
   dollarsSaved?: number;
   domain: Domain[];
-  stack: string[];
   status: SolutionStatus;
   builders: TeamMember[];
   originatingRequests: Request[];
