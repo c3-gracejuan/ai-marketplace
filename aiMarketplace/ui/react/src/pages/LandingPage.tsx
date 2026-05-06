@@ -130,6 +130,52 @@ export default function LandingPage() {
           </div>
         )}
       </section>
+
+      {/* How we work */}
+      <section className="px-6 pb-14 max-w-6xl mx-auto">
+        <div className="bg-secondary border border-weak rounded-2xl p-8">
+          <h2 className="text-xl font-bold text-primary mb-6">How we work</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[
+              {
+                step: '01',
+                title: 'Intake',
+                desc: 'Anyone at C3 submits a structured request via the Marketplace. Every request gets a triage review.',
+              },
+              {
+                step: '02',
+                title: 'Triage',
+                desc: 'We evaluate fit, scope, and capacity. We respond to every request — even with a "not now" — with transparent reasoning.',
+              },
+              {
+                step: '03',
+                title: 'Build',
+                desc: 'Accepted projects are owned by a named engineer. Status is public. We ship iteratively and move fast.',
+              },
+              {
+                step: '04',
+                title: 'Ship & Compound',
+                desc: 'Every shipped solution is documented and searchable. We tag reusable patterns so the next team can fork, not rebuild.',
+              },
+            ].map(({ step, title, desc }) => (
+              <div key={step} className="flex flex-col gap-2">
+                <span className="text-3xl font-black text-blue-200 dark:text-blue-900">{step}</span>
+                <h3 className="font-semibold text-primary">{title}</h3>
+                <p className="text-sm text-secondary leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => navigate('/submit')}
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+            >
+              Submit a Request
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
