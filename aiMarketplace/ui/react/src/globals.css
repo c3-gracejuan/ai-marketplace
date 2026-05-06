@@ -163,29 +163,26 @@
   --c3-style-colorFocus: #82B0FF;
 }
 
-/* Page-level brand anchor: a subtle blue glow at the top of the page so the
-   landing hero (and every page) has a visible accent without adding chrome.
-   Sits behind everything; no layout cost. */
-.dark body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 480px;
-  pointer-events: none;
-  z-index: 0;
-  background: radial-gradient(
+/* Page-level brand anchor: a subtle blue glow at the top of the viewport so
+   the landing hero (and every page) has a visible accent without chrome.
+   Painted as a background-image on body so it composites with body's bg-color
+   in the root element's painting layer — behind all content, no stacking
+   context required. background-attachment: fixed pins it to the viewport. */
+.dark body {
+  background-image: radial-gradient(
     ellipse 1100px 360px at 50% -120px,
     rgba(79, 141, 255, 0.10) 0%,
     rgba(79, 141, 255, 0.05) 35%,
     rgba(79, 141, 255, 0) 70%
   );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
-/* Crisper focus ring on dark — 2px ring with 1px offset reads better than
-   the default 1px outline against low-contrast input backgrounds. */
-.dark *:focus-visible {
+/* Crisper focus ring on dark — 2px outline reads better than the default 1px
+   on low-contrast surfaces. Scoped to skip form controls, which already use
+   Tailwind's focus:ring-2 (otherwise we'd double-paint ring + outline). */
+.dark *:focus-visible:not(:where(input, textarea, select)) {
   outline: 2px solid var(--c3-style-colorBorderAccent);
   outline-offset: 1px;
 }

@@ -6,11 +6,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { listSolutions } from '@/api/marketplace';
-import { Solution, Domain, SolutionStatus } from '@/types/marketplace';
+import { Solution, Domain, SolutionStatus, TeamMember } from '@/types/marketplace';
 import SolutionCard from '@/components/marketplace/SolutionCard';
 import { CardGridSkeleton } from '@/components/marketplace/CardGridSkeleton';
 
 const DOMAINS: Domain[] = ['FP&A', 'Sales Ops', 'Engineering', 'GTM', 'Customer Success', 'Cross-functional'];
+// 'Queued' is intentionally omitted — queued solutions are pre-commitment and
+// surface only after they're picked up as 'Building'.
 const STATUSES: SolutionStatus[] = ['Shipped', 'Building'];
 
 export default function BrowseSolutionsPage() {
@@ -19,15 +21,29 @@ export default function BrowseSolutionsPage() {
   const [search, setSearch] = useState('');
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<SolutionStatus[]>([]);
+  const [selectedBuilderIds, setSelectedBuilderIds] = useState<string[]>([]);
 
   useEffect(() => {
     listSolutions().then(setAllSolutions).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
+  // Builders who appear on at least one catalog solution, alphabetized.
+  const builders = useMemo<TeamMember[]>(() => {
+    const map = new Map<string, TeamMember>();
+    for (const sol of allSolutions) {
+      for (const b of sol.builders) {
+        if (!map.has(b.id)) map.set(b.id, b);
+      }
+    }
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, [allSolutions]);
+
   const toggleDomain = (d: Domain) =>
     setSelectedDomains((prev) => prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]);
   const toggleStatus = (s: SolutionStatus) =>
     setSelectedStatuses((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
+  const toggleBuilder = (id: string) =>
+    setSelectedBuilderIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
 
   const filtered = useMemo(() => {
     return allSolutions.filter((sol) => {
@@ -44,17 +60,19 @@ export default function BrowseSolutionsPage() {
         );
       const matchDomain = !selectedDomains.length || sol.domain.some((d) => selectedDomains.includes(d));
       const matchStatus = !selectedStatuses.length || selectedStatuses.includes(sol.status);
-      return matchSearch && matchDomain && matchStatus;
+      const matchBuilder = !selectedBuilderIds.length || sol.builders.some((b) => selectedBuilderIds.includes(b.id));
+      return matchSearch && matchDomain && matchStatus && matchBuilder;
     });
-  }, [allSolutions, search, selectedDomains, selectedStatuses]);
+  }, [allSolutions, search, selectedDomains, selectedStatuses, selectedBuilderIds]);
 
   const clearFilters = () => {
     setSearch('');
     setSelectedDomains([]);
     setSelectedStatuses([]);
+    setSelectedBuilderIds([]);
   };
 
-  const hasFilters = search || selectedDomains.length || selectedStatuses.length;
+  const hasFilters = search || selectedDomains.length || selectedStatuses.length || selectedBuilderIds.length;
 
   return (
     <div className="min-h-full bg-primary">
@@ -108,6 +126,7 @@ export default function BrowseSolutionsPage() {
                     <button
                       key={d}
                       type="button"
+                      aria-pressed={active}
                       onClick={() => toggleDomain(d)}
                       className={
                         'inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ' +
@@ -123,6 +142,35 @@ export default function BrowseSolutionsPage() {
               </div>
             </div>
 
+            {/* Builder filter */}
+            {builders.length > 0 && (
+              <div>
+                <p className="text-[11px] font-semibold text-secondary uppercase tracking-wider mb-3">Builder</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {builders.map((b) => {
+                    const active = selectedBuilderIds.includes(b.id);
+                    return (
+                      <button
+                        key={b.id}
+                        type="button"
+                        aria-pressed={active}
+                        onClick={() => toggleBuilder(b.id)}
+                        className={
+                          'inline-flex items-center gap-1.5 pl-0.5 pr-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors ' +
+                          (active
+                            ? 'bg-blue-600 text-white border-blue-600 dark:bg-blue-500 dark:border-blue-500'
+                            : 'bg-transparent text-secondary border-weak hover:text-primary hover:border-strong')
+                        }
+                      >
+                        <img src={b.avatarUrl} alt="" className="w-5 h-5 rounded-full shrink-0" />
+                        {b.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Status filter */}
             <div>
               <p className="text-[11px] font-semibold text-secondary uppercase tracking-wider mb-3">Status</p>
@@ -133,6 +181,7 @@ export default function BrowseSolutionsPage() {
                     <button
                       key={s}
                       type="button"
+                      aria-pressed={active}
                       onClick={() => toggleStatus(s)}
                       className={
                         'inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ' +
