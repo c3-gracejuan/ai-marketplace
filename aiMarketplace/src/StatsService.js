@@ -4,8 +4,6 @@
  */
 
 function landingStats() {
-  var requestsFielded = SwatRequest.fetchCount();
-
   var solutionsShipped = SwatSolution.fetchCount({
     filter: Filter.eq('status', 'Shipped'),
   });
@@ -28,7 +26,6 @@ function landingStats() {
   });
 
   return MarketplaceStats.make({
-    requestsFielded: requestsFielded,
     solutionsInProgress: solutionsInProgress,
     solutionsShipped: solutionsShipped,
     engineerHoursSaved: engineerHoursSaved,

@@ -4,7 +4,6 @@
  */
 
 type MarketplaceStats {
-  requestsFielded: int
   solutionsInProgress: int
   solutionsShipped: int
   engineerHoursSaved: int

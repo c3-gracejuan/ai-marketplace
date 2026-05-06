@@ -34,17 +34,6 @@ function getSolution(id) {
   return SwatSolution.forId(id).get(SOLUTION_INCLUDE);
 }
 
-function recentlyShipped(n) {
-  var limit = n || 6;
-  var result = SwatSolution.fetch({
-    filter: Filter.eq('status', 'Shipped'),
-    include: SOLUTION_INCLUDE,
-    order: 'descending(dateShipped)',
-    limit: limit,
-  });
-  return result.objs || [];
-}
-
 function listQueued() {
   var result = SwatSolution.fetch({
     filter: Filter.eq('status', 'Queued'),

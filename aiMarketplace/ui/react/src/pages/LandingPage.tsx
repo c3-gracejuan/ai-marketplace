@@ -7,10 +7,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useAnimatedCounter } from '@/hooks/useAnimatedCounter';
-import SolutionCard from '@/components/marketplace/SolutionCard';
-import { CardGridSkeleton } from '@/components/marketplace/CardGridSkeleton';
-import { recentlyShipped, landingStats } from '@/api/marketplace';
-import { Solution, MarketplaceStats } from '@/types/marketplace';
+import { landingStats } from '@/api/marketplace';
+import { MarketplaceStats } from '@/types/marketplace';
 
 function StatCounter({ target, label, prefix = '', suffix = '' }: { target: number; label: string; prefix?: string; suffix?: string }) {
   const [visible, setVisible] = useState(false);
@@ -46,10 +44,7 @@ function StatCounter({ target, label, prefix = '', suffix = '' }: { target: numb
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const [recent, setRecent] = useState<Solution[]>([]);
-  const [loadingRecent, setLoadingRecent] = useState(true);
   const [stats, setStats] = useState<MarketplaceStats>({
-    requestsFielded: 0,
     solutionsInProgress: 0,
     solutionsShipped: 0,
     engineerHoursSaved: 0,
@@ -57,7 +52,6 @@ export default function LandingPage() {
   });
 
   useEffect(() => {
-    recentlyShipped(3).then(setRecent).catch(() => {}).finally(() => setLoadingRecent(false));
     landingStats().then(setStats).catch(() => {});
   }, []);
 
@@ -97,8 +91,7 @@ export default function LandingPage() {
 
       {/* Stats strip */}
       <section className="bg-primary border-b border-weak px-6 py-8">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-6 divide-x-0 md:divide-x divide-weak">
-          <StatCounter target={stats.requestsFielded} label="Requests fielded" />
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 divide-x-0 md:divide-x divide-weak">
           <StatCounter target={stats.solutionsInProgress} label="Solutions in build" />
           <StatCounter target={stats.solutionsShipped} label="Solutions shipped" />
           <StatCounter target={stats.engineerHoursSaved} label="Engineer hours saved" suffix="+" />
@@ -106,33 +99,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Recently shipped */}
-      <section className="px-6 py-14 max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-primary">Recently Shipped</h2>
-            <p className="text-secondary text-sm mt-1">The latest solutions to land in production.</p>
-          </div>
-          <button
-            onClick={() => navigate('/solutions')}
-            className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
-          >
-            View all <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-        {loadingRecent ? (
-          <CardGridSkeleton count={3} />
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {recent.map((s) => (
-              <SolutionCard key={s.id} solution={s} />
-            ))}
-          </div>
-        )}
-      </section>
-
       {/* How we work */}
-      <section className="px-6 pb-14 max-w-6xl mx-auto">
+      <section className="px-6 py-14 max-w-6xl mx-auto">
         <div className="bg-secondary border border-weak rounded-2xl p-8">
           <h2 className="text-xl font-bold text-primary mb-6">How we work</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -164,15 +132,6 @@ export default function LandingPage() {
                 <p className="text-sm text-secondary leading-relaxed">{desc}</p>
               </div>
             ))}
-          </div>
-          <div className="mt-8 flex justify-center">
-            <button
-              onClick={() => navigate('/submit')}
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-            >
-              Submit a Request
-              <ArrowRight className="w-4 h-4" />
-            </button>
           </div>
         </div>
       </section>

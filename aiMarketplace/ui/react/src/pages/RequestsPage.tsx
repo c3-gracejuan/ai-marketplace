@@ -78,7 +78,7 @@ function RequestCard({ request, linkedSolutions, onReopen }: RequestCardProps) {
   );
 }
 
-export default function InFlightProjectsPage() {
+export default function RequestsPage() {
   const [requests, setRequests] = useState<Request[]>([]);
   const [solutions, setSolutions] = useState<Solution[]>([]);
   const [loading, setLoading] = useState(true);

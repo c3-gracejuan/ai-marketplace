@@ -15,7 +15,7 @@ import LandingPage from './pages/LandingPage';
 import BrowseSolutionsPage from './pages/BrowseSolutionsPage';
 import SolutionDetailPage from './pages/SolutionDetailPage';
 import SubmitRequestPage from './pages/SubmitRequestPage';
-import InFlightProjectsPage from './pages/InFlightProjectsPage';
+import RequestsPage from './pages/RequestsPage';
 import TeamPage from './pages/TeamPage';
 import AdminTriagePage from './pages/AdminTriagePage';
 
@@ -36,7 +36,7 @@ export default function App() {
               <Route path="/solutions" element={<BrowseSolutionsPage />} />
               <Route path="/solutions/:id" element={<SolutionDetailPage />} />
               <Route path="/submit" element={<SubmitRequestPage />} />
-              <Route path="/projects" element={<InFlightProjectsPage />} />
+              <Route path="/requests" element={<RequestsPage />} />
               <Route path="/team" element={<TeamPage />} />
               <Route path="/admin" element={<AdminTriagePage />} />
             </Routes>

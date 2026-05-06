@@ -97,11 +97,6 @@ export async function getSolution(id: string): Promise<Solution | null> {
   return mapSolution(raw);
 }
 
-export async function recentlyShipped(n = 6): Promise<Solution[]> {
-  const raw: Record<string, unknown>[] = await c3Action('SolutionService', 'recentlyShipped', [n]);
-  return (raw ?? []).map(mapSolution);
-}
-
 export async function listQueuedSolutions(): Promise<Solution[]> {
   const raw: Record<string, unknown>[] = await c3Action('SolutionService', 'listQueued', []);
   return (raw ?? []).map(mapSolution);
@@ -206,7 +201,6 @@ export async function listAllRequests(): Promise<Request[]> {
 export async function landingStats(): Promise<MarketplaceStats> {
   const raw: Record<string, unknown> = await c3Action('StatsService', 'landingStats', []);
   return {
-    requestsFielded: (raw.requestsFielded ?? 0) as number,
     solutionsInProgress: (raw.solutionsInProgress ?? 0) as number,
     solutionsShipped: (raw.solutionsShipped ?? 0) as number,
     engineerHoursSaved: (raw.engineerHoursSaved ?? 0) as number,

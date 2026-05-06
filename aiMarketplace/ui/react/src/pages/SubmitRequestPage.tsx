@@ -105,7 +105,7 @@ export default function SubmitRequestPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
-              onClick={() => navigate('/projects')}
+              onClick={() => navigate('/requests')}
               className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
             >
               View all requests

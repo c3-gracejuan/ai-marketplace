@@ -73,7 +73,7 @@ export function TeamGridSkeleton({ count = 6 }: { count?: number }) {
   );
 }
 
-/** Skeleton for the kanban board (Admin triage rows or InFlight cards) */
+/** Skeleton for the kanban board */
 export function KanbanSkeleton({ columns = 3, cardsPerCol = 2 }: { columns?: number; cardsPerCol?: number }) {
   return (
     <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-6`}>

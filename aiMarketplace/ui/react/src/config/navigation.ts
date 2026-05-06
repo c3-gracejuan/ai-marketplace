@@ -29,12 +29,12 @@ export const navigationConfig: NavigationItem[] = [
     tooltip: 'Browse Solutions',
   },
   {
-    id: 'projects',
-    path: '/projects',
+    id: 'requests',
+    path: '/requests',
     icon: Zap,
     iconActive: Zap,
-    label: 'Projects',
-    tooltip: 'Requests Received',
+    label: 'Requests',
+    tooltip: 'Track Requests',
   },
   {
     id: 'team',

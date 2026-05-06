@@ -72,7 +72,6 @@ export interface Request {
 }
 
 export interface MarketplaceStats {
-  requestsFielded: number;
   solutionsInProgress: number;
   solutionsShipped: number;
   engineerHoursSaved: number;
