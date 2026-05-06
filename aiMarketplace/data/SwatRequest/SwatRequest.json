@@ -12,8 +12,7 @@
     "requesterTeam": "Revenue Operations",
     "relatedLinks": ["https://docs.google.com/presentation/revops-monday-template"],
     "status": "Triaging",
-    "createdAt": "2026-05-02T00:00:00.000Z",
-    "lastUpdated": "2026-05-02T00:00:00.000Z"
+    "createdAt": "2026-05-02T00:00:00.000Z"
   },
   {
     "id": "req2",
@@ -28,8 +27,7 @@
     "requesterTeam": "Professional Services",
     "relatedLinks": [],
     "status": "Triaging",
-    "createdAt": "2026-04-27T00:00:00.000Z",
-    "lastUpdated": "2026-04-27T00:00:00.000Z"
+    "createdAt": "2026-04-27T00:00:00.000Z"
   },
   {
     "id": "req3",
@@ -45,8 +43,7 @@
     "relatedLinks": ["https://app.tableau.com/views/pipeline-coverage"],
     "status": "Accepted",
     "decisionResponse": "Thanks for submitting \"Pipeline coverage early-warning email\". We're accepting this. A SWAT engineer will reach out within the week to discuss requirements.",
-    "createdAt": "2026-01-18T00:00:00.000Z",
-    "lastUpdated": "2026-04-22T00:00:00.000Z"
+    "createdAt": "2026-01-18T00:00:00.000Z"
   },
   {
     "id": "req4",
@@ -62,8 +59,7 @@
     "relatedLinks": [],
     "status": "Accepted",
     "decisionResponse": "Thanks for submitting \"Renewal risk dashboard\". We're accepting this. A SWAT engineer will reach out within the week to discuss requirements.",
-    "createdAt": "2025-11-12T00:00:00.000Z",
-    "lastUpdated": "2026-02-04T00:00:00.000Z"
+    "createdAt": "2025-11-12T00:00:00.000Z"
   },
   {
     "id": "req5",
@@ -79,8 +75,7 @@
     "relatedLinks": ["https://app.gong.io"],
     "status": "Deferred",
     "decisionResponse": "Thanks for submitting \"AI sales call summarizer\". We're not picking this up right now due to capacity constraints. Expected revisit: Q3 2026. In the meantime, you might try reviewing existing solutions in the catalog for forkable patterns. You can re-submit if priority or resourcing changes.",
-    "createdAt": "2026-04-10T00:00:00.000Z",
-    "lastUpdated": "2026-04-15T00:00:00.000Z"
+    "createdAt": "2026-04-10T00:00:00.000Z"
   },
   {
     "id": "req6",
@@ -96,7 +91,6 @@
     "relatedLinks": [],
     "status": "Rejected",
     "decisionResponse": "Thanks for submitting \"Internal Wikipedia builder\". After review, this isn't something SWAT will take on because the scope exceeds our team's mandate for internal tooling. We'd suggest raising this through the standard engineering planning process.",
-    "createdAt": "2026-04-20T00:00:00.000Z",
-    "lastUpdated": "2026-04-23T00:00:00.000Z"
+    "createdAt": "2026-04-20T00:00:00.000Z"
   }
 ]

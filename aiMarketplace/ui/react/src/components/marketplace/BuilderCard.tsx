@@ -8,26 +8,9 @@ import { TeamMember } from '@/types/marketplace';
 
 interface BuilderCardProps {
   member: TeamMember;
-  compact?: boolean;
 }
 
-export default function BuilderCard({ member, compact = false }: BuilderCardProps) {
-  if (compact) {
-    return (
-      <div className="flex items-center gap-2">
-        <img
-          src={member.avatarUrl}
-          alt={member.name}
-          className="w-7 h-7 rounded-full shrink-0"
-        />
-        <div>
-          <p className="text-xs font-semibold text-primary leading-tight">{member.name}</p>
-          <p className="text-xs text-secondary leading-tight">{member.role}</p>
-        </div>
-      </div>
-    );
-  }
-
+export default function BuilderCard({ member }: BuilderCardProps) {
   return (
     <div className="bg-secondary rounded-xl p-5 border border-weak">
       <div className="flex items-start gap-4">

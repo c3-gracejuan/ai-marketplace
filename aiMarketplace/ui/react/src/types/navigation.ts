@@ -16,10 +16,4 @@ export interface NavigationItem {
   iconActive?: LucideIcon;
   label: string;
   tooltip: string;
-  badge?: number;
-  disabled?: boolean;
-}
-
-export interface NavigationConfig {
-  items: NavigationItem[];
 }

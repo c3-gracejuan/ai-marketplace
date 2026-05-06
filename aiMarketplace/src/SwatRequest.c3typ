@@ -17,5 +17,4 @@ entity type SwatRequest {
   status: string enum RequestStatus
   decisionResponse: string
   createdAt: datetime
-  lastUpdated: datetime
 }

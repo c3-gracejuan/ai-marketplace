@@ -38,17 +38,6 @@ function getSolution(id) {
   return SwatSolution.forId(id).get(SOLUTION_INCLUDE);
 }
 
-function featuredSolutions(n) {
-  var limit = n || 3;
-  var result = SwatSolution.fetch({
-    filter: Filter.eq('featured', true).and().eq('status', 'Shipped'),
-    include: SOLUTION_INCLUDE,
-    order: 'descending(dateShipped)',
-    limit: limit,
-  });
-  return result.objs || [];
-}
-
 function recentlyShipped(n) {
   var limit = n || 6;
   var result = SwatSolution.fetch({

@@ -10,5 +10,4 @@ entity type TeamMember {
   avatarUrl: string
   solutions: [SwatSolution](builders)
   projectsShipped: int calc count(solutions.(status == 'Shipped'))
-  projectIds: [string] calc solutions.id
 }

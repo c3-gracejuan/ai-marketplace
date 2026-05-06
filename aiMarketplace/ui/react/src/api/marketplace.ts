@@ -19,7 +19,6 @@ function mapMember(raw: Record<string, unknown>): TeamMember {
     expertise: (raw.expertise as string[]) ?? [],
     avatarUrl: (raw.avatarUrl ?? '') as string,
     projectsShipped: (raw.projectsShipped ?? 0) as number,
-    projectIds: (raw.projectIds as string[]) ?? [],
     solutions: rawSolutions ? rawSolutions.map(mapSolution) : undefined,
   };
 }
@@ -30,8 +29,6 @@ function mapMaterial(raw: Record<string, unknown>): SupportingMaterial {
     type: (raw.materialType ?? 'other') as SupportingMaterial['type'],
     title: (raw.title ?? '') as string,
     url: raw.url as string | undefined,
-    content: raw.content as string | undefined,
-    language: raw.language as string | undefined,
     thumbnail: raw.thumbnail as string | undefined,
     filename: raw.filename as string | undefined,
     filesize: raw.filesize as number | undefined,
@@ -56,7 +53,6 @@ function mapRequest(raw: Record<string, unknown>): Request {
     status: (raw.status ?? 'Triaging') as Request['status'],
     decisionResponse: raw.decisionResponse as string | undefined,
     createdAt: (raw.createdAt ?? '') as string,
-    lastUpdated: (raw.lastUpdated ?? '') as string,
   };
 }
 
@@ -80,7 +76,6 @@ function mapSolution(raw: Record<string, unknown>): Solution {
     dateShipped: raw.dateShipped as string | undefined,
     reusabilityNote: (raw.reusabilityNote ?? '') as string,
     supportingMaterials,
-    featured: (raw.featured ?? false) as boolean,
   };
 }
 
@@ -105,11 +100,6 @@ export async function getSolution(id: string): Promise<Solution | null> {
   const raw: Record<string, unknown> | null = await c3Action('SolutionService', 'getSolution', [id]);
   if (!raw) return null;
   return mapSolution(raw);
-}
-
-export async function featuredSolutions(n = 3): Promise<Solution[]> {
-  const raw: Record<string, unknown>[] = await c3Action('SolutionService', 'featuredSolutions', [n]);
-  return (raw ?? []).map(mapSolution);
 }
 
 export async function recentlyShipped(n = 6): Promise<Solution[]> {

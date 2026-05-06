@@ -13,9 +13,7 @@ export type SupportingMaterialType =
   | 'app_link'
   | 'confluence_doc'
   | 'external_file'
-  | 'code_snippet'
   | 'demo_video'
-  | 'image'
   | 'other';
 
 export interface SupportingMaterial {
@@ -23,8 +21,6 @@ export interface SupportingMaterial {
   type: SupportingMaterialType;
   title: string;
   url?: string;
-  content?: string;
-  language?: string;
   thumbnail?: string;
   filename?: string;
   filesize?: number;
@@ -39,7 +35,6 @@ export interface TeamMember {
   expertise: string[];
   avatarUrl: string;
   projectsShipped: number;
-  projectIds: string[];
   /** Solutions this member built — populated when fetching via listTeamMembers */
   solutions?: Solution[];
 }
@@ -60,7 +55,6 @@ export interface Solution {
   dateShipped?: string;
   reusabilityNote: string;
   supportingMaterials: SupportingMaterial[];
-  featured?: boolean;
 }
 
 export interface Request {
@@ -78,7 +72,6 @@ export interface Request {
   status: RequestStatus;
   decisionResponse?: string;
   createdAt: string;
-  lastUpdated: string;
 }
 
 export interface MarketplaceStats {

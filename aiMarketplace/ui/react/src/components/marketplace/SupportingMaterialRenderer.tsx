@@ -5,10 +5,7 @@
 
 import React, { useState } from 'react';
 import { SupportingMaterial } from '@/types/marketplace';
-import { ExternalLink, FileDown, Play, Image as ImageIcon, Code2, Link } from 'lucide-react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneLight, oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { useTheme } from '@/hooks/useTheme';
+import { ExternalLink, FileDown, Play, Link } from 'lucide-react';
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -90,53 +87,6 @@ function ExternalFileMaterial({ material }: MaterialProps) {
   );
 }
 
-function CodeSnippetMaterial({ material }: MaterialProps) {
-  const { currentTheme } = useTheme();
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    if (material.content) {
-      navigator.clipboard.writeText(material.content);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  return (
-    <div className="border border-weak rounded-xl overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-2 bg-secondary border-b border-weak">
-        <div className="flex items-center gap-2">
-          <Code2 className="w-4 h-4 text-secondary" />
-          <span className="text-sm font-medium text-primary">{material.title}</span>
-          {material.language && (
-            <span className="text-xs font-mono text-secondary bg-primary border border-weak rounded px-1.5 py-0.5">
-              {material.language}
-            </span>
-          )}
-        </div>
-        <button
-          onClick={handleCopy}
-          className="text-xs text-secondary hover:text-primary transition-colors"
-        >
-          {copied ? '✓ Copied' : 'Copy'}
-        </button>
-      </div>
-      {material.description && (
-        <p className="px-4 py-2 text-xs text-secondary bg-primary border-b border-weak">{material.description}</p>
-      )}
-      <div className="text-sm overflow-auto max-h-80">
-        <SyntaxHighlighter
-          language={material.language || 'text'}
-          style={currentTheme === 'dark' ? oneDark : oneLight}
-          customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.8rem' }}
-        >
-          {material.content || ''}
-        </SyntaxHighlighter>
-      </div>
-    </div>
-  );
-}
-
 function DemoVideoMaterial({ material }: MaterialProps) {
   const [playing, setPlaying] = useState(false);
 
@@ -176,25 +126,6 @@ function DemoVideoMaterial({ material }: MaterialProps) {
           </div>
         </div>
       )}
-      {material.description && (
-        <p className="px-4 py-3 text-xs text-secondary bg-primary">{material.description}</p>
-      )}
-    </div>
-  );
-}
-
-function ImageMaterial({ material }: MaterialProps) {
-  return (
-    <div className="border border-weak rounded-xl overflow-hidden">
-      <div className="flex items-center gap-2 px-4 py-2 bg-secondary border-b border-weak">
-        <ImageIcon className="w-4 h-4 text-secondary" />
-        <span className="text-sm font-medium text-primary">{material.title}</span>
-      </div>
-      <img
-        src={material.thumbnail || material.url}
-        alt={material.title}
-        className="w-full object-cover max-h-72"
-      />
       {material.description && (
         <p className="px-4 py-3 text-xs text-secondary bg-primary">{material.description}</p>
       )}
@@ -244,12 +175,8 @@ export default function SupportingMaterialRenderer({ materials }: SupportingMate
             return <ConfluenceMaterial key={material.id} material={material} />;
           case 'external_file':
             return <ExternalFileMaterial key={material.id} material={material} />;
-          case 'code_snippet':
-            return <CodeSnippetMaterial key={material.id} material={material} />;
           case 'demo_video':
             return <DemoVideoMaterial key={material.id} material={material} />;
-          case 'image':
-            return <ImageMaterial key={material.id} material={material} />;
           default:
             return <OtherMaterial key={material.id} material={material} />;
         }

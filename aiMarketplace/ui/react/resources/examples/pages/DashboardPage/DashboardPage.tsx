@@ -10,15 +10,14 @@
 /*
  * Copyright 2009-2026 C3 AI (www.c3.ai). All Rights Reserved.
  */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/hooks/useTheme';
 import { Document } from '@/Interfaces';
 import { fetchDocuments } from '@/shared/api';
 import { documentFiltersFromApplied } from '@/shared/documentFilters';
 import { EXAMPLE_APP_TITLE } from '@/shared/constants';
-import { type ColumnDef } from '@tanstack/react-table';
-import { DataTable } from '@/components/ui/data-table';
 import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import DocumentsFilterSidebar from '../../components/DocumentsFilterSidebar';
 import { ExampleLegendSwatch } from '../../components/ExampleLegendSwatch';
@@ -70,7 +69,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize] = useState<number>(10);
   const [skip, setSkip] = useState<number>(0);
 
   const [selectedProject, setSelectedProject] = useState<{ text: string; value: string } | null>(null);
@@ -143,36 +142,6 @@ export default function DashboardPage() {
     setAppliedSearchText('');
     setSkip(0);
   };
-
-  const pageIndex = Math.floor(skip / pageSize);
-
-  const columns: ColumnDef<Document>[] = useMemo(
-    () => [
-      { accessorKey: 'documentName', header: 'Document Name' },
-      { accessorKey: 'program', header: 'Program' },
-      { accessorKey: 'owner', header: 'Owner' },
-      {
-        accessorKey: 'checklistApplied',
-        header: 'Checklist Applied',
-        cell: ({ row }) => (
-          <span className="rounded bg-accent-weak px-2 py-1 text-sm text-accent">{row.original.checklistApplied}</span>
-        ),
-      },
-      {
-        accessorKey: 'attachments',
-        header: 'No. Attachments',
-        cell: ({ row }) => {
-          const n = row.original.attachments;
-          const cls =
-            n > 3 ? 'bg-success-weak text-success' : n > 1 ? 'bg-warning-weak text-warning' : 'bg-gray-weak text-gray';
-          return <span className={`rounded px-2 py-1 text-sm ${cls}`}>{n}</span>;
-        },
-      },
-      { accessorKey: 'uploadedBy', header: 'Uploaded by' },
-      { accessorKey: 'uploadedAt', header: 'Uploaded at' },
-    ],
-    []
-  );
 
   return (
     <>
@@ -273,21 +242,68 @@ export default function DashboardPage() {
                       <p className="text-danger">{error}</p>
                     </div>
                   ) : (
-                    <DataTable
-                      data={documents}
-                      columns={columns}
-                      pagination={{
-                        pageIndex,
-                        pageSize,
-                        totalCount,
-                        mode: 'server',
-                        pageSizes: [10, 25, 50, 100],
-                        onPageChange: (nextIndex, nextSize) => {
-                          setSkip(nextIndex * nextSize);
-                          setPageSize(nextSize);
-                        },
-                      }}
-                    />
+                    <>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Document Name</TableHead>
+                            <TableHead>Program</TableHead>
+                            <TableHead>Owner</TableHead>
+                            <TableHead>Checklist Applied</TableHead>
+                            <TableHead>No. Attachments</TableHead>
+                            <TableHead>Uploaded by</TableHead>
+                            <TableHead>Uploaded at</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {documents.map((doc) => {
+                            const n = doc.attachments;
+                            const attachCls =
+                              n > 3 ? 'bg-success-weak text-success' : n > 1 ? 'bg-warning-weak text-warning' : 'bg-gray-weak text-gray';
+                            return (
+                              <TableRow key={doc.id}>
+                                <TableCell>{doc.documentName}</TableCell>
+                                <TableCell>{doc.program}</TableCell>
+                                <TableCell>{doc.owner}</TableCell>
+                                <TableCell>
+                                  <span className="rounded bg-accent-weak px-2 py-1 text-sm text-accent">
+                                    {doc.checklistApplied}
+                                  </span>
+                                </TableCell>
+                                <TableCell>
+                                  <span className={`rounded px-2 py-1 text-sm ${attachCls}`}>{n}</span>
+                                </TableCell>
+                                <TableCell>{doc.uploadedBy}</TableCell>
+                                <TableCell>{doc.uploadedAt}</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                      <div className="mt-4 flex items-center justify-between text-sm text-secondary">
+                        <span>
+                          Showing {documents.length} of {totalCount}
+                        </span>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setSkip(Math.max(0, skip - pageSize))}
+                            disabled={skip === 0}
+                            className="px-3 py-1 border border-weak rounded disabled:opacity-50"
+                          >
+                            Previous
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setSkip(skip + pageSize)}
+                            disabled={skip + pageSize >= totalCount}
+                            className="px-3 py-1 border border-weak rounded disabled:opacity-50"
+                          >
+                            Next
+                          </button>
+                        </div>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>

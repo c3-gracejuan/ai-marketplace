@@ -18,8 +18,6 @@ function isTransitionAllowed(fromStatus, toStatus) {
 }
 
 function submitRequest(title, problem, currentProcess, affectedTeam, affectedCount, burdenEstimate, desiredOutcome, requesterName, requesterTeam, relatedLinks) {
-  var now = DateTime.now();
-
   return SwatRequest.make({
     title: title,
     problem: problem,
@@ -32,8 +30,7 @@ function submitRequest(title, problem, currentProcess, affectedTeam, affectedCou
     requesterTeam: requesterTeam,
     relatedLinks: relatedLinks || [],
     status: 'Triaging',
-    createdAt: now,
-    lastUpdated: now,
+    createdAt: DateTime.now(),
   }).create();
 }
 
@@ -49,7 +46,6 @@ function decide(requestId, newStatus, response) {
   var updated = request
     .withField('status', newStatus)
     .withField('decisionResponse', response)
-    .withField('lastUpdated', DateTime.now())
     .merge();
 
   // Auto-create a stub Solution when transitioning into Accepted.
@@ -61,7 +57,6 @@ function decide(requestId, newStatus, response) {
       problem: request.problem,
       status: 'Queued',
       originatingRequests: [{id: request.id}],
-      featured: false,
     }).create();
   }
 

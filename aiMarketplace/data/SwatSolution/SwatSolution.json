@@ -12,8 +12,7 @@
     "status": "Queued",
     "builders": [],
     "originatingRequests": [{"id": "req3"}],
-    "reusabilityNote": "",
-    "featured": false
+    "reusabilityNote": ""
   },
   {
     "id": "sol2",
@@ -28,8 +27,7 @@
     "status": "Building",
     "builders": [{"id": "tm5"}],
     "originatingRequests": [{"id": "req4"}],
-    "reusabilityNote": "",
-    "featured": false
+    "reusabilityNote": ""
   },
   {
     "id": "sol3",
@@ -44,8 +42,7 @@
     "status": "Building",
     "builders": [{"id": "tm4"}],
     "originatingRequests": [],
-    "reusabilityNote": "",
-    "featured": false
+    "reusabilityNote": ""
   },
   {
     "id": "sol4",
@@ -61,8 +58,7 @@
     "builders": [{"id": "tm1"}, {"id": "tm5"}, {"id": "tm6"}],
     "originatingRequests": [],
     "dateShipped": "2026-04-08T00:00:00.000Z",
-    "reusabilityNote": "The cross-signal join pattern — joining pipeline, health, and attribution into one entity model with role-based views — is forkable for any cross-functional health dashboard.",
-    "featured": true
+    "reusabilityNote": "The cross-signal join pattern — joining pipeline, health, and attribution into one entity model with role-based views — is forkable for any cross-functional health dashboard."
   },
   {
     "id": "sol5",
@@ -78,8 +74,7 @@
     "builders": [{"id": "tm1"}, {"id": "tm4"}],
     "originatingRequests": [],
     "dateShipped": "2025-11-15T00:00:00.000Z",
-    "reusabilityNote": "Forkable for any team reconciling data across two or more HR/planning systems.",
-    "featured": true
+    "reusabilityNote": "Forkable for any team reconciling data across two or more HR/planning systems."
   },
   {
     "id": "sol6",
@@ -95,8 +90,7 @@
     "builders": [{"id": "tm2"}, {"id": "tm6"}],
     "originatingRequests": [],
     "dateShipped": "2025-12-02T00:00:00.000Z",
-    "reusabilityNote": "The policy engine pattern is forkable for any multi-tier approval workflow.",
-    "featured": true
+    "reusabilityNote": "The policy engine pattern is forkable for any multi-tier approval workflow."
   },
   {
     "id": "sol7",
@@ -112,8 +106,7 @@
     "builders": [{"id": "tm1"}, {"id": "tm6"}],
     "originatingRequests": [],
     "dateShipped": "2025-10-28T00:00:00.000Z",
-    "reusabilityNote": "Digest template is forkable for any recurring operational report.",
-    "featured": false
+    "reusabilityNote": "Digest template is forkable for any recurring operational report."
   },
   {
     "id": "sol8",
@@ -129,8 +122,7 @@
     "builders": [{"id": "tm3"}, {"id": "tm6"}],
     "originatingRequests": [],
     "dateShipped": "2025-09-12T00:00:00.000Z",
-    "reusabilityNote": "Health score framework forkable for any account-based risk scoring use case.",
-    "featured": false
+    "reusabilityNote": "Health score framework forkable for any account-based risk scoring use case."
   },
   {
     "id": "sol9",
@@ -146,7 +138,6 @@
     "builders": [{"id": "tm2"}, {"id": "tm5"}],
     "originatingRequests": [],
     "dateShipped": "2026-01-14T00:00:00.000Z",
-    "reusabilityNote": "Cost model is forkable for any operational process where you need to attach a dollar figure to a time-series event.",
-    "featured": false
+    "reusabilityNote": "Cost model is forkable for any operational process where you need to attach a dollar figure to a time-series event."
   }
 ]

@@ -59,11 +59,6 @@ export default function SideNav() {
                     <Icon className="h-5 w-5" strokeWidth={2} aria-hidden />
                   </span>
                   <span className="text-xs text-center">{item.label}</span>
-                  {item.badge && (
-                    <span className="absolute top-1 right-1 bg-danger text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                      {item.badge}
-                    </span>
-                  )}
                 </a>
               </li>
             );
@@ -148,11 +143,6 @@ export default function SideNav() {
                     >
                       <Icon className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden />
                       <span>{item.label}</span>
-                      {item.badge && (
-                        <span className="ml-auto bg-danger text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                          {item.badge}
-                        </span>
-                      )}
                     </a>
                   </li>
                 );

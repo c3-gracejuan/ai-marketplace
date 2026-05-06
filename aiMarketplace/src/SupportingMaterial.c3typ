@@ -8,8 +8,6 @@ entity type SupportingMaterial {
   materialType: string enum MaterialType
   title: !string
   url: string
-  content: string
-  language: string
   thumbnail: string
   filename: string
   filesize: int

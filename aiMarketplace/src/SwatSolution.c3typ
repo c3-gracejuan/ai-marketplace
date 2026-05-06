@@ -17,6 +17,5 @@ entity type SwatSolution {
   originatingRequests: [SwatRequest]
   dateShipped: datetime
   reusabilityNote: string
-  featured: boolean
   supportingMaterials: [SupportingMaterial](solution)
 }

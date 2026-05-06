@@ -39,9 +39,6 @@ export function useErrorReporter(): ErrorReporterContextType {
   return context;
 }
 
-// Keep old name as alias for backwards compatibility
-export const useErrorBoundary = useErrorReporter;
-
 interface ErrorReporterProviderProps {
   children: ReactNode;
 }
@@ -72,17 +69,4 @@ export default function ErrorReporterProvider({ children }: ErrorReporterProvide
       {children}
     </ErrorReporterContext.Provider>
   );
-}
-
-/**
- * Higher-order component wrapper for components that need error reporting access.
- * Provides the reportError function as a prop.
- */
-export function withErrorReporter<P extends object>(
-  WrappedComponent: React.ComponentType<P & { reportError: (error: unknown) => void }>
-): React.FC<P> {
-  return function WithErrorReporterWrapper(props: P) {
-    const { reportError } = useErrorReporter();
-    return <WrappedComponent {...props} reportError={reportError} />;
-  };
 }

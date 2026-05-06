@@ -13,9 +13,8 @@
 import React, { useMemo, useState } from 'react';
 import { useTheme } from '@/hooks/useTheme';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { type ColumnDef } from '@tanstack/react-table';
-import { DataTable } from '@/components/ui/data-table';
 import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import TopNav from '@/components/TopNav/TopNav';
 import { CHECKLIST_TOP_NAV_TABS, EXAMPLE_APP_TITLE } from '@/shared/constants';
 
@@ -109,23 +108,6 @@ export default function ChecklistDetailPage() {
     return CHECKS_DATA.filter((r) => r.title.toLowerCase().includes(q) || r.description.toLowerCase().includes(q));
   }, [searchText]);
 
-  const columns: ColumnDef<CheckRow>[] = useMemo(
-    () => [
-      { accessorKey: 'title', header: 'Title' },
-      { accessorKey: 'description', header: 'Description' },
-      {
-        accessorKey: 'critical',
-        header: 'Critical',
-        cell: ({ row }) => {
-          const critical = row.original.critical;
-          const cls = critical ? 'bg-danger-weak text-danger' : 'bg-gray-weak text-gray';
-          return <span className={`rounded px-2 py-1 text-md ${cls}`}>{critical ? 'Yes' : 'No'}</span>;
-        },
-      },
-    ],
-    []
-  );
-
   return (
     <>
       <TopNav title={EXAMPLE_APP_TITLE} tabs={CHECKLIST_TOP_NAV_TABS} />
@@ -216,7 +198,29 @@ export default function ChecklistDetailPage() {
                     />
                   </div>
                 </div>
-                <DataTable data={filteredRows} columns={columns} />
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Title</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Critical</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredRows.map((row) => {
+                      const cls = row.critical ? 'bg-danger-weak text-danger' : 'bg-gray-weak text-gray';
+                      return (
+                        <TableRow key={row.id}>
+                          <TableCell>{row.title}</TableCell>
+                          <TableCell>{row.description}</TableCell>
+                          <TableCell>
+                            <span className={`rounded px-2 py-1 text-md ${cls}`}>{row.critical ? 'Yes' : 'No'}</span>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
               </div>
             </div>
 

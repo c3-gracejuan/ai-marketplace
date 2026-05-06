@@ -61,30 +61,3 @@ export const navigationConfig: NavigationItem[] = [
     tooltip: 'Admin Triage (SWAT only)',
   },
 ];
-
-/**
- * Helper function to add navigation item dynamically
- */
-export const addNavigationItem = (item: NavigationItem) => {
-  navigationConfig.push(item);
-};
-
-/**
- * Helper function to remove navigation item
- */
-export const removeNavigationItem = (id: string) => {
-  const index = navigationConfig.findIndex((item) => item.id === id);
-  if (index > -1) {
-    navigationConfig.splice(index, 1);
-  }
-};
-
-/**
- * Helper function to update badge count
- */
-export const updateNavigationBadge = (id: string, badge?: number) => {
-  const item = navigationConfig.find((item) => item.id === id);
-  if (item) {
-    item.badge = badge;
-  }
-};

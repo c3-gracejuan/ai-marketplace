@@ -78,6 +78,12 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
                 <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Current process</p>
                 <p className="text-sm text-primary leading-relaxed">{request.currentProcess}</p>
               </div>
+              {request.desiredOutcome && (
+                <div>
+                  <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Desired outcome</p>
+                  <p className="text-sm text-primary leading-relaxed">{request.desiredOutcome}</p>
+                </div>
+              )}
               <div>
                 <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Team</p>
                 <p className="text-sm text-primary">{request.affectedTeam} (~{request.affectedCount} people)</p>
@@ -86,6 +92,25 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
                 <div>
                   <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Burden</p>
                   <p className="text-sm text-primary">{request.burdenEstimate}</p>
+                </div>
+              )}
+              {request.relatedLinks.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Related links</p>
+                  <ul className="flex flex-col gap-1">
+                    {request.relatedLinks.map((link) => (
+                      <li key={link} className="text-sm">
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 dark:text-blue-400 hover:underline break-all"
+                        >
+                          {link}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </div>
