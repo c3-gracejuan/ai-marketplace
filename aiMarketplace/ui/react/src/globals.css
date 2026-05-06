@@ -69,6 +69,36 @@
   --border: var(--color-border-weak);
   --input: var(--color-border-weak);
   --ring: var(--c3-style-colorBorderAccent);
+
+  /*
+    Soften dark-theme contrast: the C3 default uses #111112 page bg with 95%-opacity
+    white text (~19:1 contrast), which is harsh on the eyes. Lift backgrounds toward
+    a warmer near-black and dial primary/secondary text down to AAA-but-comfortable.
+  */
+  --c3-style-pageBackgroundColor: #1a1b1d;
+  --c3-style-colorBgPage: #1a1b1d;
+  --c3-style-colorBgPrimary: #1a1b1d;
+  --c3-style-colorBgSecondary: #212325;
+  --c3-style-colorBgTertiary: #2a2c2e;
+  --c3-style-colorBgCardParent: #212325;
+  --c3-style-colorBgCardChildPrimary: #2a2c2e;
+  --c3-style-colorBgCardChildSecondary: #212325;
+  --c3-style-colorBgContainer01: #212325;
+  --c3-style-colorBgContainer02: #2a2c2e;
+  --c3-style-colorBgContentFrame: #212325;
+  --c3-style-colorBgSideNav: #212325;
+  --c3-style-colorBgSideNavPanel: #212325;
+  --c3-style-colorBgCollapsibleNav: #1f2022;
+  --c3-style-cardElevation00BackgroundColor: #1a1b1d;
+  --c3-style-cardElevation01BackgroundColor: #212325;
+  --c3-style-cardElevation02BackgroundColor: #212325;
+  --c3-style-cardElevation03BackgroundColor: #212325;
+  --c3-style-cardElevation04BackgroundColor: #2a2c2e;
+  --c3-style-cardElevation06BackgroundColor: #2a2c2e;
+  --c3-style-fontColor: rgba(235, 237, 240, 0.9);
+  --c3-style-colorFgPrimary: rgba(235, 237, 240, 0.9);
+  --c3-style-secondaryFontColor: rgba(235, 237, 240, 0.65);
+  --c3-style-colorFgSecondary: rgba(235, 237, 240, 0.65);
 }
 
 @theme inline {
