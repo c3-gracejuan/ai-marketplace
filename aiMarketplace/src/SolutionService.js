@@ -55,18 +55,16 @@ function listQueued() {
   return result.objs || [];
 }
 
-function updateDraft(solutionId, solutionDescription, impactSummary, hoursSaved, dollarsSaved, domain, reusabilityNote) {
+function updateDraft(solutionId, solutionDescription, hoursSaved, dollarsSaved, domain) {
   var solution = SwatSolution.forId(solutionId).get('this');
   if (!solution) {
     throw new Error('SwatSolution not found with id: ' + solutionId);
   }
   return solution
     .withField('solutionDescription', solutionDescription || '')
-    .withField('impactSummary', impactSummary || '')
     .withField('hoursSaved', hoursSaved || 0)
     .withField('dollarsSaved', dollarsSaved || 0)
     .withField('domain', domain || [])
-    .withField('reusabilityNote', reusabilityNote || '')
     .merge();
 }
 

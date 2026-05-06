@@ -44,7 +44,6 @@ export interface Solution {
   title: string;
   problem: string;
   solutionDescription: string;
-  impactSummary: string;
   hoursSaved?: number;
   dollarsSaved?: number;
   domain: Domain[];
@@ -52,7 +51,6 @@ export interface Solution {
   builders: TeamMember[];
   originatingRequests: Request[];
   dateShipped?: string;
-  reusabilityNote: string;
   supportingMaterials: SupportingMaterial[];
 }
 

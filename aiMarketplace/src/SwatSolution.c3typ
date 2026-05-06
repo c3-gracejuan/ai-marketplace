@@ -7,7 +7,6 @@ entity type SwatSolution {
   title: !string
   problem: string
   solutionDescription: string
-  impactSummary: string
   hoursSaved: int
   dollarsSaved: int
   domain: [string]
@@ -15,6 +14,5 @@ entity type SwatSolution {
   builders: [TeamMember]
   originatingRequests: [SwatRequest]
   dateShipped: datetime
-  reusabilityNote: string
   supportingMaterials: [SupportingMaterial](solution)
 }

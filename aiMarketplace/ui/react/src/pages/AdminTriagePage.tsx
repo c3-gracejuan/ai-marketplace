@@ -169,11 +169,9 @@ interface QueuedSolutionRowProps {
 function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolutionRowProps) {
   const [expanded, setExpanded] = useState(false);
   const [solutionDescription, setSolutionDescription] = useState(solution.solutionDescription);
-  const [impactSummary, setImpactSummary] = useState(solution.impactSummary);
   const [hoursSaved, setHoursSaved] = useState(solution.hoursSaved?.toString() ?? '');
   const [dollarsSaved, setDollarsSaved] = useState(solution.dollarsSaved?.toString() ?? '');
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>(solution.domain);
-  const [reusabilityNote, setReusabilityNote] = useState(solution.reusabilityNote);
   const [selectedBuilderIds, setSelectedBuilderIds] = useState<string[]>(solution.builders.map((b) => b.id));
   const [savingDraft, setSavingDraft] = useState(false);
   const [assigning, setAssigning] = useState(false);
@@ -198,11 +196,9 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
       const updated = await updateSolutionDraft({
         solutionId: solution.id,
         solutionDescription,
-        impactSummary,
         hoursSaved: hoursSaved ? parseInt(hoursSaved, 10) || 0 : 0,
         dollarsSaved: dollarsSaved ? parseInt(dollarsSaved, 10) || 0 : 0,
         domain: selectedDomains,
-        reusabilityNote,
       });
       onChange(updated);
     } catch (err) {
@@ -220,11 +216,9 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
       await updateSolutionDraft({
         solutionId: solution.id,
         solutionDescription,
-        impactSummary,
         hoursSaved: hoursSaved ? parseInt(hoursSaved, 10) || 0 : 0,
         dollarsSaved: dollarsSaved ? parseInt(dollarsSaved, 10) || 0 : 0,
         domain: selectedDomains,
-        reusabilityNote,
       });
       await assignBuilders(solution.id, selectedBuilderIds);
       onAssigned(solution.id);
@@ -323,19 +317,6 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
             </div>
 
             <div className="flex flex-col gap-4">
-              <div>
-                <p className="block text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
-                  Impact summary
-                </p>
-                <textarea
-                  value={impactSummary}
-                  onChange={(e) => setImpactSummary(e.target.value)}
-                  rows={3}
-                  placeholder="What changes for the requester after this ships. Often filled in closer to launch."
-                  className="w-full rounded-lg border border-weak bg-primary text-primary px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary resize-none"
-                />
-              </div>
-
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <p className="block text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
@@ -363,19 +344,6 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
                     className="w-full rounded-lg border border-weak bg-primary text-primary px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary"
                   />
                 </div>
-              </div>
-
-              <div>
-                <p className="block text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
-                  Reusability note
-                </p>
-                <textarea
-                  value={reusabilityNote}
-                  onChange={(e) => setReusabilityNote(e.target.value)}
-                  rows={2}
-                  placeholder="What's forkable about this. Helps others adapt the pattern for their own problem."
-                  className="w-full rounded-lg border border-weak bg-primary text-primary px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary resize-none"
-                />
               </div>
             </div>
           </div>

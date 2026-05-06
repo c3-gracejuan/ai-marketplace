@@ -2,9 +2,8 @@
   {
     "id": "sol1",
     "title": "Pipeline coverage early-warning email",
-    "problem": "Marketing and GTM leaders only learn about pipeline coverage gaps at the weekly forecast review \u2014 by then the window to act has closed. We want a daily digest that flags any segment slipping below 3x coverage with the responsible AE and the at-risk amount.",
+    "problem": "Marketing and GTM leaders only learn about pipeline coverage gaps at the weekly forecast review — by then the window to act has closed. We want a daily digest that flags any segment slipping below 3x coverage with the responsible AE and the at-risk amount.",
     "solutionDescription": "",
-    "impactSummary": "",
     "hoursSaved": 0,
     "dollarsSaved": 0,
     "domain": [],
@@ -14,15 +13,13 @@
       {
         "id": "req3"
       }
-    ],
-    "reusabilityNote": ""
+    ]
   },
   {
     "id": "sol2",
     "title": "Renewal Risk Dashboard",
     "problem": "The renewal team has no proactive view of accounts at risk before the 90-day window. By the time they react, the customer has already made up their mind.",
-    "solutionDescription": "Building a renewal risk dashboard that scores accounts on a 0\u2013100 risk scale based on usage telemetry, support tickets, NPS, and contract proximity. CSM-facing view shows top 20 at-risk accounts with drill-down into signals.",
-    "impactSummary": "",
+    "solutionDescription": "Building a renewal risk dashboard that scores accounts on a 0–100 risk scale based on usage telemetry, support tickets, NPS, and contract proximity. CSM-facing view shows top 20 at-risk accounts with drill-down into signals.",
     "hoursSaved": 0,
     "dollarsSaved": 0,
     "domain": [
@@ -38,15 +35,13 @@
       {
         "id": "req4"
       }
-    ],
-    "reusabilityNote": ""
+    ]
   },
   {
     "id": "sol3",
     "title": "AR Collections Prioritization Engine",
     "problem": "The Finance AR team was working collections with no systematic prioritization. High-value overdue accounts were treated the same as low-value ones, and the team had no data on which outreach method worked best.",
     "solutionDescription": "Building a collections scoring model that ranks overdue accounts by ARR, days past due, historical pay behavior, and customer health score. Daily priority queue surfaced in a C3 dashboard. A/B tested outreach cadences are tracked for efficacy.",
-    "impactSummary": "",
     "hoursSaved": 0,
     "dollarsSaved": 0,
     "domain": [
@@ -59,15 +54,13 @@
         "id": "tm4"
       }
     ],
-    "originatingRequests": [],
-    "reusabilityNote": ""
+    "originatingRequests": []
   },
   {
     "id": "sol4",
     "title": "Unified GTM Health Dashboard",
     "problem": "Marketing and Customer Success leaders had no shared view of GTM health: pipeline coverage, renewal risk, and segment-level attainment lived in disconnected dashboards. Teams were making decisions on stale or partial data.",
     "solutionDescription": "Built a unified GTM health dashboard joining Salesforce pipeline data, CSM health scores, and Marketing attribution into a single C3 entity model. Daily refresh, role-based views (CRO, CMO, VP CS), and drill-down to account level.",
-    "impactSummary": "Single source of truth for GTM health adopted by CRO/CMO/VP CS staff meetings. Eliminated 3 standalone weekly reports. Caught 6 at-risk renewals in the first quarter.",
     "hoursSaved": 320,
     "dollarsSaved": 1800000,
     "domain": [
@@ -88,15 +81,13 @@
       }
     ],
     "originatingRequests": [],
-    "dateShipped": "2026-04-08T00:00:00.000Z",
-    "reusabilityNote": "The cross-signal join pattern \u2014 joining pipeline, health, and attribution into one entity model with role-based views \u2014 is forkable for any cross-functional health dashboard."
+    "dateShipped": "2026-04-08T00:00:00.000Z"
   },
   {
     "id": "sol5",
     "title": "Automated Headcount Variance Report",
-    "problem": "The FP&A team spent 6\u20138 hours every month manually reconciling headcount data across Workday, Adaptive, and internal spreadsheets. Discrepancies went undetected until close, causing last-minute reforecasts.",
+    "problem": "The FP&A team spent 6–8 hours every month manually reconciling headcount data across Workday, Adaptive, and internal spreadsheets. Discrepancies went undetected until close, causing last-minute reforecasts.",
     "solutionDescription": "Built a C3 AI pipeline that pulls from Workday and Adaptive APIs on a nightly schedule, computes variance by department and cost center, and surfaces a self-refreshing dashboard. Threshold alerts flag anomalies >2% before month-end close.",
-    "impactSummary": "Eliminated 8 hours/month of manual reconciliation. Zero close-day surprises in the 3 months since launch.",
     "hoursSaved": 96,
     "dollarsSaved": 48000,
     "domain": [
@@ -112,15 +103,13 @@
       }
     ],
     "originatingRequests": [],
-    "dateShipped": "2025-11-15T00:00:00.000Z",
-    "reusabilityNote": "Forkable for any team reconciling data across two or more HR/planning systems."
+    "dateShipped": "2025-11-15T00:00:00.000Z"
   },
   {
     "id": "sol6",
     "title": "Deal Desk Approval Automation",
     "problem": "Sales Ops was bottlenecking 30+ deals per quarter waiting for manual Deal Desk approvals via email chains. Average approval latency was 4.2 days, delaying close and degrading rep satisfaction.",
     "solutionDescription": "Implemented a rules-based approval router that ingests deal attributes from Salesforce, runs them through a tiered policy engine, and either auto-approves low-risk deals or routes complex deals to the right approver with structured context. Built-in escalation paths and SLA timers.",
-    "impactSummary": "68% of deals now auto-approved. Average approval latency down from 4.2 days to 11 hours for routed deals.",
     "hoursSaved": 240,
     "dollarsSaved": 320000,
     "domain": [
@@ -136,15 +125,13 @@
       }
     ],
     "originatingRequests": [],
-    "dateShipped": "2025-12-02T00:00:00.000Z",
-    "reusabilityNote": "The policy engine pattern is forkable for any multi-tier approval workflow."
+    "dateShipped": "2025-12-02T00:00:00.000Z"
   },
   {
     "id": "sol7",
     "title": "Quota Attainment Digest",
     "problem": "Sales leadership had no single view of real-time quota attainment by rep, segment, and region. The weekly deck took a quota analyst 5 hours to build from three disconnected exports.",
     "solutionDescription": "Built a weekly auto-generated digest that pulls Salesforce opportunity data, applies quota bookings logic, and emails a formatted summary to each regional VP every Monday at 7am. Includes sparklines, segment drill-downs, and YTD trend.",
-    "impactSummary": "Eliminated 5 hours/week of analyst time. Sales leadership has data by Monday 7am instead of Tuesday afternoon.",
     "hoursSaved": 260,
     "dollarsSaved": 130000,
     "domain": [
@@ -161,15 +148,13 @@
       }
     ],
     "originatingRequests": [],
-    "dateShipped": "2025-10-28T00:00:00.000Z",
-    "reusabilityNote": "Digest template is forkable for any recurring operational report."
+    "dateShipped": "2025-10-28T00:00:00.000Z"
   },
   {
     "id": "sol8",
     "title": "CS Health Score Automation",
     "problem": "Customer Success Managers were manually computing health scores for 200+ accounts in a shared spreadsheet. Updates happened monthly at best, creating blind spots for at-risk accounts.",
     "solutionDescription": "Automated health score computation using C3 AI time-series + entity types. Pulls usage telemetry, support ticket volume, NPS data, and contract renewal date proximity. Scores refresh daily. Escalation alerts are routed to the owning CSM via Slack.",
-    "impactSummary": "Health scores now refresh daily. CSMs caught 4 at-risk accounts in Q4 that would have churned without intervention. Estimated $2.1M ARR protected.",
     "hoursSaved": 400,
     "dollarsSaved": 2100000,
     "domain": [
@@ -185,15 +170,13 @@
       }
     ],
     "originatingRequests": [],
-    "dateShipped": "2025-09-12T00:00:00.000Z",
-    "reusabilityNote": "Health score framework forkable for any account-based risk scoring use case."
+    "dateShipped": "2025-09-12T00:00:00.000Z"
   },
   {
     "id": "sol9",
     "title": "Eng Incident Cost Estimator",
-    "problem": "Engineering leadership had no way to quantify the cost of incidents \u2014 downtime was tracked in PagerDuty, but the business impact (eng hours, customer ARR at risk, support load) was never rolled up.",
+    "problem": "Engineering leadership had no way to quantify the cost of incidents — downtime was tracked in PagerDuty, but the business impact (eng hours, customer ARR at risk, support load) was never rolled up.",
     "solutionDescription": "Built an incident cost model that joins PagerDuty data with ARR exposure, support ticket surge metrics, and eng time estimates. Generates a cost report for every P1/P2 within 48 hours of resolution.",
-    "impactSummary": "Every major incident now has a quantified cost within 48 hours. Engineering and Finance use the data to prioritize reliability investments.",
     "hoursSaved": 120,
     "dollarsSaved": 600000,
     "domain": [
@@ -209,7 +192,6 @@
       }
     ],
     "originatingRequests": [],
-    "dateShipped": "2026-01-14T00:00:00.000Z",
-    "reusabilityNote": "Cost model is forkable for any operational process where you need to attach a dollar figure to a time-series event."
+    "dateShipped": "2026-01-14T00:00:00.000Z"
   }
 ]

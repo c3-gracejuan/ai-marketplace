@@ -6,6 +6,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Solution } from '@/types/marketplace';
+import { formatDollars } from '@/lib/formatImpact';
 import StatusPill from './StatusPill';
 
 interface SolutionCardProps {
@@ -14,6 +15,17 @@ interface SolutionCardProps {
 
 export default function SolutionCard({ solution }: SolutionCardProps) {
   const navigate = useNavigate();
+
+  const hrs = solution.hoursSaved;
+  const dollars = solution.dollarsSaved;
+  const parts: string[] = [];
+  if (hrs) parts.push(`${hrs.toLocaleString()} hrs`);
+  if (dollars) parts.push(formatDollars(dollars));
+  const impactLine = parts.length === 2
+    ? `${parts[0]} · ${parts[1]} saved`
+    : parts.length === 1
+    ? `${parts[0]} saved`
+    : '';
 
   return (
     <div
@@ -34,9 +46,13 @@ export default function SolutionCard({ solution }: SolutionCardProps) {
         {solution.problem}
       </p>
 
-      <p className="text-xs text-green-700 dark:text-green-400 font-medium line-clamp-1 mt-auto">
-        {solution.impactSummary}
-      </p>
+      {impactLine ? (
+        <p className="text-xs text-green-700 dark:text-green-400 font-medium line-clamp-1 mt-auto">
+          {impactLine}
+        </p>
+      ) : (
+        <p className="text-xs invisible mt-auto">&nbsp;</p>
+      )}
     </div>
   );
 }

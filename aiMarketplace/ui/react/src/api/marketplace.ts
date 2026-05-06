@@ -65,7 +65,6 @@ function mapSolution(raw: Record<string, unknown>): Solution {
     title: (raw.title ?? '') as string,
     problem: (raw.problem ?? '') as string,
     solutionDescription: (raw.solutionDescription ?? '') as string,
-    impactSummary: (raw.impactSummary ?? '') as string,
     hoursSaved: raw.hoursSaved as number | undefined,
     dollarsSaved: raw.dollarsSaved as number | undefined,
     domain: ((raw.domain as string[]) ?? []) as Solution['domain'],
@@ -73,7 +72,6 @@ function mapSolution(raw: Record<string, unknown>): Solution {
     builders,
     originatingRequests,
     dateShipped: raw.dateShipped as string | undefined,
-    reusabilityNote: (raw.reusabilityNote ?? '') as string,
     supportingMaterials,
   };
 }
@@ -112,20 +110,16 @@ export async function listQueuedSolutions(): Promise<Solution[]> {
 export async function updateSolutionDraft(params: {
   solutionId: string;
   solutionDescription: string;
-  impactSummary: string;
   hoursSaved: number;
   dollarsSaved: number;
   domain: string[];
-  reusabilityNote: string;
 }): Promise<Solution> {
   const raw: Record<string, unknown> = await c3Action('SolutionService', 'updateDraft', [
     params.solutionId,
     params.solutionDescription,
-    params.impactSummary,
     params.hoursSaved,
     params.dollarsSaved,
     params.domain,
-    params.reusabilityNote,
   ]);
   return mapSolution(raw);
 }

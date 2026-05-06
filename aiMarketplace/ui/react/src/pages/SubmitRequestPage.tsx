@@ -4,8 +4,8 @@
  */
 
 import React, { useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { CheckCircle, Info, ChevronLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { CheckCircle, ChevronLeft } from 'lucide-react';
 import { submitRequest } from '@/api/marketplace';
 
 interface FormState {
@@ -22,13 +22,11 @@ interface FormState {
 }
 
 export default function SubmitRequestPage() {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const refSolutionId = searchParams.get('ref');
 
   const [form, setForm] = useState<FormState>({
     title: '',
-    problem: refSolutionId ? `Similar to solution "${refSolutionId}" — ` : '',
+    problem: '',
     currentProcess: '',
     affectedTeam: '',
     affectedCount: '',
@@ -141,18 +139,6 @@ export default function SubmitRequestPage() {
           <p className="text-secondary mt-1">Tell us about your problem.</p>
         </div>
       </div>
-
-      {/* Pre-fill notice */}
-      {refSolutionId && (
-        <div className="max-w-2xl mx-auto px-6 pt-6">
-          <div className="flex items-start gap-3 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl text-sm">
-            <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
-            <p className="text-blue-700 dark:text-blue-300">
-              Pre-filled from a related solution. Edit the description to describe your specific problem.
-            </p>
-          </div>
-        </div>
-      )}
 
       {error && (
         <div className="max-w-2xl mx-auto px-6 pt-4">
