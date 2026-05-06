@@ -3,42 +3,36 @@
     "id": "tm1",
     "name": "Priya Anand",
     "role": "Senior Software Engineer",
-    "expertise": ["Data Pipelines", "FP&A Automation", "Python", "C3 AI"],
     "avatarUrl": "https://api.dicebear.com/7.x/initials/svg?seed=Priya+Anand&backgroundColor=3b82f6&textColor=ffffff"
   },
   {
     "id": "tm2",
     "name": "Marcus Webb",
     "role": "Staff Engineer",
-    "expertise": ["ML Ops", "Revenue Analytics", "JavaScript", "Platform Engineering"],
     "avatarUrl": "https://api.dicebear.com/7.x/initials/svg?seed=Marcus+Webb&backgroundColor=8b5cf6&textColor=ffffff"
   },
   {
     "id": "tm3",
     "name": "Leila Nouri",
     "role": "Software Engineer",
-    "expertise": ["Sales Ops", "CRM Integrations", "React", "REST APIs"],
     "avatarUrl": "https://api.dicebear.com/7.x/initials/svg?seed=Leila+Nouri&backgroundColor=10b981&textColor=ffffff"
   },
   {
     "id": "tm4",
     "name": "Derek Hwang",
     "role": "Senior Software Engineer",
-    "expertise": ["ETL", "Data Engineering", "Go", "Kubernetes"],
     "avatarUrl": "https://api.dicebear.com/7.x/initials/svg?seed=Derek+Hwang&backgroundColor=f59e0b&textColor=ffffff"
   },
   {
     "id": "tm5",
     "name": "Sofia Reyes",
     "role": "Software Engineer",
-    "expertise": ["CS Tooling", "Support Automation", "TypeScript", "NLP"],
     "avatarUrl": "https://api.dicebear.com/7.x/initials/svg?seed=Sofia+Reyes&backgroundColor=ef4444&textColor=ffffff"
   },
   {
     "id": "tm6",
     "name": "Tariq Osei",
     "role": "Staff Engineer",
-    "expertise": ["Platform", "GTM Analytics", "Data Modeling", "C3 AI"],
     "avatarUrl": "https://api.dicebear.com/7.x/initials/svg?seed=Tariq+Osei&backgroundColor=06b6d4&textColor=ffffff"
   }
 ]

@@ -16,9 +16,7 @@ function mapMember(raw: Record<string, unknown>): TeamMember {
     id: raw.id as string,
     name: (raw.name ?? '') as string,
     role: (raw.role ?? '') as string,
-    expertise: (raw.expertise as string[]) ?? [],
     avatarUrl: (raw.avatarUrl ?? '') as string,
-    projectsShipped: (raw.projectsShipped ?? 0) as number,
     solutions: rawSolutions ? rawSolutions.map(mapSolution) : undefined,
   };
 }
@@ -42,14 +40,7 @@ function mapRequest(raw: Record<string, unknown>): Request {
     id: raw.id as string,
     title: (raw.title ?? '') as string,
     problem: (raw.problem ?? '') as string,
-    currentProcess: (raw.currentProcess ?? '') as string,
-    affectedTeam: (raw.affectedTeam ?? '') as string,
-    affectedCount: (raw.affectedCount ?? 0) as number,
-    burdenEstimate: (raw.burdenEstimate ?? '') as string,
-    desiredOutcome: (raw.desiredOutcome ?? '') as string,
     requesterName: (raw.requesterName ?? '') as string,
-    requesterTeam: (raw.requesterTeam ?? '') as string,
-    relatedLinks: (raw.relatedLinks as string[]) ?? [],
     status: (raw.status ?? 'Triaging') as Request['status'],
     decisionResponse: raw.decisionResponse as string | undefined,
     createdAt: (raw.createdAt ?? '') as string,
@@ -133,7 +124,7 @@ export async function assignBuilders(solutionId: string, builderIds: string[]): 
 
 export async function listTeamMembers(): Promise<TeamMember[]> {
   const result: { objs?: Record<string, unknown>[] } = await c3Action('TeamMember', 'fetch', {
-    include: 'this,projectsShipped,solutions.this',
+    include: 'this,solutions.this',
     order: 'ascending(name)',
     limit: -1,
   });
@@ -147,26 +138,12 @@ export async function listTeamMembers(): Promise<TeamMember[]> {
 export async function submitRequest(params: {
   title: string;
   problem: string;
-  currentProcess: string;
-  affectedTeam: string;
-  affectedCount: number;
-  burdenEstimate: string;
-  desiredOutcome: string;
   requesterName: string;
-  requesterTeam: string;
-  relatedLinks: string[];
 }): Promise<Request> {
   const raw: Record<string, unknown> = await c3Action('RequestService', 'submitRequest', [
     params.title,
     params.problem,
-    params.currentProcess,
-    params.affectedTeam,
-    params.affectedCount,
-    params.burdenEstimate,
-    params.desiredOutcome,
     params.requesterName,
-    params.requesterTeam,
-    params.relatedLinks,
   ]);
   return mapRequest(raw);
 }

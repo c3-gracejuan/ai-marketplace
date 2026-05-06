@@ -57,7 +57,7 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
       >
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-primary text-sm truncate">{request.title}</p>
-          <p className="text-xs text-secondary mt-0.5">{request.requesterName} · {request.requesterTeam}</p>
+          <p className="text-xs text-secondary mt-0.5">{request.requesterName}</p>
         </div>
 
         <div className="shrink-0 flex items-center gap-3">
@@ -75,44 +75,9 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
                 <p className="text-sm text-primary leading-relaxed">{request.problem}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Current process</p>
-                <p className="text-sm text-primary leading-relaxed">{request.currentProcess}</p>
+                <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Submitted by</p>
+                <p className="text-sm text-primary">{request.requesterName}</p>
               </div>
-              {request.desiredOutcome && (
-                <div>
-                  <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Desired outcome</p>
-                  <p className="text-sm text-primary leading-relaxed">{request.desiredOutcome}</p>
-                </div>
-              )}
-              <div>
-                <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Team</p>
-                <p className="text-sm text-primary">{request.affectedTeam} (~{request.affectedCount} people)</p>
-              </div>
-              {request.burdenEstimate && (
-                <div>
-                  <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Burden</p>
-                  <p className="text-sm text-primary">{request.burdenEstimate}</p>
-                </div>
-              )}
-              {request.relatedLinks.length > 0 && (
-                <div>
-                  <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Related links</p>
-                  <ul className="flex flex-col gap-1">
-                    {request.relatedLinks.map((link) => (
-                      <li key={link} className="text-sm">
-                        <a
-                          href={link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 dark:text-blue-400 hover:underline break-all"
-                        >
-                          {link}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
 
             <div className="flex flex-col gap-4">
@@ -242,7 +207,7 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
           <p className="font-semibold text-primary text-sm truncate">{solution.title}</p>
           {originating && (
             <p className="text-xs text-secondary mt-0.5">
-              From {originating.requesterName} · {originating.requesterTeam}
+              From {originating.requesterName}
             </p>
           )}
         </div>

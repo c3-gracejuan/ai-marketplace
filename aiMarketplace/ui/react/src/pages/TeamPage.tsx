@@ -50,38 +50,25 @@ export default function TeamPage() {
                   </div>
                 </div>
 
-                {/* Expertise */}
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {member.expertise.map((e) => (
-                    <span
-                      key={e}
-                      className="inline-flex items-center rounded px-2 py-0.5 text-xs bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200"
-                    >
-                      {e}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Projects shipped */}
-                <div className="border-t border-weak pt-4">
-                  <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
-                    {member.projectsShipped} solution{member.projectsShipped !== 1 ? 's' : ''} shipped
-                  </p>
-                  <div className="flex flex-col gap-1">
-                    {memberSolutions.slice(0, 3).map((s) => (
-                      <button
-                        key={s.id}
-                        onClick={() => navigate(`/solutions/${s.id}`)}
-                        className="text-xs text-left text-blue-600 dark:text-blue-400 hover:underline truncate"
-                      >
-                        → {s.title}
-                      </button>
-                    ))}
-                    {memberSolutions.length > 3 && (
-                      <span className="text-xs text-secondary">+{memberSolutions.length - 3} more</span>
-                    )}
+                {/* Solutions */}
+                {memberSolutions.length > 0 && (
+                  <div className="border-t border-weak pt-4">
+                    <div className="flex flex-col gap-1">
+                      {memberSolutions.slice(0, 3).map((s) => (
+                        <button
+                          key={s.id}
+                          onClick={() => navigate(`/solutions/${s.id}`)}
+                          className="text-xs text-left text-blue-600 dark:text-blue-400 hover:underline truncate"
+                        >
+                          → {s.title}
+                        </button>
+                      ))}
+                      {memberSolutions.length > 3 && (
+                        <span className="text-xs text-secondary">+{memberSolutions.length - 3} more</span>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             );
           })}

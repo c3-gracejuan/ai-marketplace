@@ -22,19 +22,6 @@ export default function BuilderCard({ member }: BuilderCardProps) {
         <div className="min-w-0">
           <p className="font-semibold text-primary text-base">{member.name}</p>
           <p className="text-sm text-secondary">{member.role}</p>
-          <div className="flex flex-wrap gap-1 mt-2">
-            {member.expertise.map((e) => (
-              <span
-                key={e}
-                className="inline-flex items-center rounded px-2 py-0.5 text-xs bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200"
-              >
-                {e}
-              </span>
-            ))}
-          </div>
-          <p className="text-xs text-secondary mt-2">
-            {member.projectsShipped} solution{member.projectsShipped !== 1 ? 's' : ''} shipped
-          </p>
         </div>
       </div>
     </div>

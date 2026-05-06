@@ -32,9 +32,7 @@ export interface TeamMember {
   id: string;
   name: string;
   role: string;
-  expertise: string[];
   avatarUrl: string;
-  projectsShipped: number;
   /** Solutions this member built — populated when fetching via listTeamMembers */
   solutions?: Solution[];
 }
@@ -58,14 +56,7 @@ export interface Request {
   id: string;
   title: string;
   problem: string;
-  currentProcess: string;
-  affectedTeam: string;
-  affectedCount: number;
-  burdenEstimate: string;
-  desiredOutcome: string;
   requesterName: string;
-  requesterTeam: string;
-  relatedLinks: string[];
   status: RequestStatus;
   decisionResponse?: string;
   createdAt: string;

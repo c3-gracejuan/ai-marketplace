@@ -17,18 +17,11 @@ function isTransitionAllowed(fromStatus, toStatus) {
   return allowed.indexOf(toStatus) !== -1;
 }
 
-function submitRequest(title, problem, currentProcess, affectedTeam, affectedCount, burdenEstimate, desiredOutcome, requesterName, requesterTeam, relatedLinks) {
+function submitRequest(title, problem, requesterName) {
   return SwatRequest.make({
     title: title,
     problem: problem,
-    currentProcess: currentProcess,
-    affectedTeam: affectedTeam,
-    affectedCount: affectedCount,
-    burdenEstimate: burdenEstimate,
-    desiredOutcome: desiredOutcome,
     requesterName: requesterName,
-    requesterTeam: requesterTeam,
-    relatedLinks: relatedLinks || [],
     status: 'Triaging',
     createdAt: DateTime.now(),
   }).create();

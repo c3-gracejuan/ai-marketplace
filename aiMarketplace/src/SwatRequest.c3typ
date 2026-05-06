@@ -6,14 +6,7 @@
 entity type SwatRequest {
   title: !string
   problem: string
-  currentProcess: string
-  affectedTeam: string
-  affectedCount: int
-  burdenEstimate: string
-  desiredOutcome: string
   requesterName: !string
-  requesterTeam: string
-  relatedLinks: [string]
   status: string enum RequestStatus
   decisionResponse: string
   createdAt: datetime

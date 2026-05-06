@@ -60,8 +60,6 @@ function RequestCard({ request, linkedSolutions, onReopen }: RequestCardProps) {
       <div className="flex items-center justify-between pt-1 border-t border-weak text-xs text-secondary">
         <div className="truncate">
           <span className="font-medium text-primary">{request.requesterName}</span>
-          {' · '}
-          {request.requesterTeam}
         </div>
         {request.status === 'Deferred' && onReopen && (
           <button

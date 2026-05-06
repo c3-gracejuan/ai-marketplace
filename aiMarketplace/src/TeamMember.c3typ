@@ -6,8 +6,6 @@
 entity type TeamMember {
   // name is inherited from Persistable — no need to declare
   role: string
-  expertise: [string]
   avatarUrl: string
   solutions: [SwatSolution](builders)
-  projectsShipped: int calc count(solutions.(status == 'Shipped'))
 }

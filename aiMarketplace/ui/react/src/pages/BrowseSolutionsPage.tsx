@@ -53,11 +53,7 @@ export default function BrowseSolutionsPage() {
         sol.title.toLowerCase().includes(q) ||
         sol.problem.toLowerCase().includes(q) ||
         sol.solutionDescription.toLowerCase().includes(q) ||
-        sol.builders.some(
-          (b) =>
-            b.name.toLowerCase().includes(q) ||
-            b.expertise.some((e) => e.toLowerCase().includes(q))
-        );
+        sol.builders.some((b) => b.name.toLowerCase().includes(q));
       const matchDomain = !selectedDomains.length || sol.domain.some((d) => selectedDomains.includes(d));
       const matchStatus = !selectedStatuses.length || selectedStatuses.includes(sol.status);
       const matchBuilder = !selectedBuilderIds.length || sol.builders.some((b) => selectedBuilderIds.includes(b.id));
