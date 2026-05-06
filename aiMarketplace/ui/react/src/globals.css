@@ -71,34 +71,123 @@
   --ring: var(--c3-style-colorBorderAccent);
 
   /*
-    Soften dark-theme contrast: the C3 default uses #111112 page bg with 95%-opacity
-    white text (~19:1 contrast), which is harsh on the eyes. Lift backgrounds toward
-    a warmer near-black and dial primary/secondary text down to AAA-but-comfortable.
+    Dark theme override.
+
+    Goals (vs. C3 default + previous override):
+      - Soften the harsh #111112 / 95%-white default to a warmer near-black.
+      - Establish a perceptible 3-step surface hierarchy (page → card → elevated)
+        with ≥8% L* delta between page and card, so cards stop melting into the bg.
+      - Make borders visible on dark surfaces — the C3 default colorBorderWeak
+        (#27292B) is invisible on a #1a1b1d page.
+      - Hold secondary text ≥4.5:1 (AA) on the brightest card surface.
+      - Add a true neutral data-grid hover instead of slate-tinted near-bg.
+      - Step decorative chip backgrounds down so they read calm in dark.
   */
-  --c3-style-pageBackgroundColor: #1a1b1d;
-  --c3-style-colorBgPage: #1a1b1d;
-  --c3-style-colorBgPrimary: #1a1b1d;
-  --c3-style-colorBgSecondary: #212325;
-  --c3-style-colorBgTertiary: #2a2c2e;
-  --c3-style-colorBgCardParent: #212325;
-  --c3-style-colorBgCardChildPrimary: #2a2c2e;
-  --c3-style-colorBgCardChildSecondary: #212325;
-  --c3-style-colorBgContainer01: #212325;
-  --c3-style-colorBgContainer02: #2a2c2e;
-  --c3-style-colorBgContentFrame: #212325;
-  --c3-style-colorBgSideNav: #212325;
-  --c3-style-colorBgSideNavPanel: #212325;
-  --c3-style-colorBgCollapsibleNav: #1f2022;
-  --c3-style-cardElevation00BackgroundColor: #1a1b1d;
-  --c3-style-cardElevation01BackgroundColor: #212325;
-  --c3-style-cardElevation02BackgroundColor: #212325;
-  --c3-style-cardElevation03BackgroundColor: #212325;
-  --c3-style-cardElevation04BackgroundColor: #2a2c2e;
-  --c3-style-cardElevation06BackgroundColor: #2a2c2e;
-  --c3-style-fontColor: rgba(235, 237, 240, 0.9);
-  --c3-style-colorFgPrimary: rgba(235, 237, 240, 0.9);
-  --c3-style-secondaryFontColor: rgba(235, 237, 240, 0.65);
-  --c3-style-colorFgSecondary: rgba(235, 237, 240, 0.65);
+
+  /* Surfaces — 3-step hierarchy:
+     page  #16171a  → card  #21242a  → elevated  #2c3036
+     ~7-8 lightness steps each, comfortable on OLED and IPS. */
+  --c3-style-pageBackgroundColor: #16171a;
+  --c3-style-colorBgPage: #16171a;
+  --c3-style-colorBgPrimary: #16171a;
+  --c3-style-colorBgSecondary: #21242a;
+  --c3-style-colorBgTertiary: #2c3036;
+  --c3-style-colorBgCardParent: #21242a;
+  --c3-style-colorBgCardChildPrimary: #2c3036;
+  --c3-style-colorBgCardChildSecondary: #21242a;
+  --c3-style-colorBgContainer01: #21242a;
+  --c3-style-colorBgContainer02: #2c3036;
+  --c3-style-colorBgContentFrame: #21242a;
+  --c3-style-colorBgSideNav: #1b1d21;
+  --c3-style-colorBgSideNavPanel: #1b1d21;
+  --c3-style-colorBgCollapsibleNav: #1b1d21;
+  --c3-style-cardElevation00BackgroundColor: #16171a;
+  --c3-style-cardElevation01BackgroundColor: #21242a;
+  --c3-style-cardElevation02BackgroundColor: #21242a;
+  --c3-style-cardElevation03BackgroundColor: #21242a;
+  --c3-style-cardElevation04BackgroundColor: #2c3036;
+  --c3-style-cardElevation06BackgroundColor: #2c3036;
+  --c3-style-cardElevation08BackgroundColor: #2c3036;
+  --c3-style-cardElevation12BackgroundColor: #32363d;
+  --c3-style-cardElevation16BackgroundColor: #32363d;
+  --c3-style-cardElevation24BackgroundColor: #383d44;
+
+  /* Borders — visible on every surface step.
+     Weak: subtle but present on page bg.
+     Default: clearly delineates inputs and dividers on cards. */
+  --c3-style-colorBorderWeak: #2f3338;
+  --c3-style-colorBorder: #3a3f46;
+  --c3-style-colorBorderStrong: #4a5058;
+  --c3-style-borderColor: rgba(255, 255, 255, 0.12);
+  --c3-style-componentBorderColor: rgba(255, 255, 255, 0.14);
+  --c3-style-componentDividerColor: rgba(255, 255, 255, 0.10);
+  --c3-style-colorDivider: #2f3338;
+  --c3-style-colorDividerWeak: #262a2f;
+  --c3-style-colorDividerStrong: #4a5058;
+  --c3-style-formFieldBorderColor: rgba(255, 255, 255, 0.16);
+  --c3-style-formFieldHoverBorderColor: rgba(255, 255, 255, 0.32);
+  --c3-style-formFieldVariantBorderColor: rgba(255, 255, 255, 0.16);
+
+  /* Text — primary 0.92 (AAA on card), secondary 0.72 (≥4.5:1 on elevated). */
+  --c3-style-fontColor: rgba(236, 238, 242, 0.92);
+  --c3-style-colorFgPrimary: rgba(236, 238, 242, 0.92);
+  --c3-style-secondaryFontColor: rgba(236, 238, 242, 0.72);
+  --c3-style-colorFgSecondary: rgba(236, 238, 242, 0.72);
+  --c3-style-secondaryVariantFontColor: rgba(236, 238, 242, 0.55);
+
+  /* Hover/pressed — true neutral, no slate tint. */
+  --c3-style-colorBgActionHover: rgba(255, 255, 255, 0.06);
+  --c3-style-colorBgActionPressed: rgba(255, 255, 255, 0.12);
+  --c3-style-colorBgDataGridHover: rgba(255, 255, 255, 0.04);
+  --c3-style-gridHoverBackgroundColor: rgba(255, 255, 255, 0.04);
+  --c3-style-colorBgSelected: rgba(130, 176, 255, 0.14);
+  --c3-style-selectionBackgroundColor: rgba(130, 176, 255, 0.14);
+
+  /* Decorative chip backgrounds — step down one stop (level-70 → level-80)
+     so brand chips read calm against the lifted card surfaces. */
+  --c3-style-avatarBadgeBlueBackgroundColor: var(--c3-style-color-core-blue-80);
+  --c3-style-avatarBadgeChocoBackgroundColor: var(--c3-style-color-decorative-choco-80);
+  --c3-style-avatarBadgeCyanBackgroundColor: var(--c3-style-color-decorative-cyan-80);
+  --c3-style-avatarBadgeForestBackgroundColor: var(--c3-style-color-decorative-forest-80);
+  --c3-style-avatarBadgeGreenBackgroundColor: var(--c3-style-color-core-green-80);
+  --c3-style-avatarBadgeLimeBackgroundColor: var(--c3-style-color-decorative-lime-80);
+  --c3-style-avatarBadgeOliveBackgroundColor: var(--c3-style-color-decorative-olive-80);
+  --c3-style-avatarBadgeOrangeBackgroundColor: var(--c3-style-color-decorative-orange-80);
+  --c3-style-avatarBadgePlumBackgroundColor: var(--c3-style-color-decorative-plum-80);
+  --c3-style-avatarBadgePurpleBackgroundColor: var(--c3-style-color-decorative-purple-80);
+  --c3-style-avatarBadgeRedBackgroundColor: var(--c3-style-color-core-red-80);
+  --c3-style-avatarBadgeSlateBackgroundColor: var(--c3-style-color-decorative-slate-80);
+  --c3-style-avatarBadgeYellowBackgroundColor: var(--c3-style-color-core-yellow-80);
+
+  /* Focus ring — bump to a 2px-feel via stronger color contrast. */
+  --c3-style-colorFocus: #82B0FF;
+}
+
+/* Page-level brand anchor: a subtle blue glow at the top of the page so the
+   landing hero (and every page) has a visible accent without adding chrome.
+   Sits behind everything; no layout cost. */
+.dark body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 480px;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 1100px 360px at 50% -120px,
+    rgba(79, 141, 255, 0.10) 0%,
+    rgba(79, 141, 255, 0.05) 35%,
+    rgba(79, 141, 255, 0) 70%
+  );
+}
+
+/* Crisper focus ring on dark — 2px ring with 1px offset reads better than
+   the default 1px outline against low-contrast input backgrounds. */
+.dark *:focus-visible {
+  outline: 2px solid var(--c3-style-colorBorderAccent);
+  outline-offset: 1px;
 }
 
 @theme inline {
