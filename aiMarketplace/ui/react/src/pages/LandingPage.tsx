@@ -58,30 +58,30 @@ export default function LandingPage() {
   return (
     <div className="min-h-full">
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 dark:from-blue-900 dark:via-blue-800 dark:to-indigo-900 text-white px-6 py-20 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 dark:from-blue-900 dark:via-blue-800 dark:to-indigo-900 text-white px-6 py-12 overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
         <div className="relative max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-1.5 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-1.5 text-sm font-medium mb-4">
             <Sparkles className="w-4 h-4" />
             C3 AI SWAT Team
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-5">
+          <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-3">
             Got a problem that needs solving?
           </h1>
-          <p className="text-lg text-blue-100 mb-8 max-w-xl mx-auto">
+          <p className="text-base text-blue-100 mb-6 max-w-xl mx-auto">
             The SWAT Marketplace connects every C3 employee with the engineering team that builds internal tools, automates workflows, and ships real solutions fast.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={() => navigate('/submit')}
-              className="inline-flex items-center gap-2 bg-white text-blue-700 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors shadow-lg"
+              className="inline-flex items-center gap-2 bg-white text-blue-700 font-semibold px-6 py-2.5 rounded-lg hover:bg-blue-50 transition-colors shadow-lg"
             >
               Submit a Request
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => navigate('/solutions')}
-              className="inline-flex items-center gap-2 bg-blue-500/30 text-white border border-white/30 font-medium px-6 py-3 rounded-lg hover:bg-blue-500/40 transition-colors"
+              className="inline-flex items-center gap-2 bg-blue-500/30 text-white border border-white/30 font-medium px-6 py-2.5 rounded-lg hover:bg-blue-500/40 transition-colors"
             >
               Browse Solutions
             </button>
@@ -90,7 +90,7 @@ export default function LandingPage() {
       </section>
 
       {/* Stats strip */}
-      <section className="bg-primary border-b border-weak px-6 py-8">
+      <section className="bg-primary border-b border-weak px-6 py-6">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 divide-x-0 md:divide-x divide-weak">
           <StatCounter target={stats.solutionsInProgress} label="Solutions in build" />
           <StatCounter target={stats.solutionsShipped} label="Solutions shipped" />
@@ -100,9 +100,9 @@ export default function LandingPage() {
       </section>
 
       {/* How we work */}
-      <section className="px-6 py-14 max-w-6xl mx-auto">
-        <div className="bg-secondary border border-weak rounded-2xl p-8">
-          <h2 className="text-xl font-bold text-primary mb-6">How we work</h2>
+      <section className="px-6 py-8 max-w-6xl mx-auto">
+        <div className="bg-secondary border border-weak rounded-2xl p-6">
+          <h2 className="text-xl font-bold text-primary mb-4">How we work</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
               {
