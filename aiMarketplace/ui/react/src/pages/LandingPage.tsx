@@ -3,13 +3,19 @@
  * Confidential and Proprietary C3 Materials.
  */
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useAnimatedCounter } from '@/hooks/useAnimatedCounter';
 import { landingStats, listSolutions } from '@/api/marketplace';
 import { MarketplaceStats, Solution } from '@/types/marketplace';
 import { formatDollars } from '@/lib/formatImpact';
+
+function compact(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, '')}K`;
+  return n.toString();
+}
 
 function formatRelative(iso: string): string {
   const diffDays = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
@@ -70,21 +76,22 @@ export default function LandingPage() {
     engineerHoursSaved: 0,
     companyDollarsSaved: 0,
   });
-  const [recentShips, setRecentShips] = useState<Solution[]>([]);
+  const [allSolutions, setAllSolutions] = useState<Solution[]>([]);
   const [tickerIdx, setTickerIdx] = useState(0);
 
   useEffect(() => {
     landingStats().then(setStats).catch(() => {});
-    listSolutions()
-      .then((all) => {
-        const ships = all
-          .filter((s) => s.status === 'Shipped' && s.dateShipped)
-          .sort((a, b) => (b.dateShipped! > a.dateShipped! ? 1 : -1))
-          .slice(0, 5);
-        setRecentShips(ships);
-      })
-      .catch(() => {});
+    listSolutions().then(setAllSolutions).catch(() => {});
   }, []);
+
+  const recentShips = useMemo(
+    () =>
+      allSolutions
+        .filter((s) => s.status === 'Shipped' && s.dateShipped)
+        .sort((a, b) => (b.dateShipped! > a.dateShipped! ? 1 : -1))
+        .slice(0, 5),
+    [allSolutions],
+  );
 
   useEffect(() => {
     if (recentShips.length <= 1) return;
@@ -103,6 +110,12 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-secondary mb-3">
             SWAT Marketplace
+            {stats.engineerHoursSaved >= 1000 && (
+              <>
+                <span className="mx-2 opacity-60" aria-hidden="true">·</span>
+                {compact(stats.engineerHoursSaved)} hrs saved
+              </>
+            )}
           </p>
 
           <h1 className="text-fluid-display font-extrabold text-primary leading-[1.05] tracking-tight max-w-4xl">
