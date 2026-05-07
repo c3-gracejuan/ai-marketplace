@@ -12,14 +12,22 @@ import { useLocation } from 'react-router-dom';
 import { Moon, Sun } from 'lucide-react';
 
 import { useTheme } from '@/hooks/useTheme';
+import { usePermissions } from '@/hooks/usePermissions';
 import { navigationConfig } from '@/config/navigation';
 import { NavigationItem } from '@/types/navigation';
 
 export default function SideNav() {
   const { currentTheme, toggleTheme } = useTheme();
+  const { isAdmin, loading: permsLoading } = usePermissions();
   const location = useLocation();
   const currentPath = location.pathname;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const visibleNavItems = navigationConfig.filter((item) => {
+    if (!item.adminOnly) return true;
+    if (permsLoading) return false;
+    return isAdmin;
+  });
 
   const isActiveRoute = (item: NavigationItem): boolean => {
     if (item.path === '/' && currentPath === '/') {
@@ -43,7 +51,7 @@ export default function SideNav() {
           <div className="c3-logo"></div>
         </div>
         <ul className="flex flex-col gap-1 w-full flex-1">
-          {navigationConfig?.map((item) => {
+          {visibleNavItems.map((item) => {
             const isActive = isActiveRoute(item);
             const Icon = isActive && item.iconActive ? item.iconActive : item.icon;
             return (
@@ -127,7 +135,7 @@ export default function SideNav() {
             </div>
 
             <ul className="space-y-2">
-              {navigationConfig?.map((item) => {
+              {visibleNavItems.map((item) => {
                 const isActive = isActiveRoute(item);
                 const Icon = isActive && item.iconActive ? item.iconActive : item.icon;
                 return (

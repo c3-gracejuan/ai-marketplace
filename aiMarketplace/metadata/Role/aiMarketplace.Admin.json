@@ -1,0 +1,14 @@
+{
+  "id": "aiMarketplace.Admin",
+  "description": "Admin role for the AI Marketplace, intended for SWAT team members. Inherits all aiMarketplace.User permissions and adds triage, decision, and solution-management capabilities.",
+  "nestedRoles": ["aiMarketplace.User"],
+  "permissions": [
+    "allow:SwatRequest:write:",
+    "allow:SwatSolution:create:",
+    "allow:SwatSolution:write:",
+    "allow:RequestService::listForTriage",
+    "allow:RequestService::decide",
+    "allow:SolutionService::updateDraft",
+    "allow:SolutionService::assignBuilders"
+  ]
+}

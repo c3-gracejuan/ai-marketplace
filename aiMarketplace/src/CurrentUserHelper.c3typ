@@ -1,0 +1,18 @@
+/*
+ * Copyright 2009-2026 C3 AI (www.c3.ai). All Rights Reserved.
+ * Confidential and Proprietary C3 Materials.
+ */
+
+/**
+ * Helper type for current-user permission lookup in the AI Marketplace UI.
+ * Single source of truth for the frontend's role-based gating.
+ */
+type CurrentUserHelper {
+
+  /**
+   * Returns the current user's permission flags for the marketplace UI.
+   *
+   * @return JSON of shape { isAdmin: boolean, roles: [string] }
+   */
+  getPermissions: function(): json js-server
+}

@@ -162,6 +162,23 @@ export async function listAllRequests(): Promise<Request[]> {
 }
 
 // ---------------------------------------------------------------------------
+// CurrentUserHelper — RBAC permission lookup
+// ---------------------------------------------------------------------------
+
+export interface CurrentUserPermissions {
+  isAdmin: boolean;
+  roles: string[];
+}
+
+export async function getCurrentUserPermissions(): Promise<CurrentUserPermissions> {
+  const raw: Record<string, unknown> = await c3Action('CurrentUserHelper', 'getPermissions', []);
+  return {
+    isAdmin: Boolean(raw?.isAdmin),
+    roles: ((raw?.roles as string[]) ?? []),
+  };
+}
+
+// ---------------------------------------------------------------------------
 // StatsService calls
 // ---------------------------------------------------------------------------
 

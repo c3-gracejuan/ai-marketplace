@@ -16,4 +16,5 @@ export interface NavigationItem {
   iconActive?: LucideIcon;
   label: string;
   tooltip: string;
+  adminOnly?: boolean;
 }

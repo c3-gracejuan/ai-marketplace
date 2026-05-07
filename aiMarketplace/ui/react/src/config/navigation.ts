@@ -59,5 +59,6 @@ export const navigationConfig: NavigationItem[] = [
     iconActive: ShieldCheck,
     label: 'Admin',
     tooltip: 'Admin Triage (SWAT only)',
+    adminOnly: true,
   },
 ];

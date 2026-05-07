@@ -1,0 +1,19 @@
+{
+  "id": "aiMarketplace.User",
+  "description": "Base authenticated-user role for the AI Marketplace. Grants browse access to the catalog, team, requests, and ability to submit new requests.",
+  "permissions": [
+    "allow:SwatRequest:read:",
+    "allow:SwatRequest:create:",
+    "allow:SwatSolution:read:",
+    "allow:TeamMember:read:",
+    "allow:SupportingMaterial:read:",
+    "allow:RequestService::submitRequest",
+    "allow:RequestService::listAll",
+    "allow:SolutionService::listSolutions",
+    "allow:SolutionService::getSolution",
+    "allow:SolutionService::listQueued",
+    "allow:StatsService::landingStats",
+    "allow:User::myUser",
+    "allow:CurrentUserHelper::getPermissions"
+  ]
+}
