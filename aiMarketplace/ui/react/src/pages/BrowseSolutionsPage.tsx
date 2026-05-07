@@ -68,7 +68,7 @@ export default function BrowseSolutionsPage() {
     setSelectedBuilderIds([]);
   };
 
-  const hasFilters = search || selectedDomains.length || selectedStatuses.length || selectedBuilderIds.length;
+  const hasFilters = Boolean(search) || selectedDomains.length > 0 || selectedStatuses.length > 0 || selectedBuilderIds.length > 0;
 
   return (
     <div className="min-h-full bg-primary">

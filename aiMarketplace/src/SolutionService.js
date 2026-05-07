@@ -49,10 +49,11 @@ function updateDraft(solutionId, solutionDescription, domain) {
   if (!solution) {
     throw new Error('SwatSolution not found with id: ' + solutionId);
   }
-  return solution
+  solution
     .withField('solutionDescription', solutionDescription || '')
     .withField('domain', domain || [])
     .merge();
+  return SwatSolution.forId(solutionId).get(SOLUTION_INCLUDE);
 }
 
 function assignBuilders(solutionId, builderIds) {
@@ -74,8 +75,9 @@ function assignBuilders(solutionId, builderIds) {
   }
 
   var builders = builderIds.map(function (id) { return {id: id}; });
-  return solution
+  solution
     .withField('builders', builders)
     .withField('status', 'Building')
     .merge();
+  return SwatSolution.forId(solutionId).get(SOLUTION_INCLUDE);
 }
