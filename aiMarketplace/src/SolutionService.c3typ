@@ -4,7 +4,7 @@
  */
 
 type SolutionService {
-  listSolutions: function(domain: string, search: string): [SwatSolution] js-server
+  listSolutions: function(): [SwatSolution] js-server
   getSolution: function(id: string): SwatSolution js-server
   listQueued: function(): [SwatSolution] js-server
   updateDraft: function(solutionId: string, solutionDescription: string, domain: [string]): SwatSolution js-server

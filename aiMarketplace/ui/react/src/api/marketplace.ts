@@ -71,14 +71,8 @@ function mapSolution(raw: Record<string, unknown>): Solution {
 // SolutionService calls
 // ---------------------------------------------------------------------------
 
-export async function listSolutions(
-  domain?: string,
-  search?: string,
-): Promise<Solution[]> {
-  const raw: Record<string, unknown>[] = await c3Action('SolutionService', 'listSolutions', [
-    domain ?? null,
-    search ?? null,
-  ]);
+export async function listSolutions(): Promise<Solution[]> {
+  const raw: Record<string, unknown>[] = await c3Action('SolutionService', 'listSolutions', []);
   return (raw ?? []).map(mapSolution);
 }
 

@@ -10,20 +10,9 @@ function publishedFilter() {
   return Filter.eq('status', 'Building').or().eq('status', 'Shipped');
 }
 
-function listSolutions(domain, search) {
-  var filter = publishedFilter();
-
-  if (domain) {
-    filter = filter.and().paren(Filter.contains('domain', domain));
-  }
-
-  if (search) {
-    var searchFilter = Filter.containsIgnoreCase('title', search).or().containsIgnoreCase('problem', search);
-    filter = filter.and().paren(searchFilter);
-  }
-
+function listSolutions() {
   var result = SwatSolution.fetch({
-    filter: filter,
+    filter: publishedFilter(),
     include: SOLUTION_INCLUDE,
     limit: -1,
   });
