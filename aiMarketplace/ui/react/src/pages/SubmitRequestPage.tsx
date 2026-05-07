@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle, ChevronLeft } from 'lucide-react';
 import { submitRequest } from '@/api/marketplace';
+import { Request } from '@/types/marketplace';
 
 interface FormState {
   title: string;
@@ -24,7 +25,7 @@ export default function SubmitRequestPage() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [requestId, setRequestId] = useState('');
+  const [submittedRequest, setSubmittedRequest] = useState<Request | null>(null);
   const [error, setError] = useState('');
 
   const update = (field: keyof FormState, value: string) =>
@@ -46,7 +47,7 @@ export default function SubmitRequestPage() {
         problem: form.problem.trim(),
         requesterName: form.requesterName.trim(),
       });
-      setRequestId(req.id);
+      setSubmittedRequest(req);
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
@@ -55,7 +56,7 @@ export default function SubmitRequestPage() {
     }
   };
 
-  if (submitted) {
+  if (submitted && submittedRequest) {
     return (
       <div className="min-h-full flex items-center justify-center bg-primary px-6">
         <div className="max-w-lg w-full text-center">
@@ -69,11 +70,11 @@ export default function SubmitRequestPage() {
           <div className="bg-secondary border border-weak rounded-xl p-5 text-left mb-6">
             <div className="flex justify-between text-sm mb-2">
               <span className="text-secondary">Request ID</span>
-              <span className="font-mono font-semibold text-primary">{requestId}</span>
+              <span className="font-mono font-semibold text-primary">{submittedRequest.id}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-secondary">Status</span>
-              <span className="text-primary font-medium">Triaging</span>
+              <span className="text-primary font-medium">{submittedRequest.status}</span>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
