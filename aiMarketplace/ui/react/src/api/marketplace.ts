@@ -96,15 +96,11 @@ export async function listQueuedSolutions(): Promise<Solution[]> {
 export async function updateSolutionDraft(params: {
   solutionId: string;
   solutionDescription: string;
-  hoursSaved: number;
-  dollarsSaved: number;
   domain: string[];
 }): Promise<Solution> {
   const raw: Record<string, unknown> = await c3Action('SolutionService', 'updateDraft', [
     params.solutionId,
     params.solutionDescription,
-    params.hoursSaved,
-    params.dollarsSaved,
     params.domain,
   ]);
   return mapSolution(raw);

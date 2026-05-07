@@ -44,15 +44,13 @@ function listQueued() {
   return result.objs || [];
 }
 
-function updateDraft(solutionId, solutionDescription, hoursSaved, dollarsSaved, domain) {
+function updateDraft(solutionId, solutionDescription, domain) {
   var solution = SwatSolution.forId(solutionId).get('this');
   if (!solution) {
     throw new Error('SwatSolution not found with id: ' + solutionId);
   }
   return solution
     .withField('solutionDescription', solutionDescription || '')
-    .withField('hoursSaved', hoursSaved || 0)
-    .withField('dollarsSaved', dollarsSaved || 0)
     .withField('domain', domain || [])
     .merge();
 }

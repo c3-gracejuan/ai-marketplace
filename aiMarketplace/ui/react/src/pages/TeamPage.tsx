@@ -42,7 +42,7 @@ export default function TeamPage() {
               return (
                 <div
                   key={member.id}
-                  className="border border-weak rounded-xl p-6 hover:border-strong transition-colors flex flex-col"
+                  className="border border-weak rounded-xl p-6 flex flex-col"
                 >
                   {/* Header: identity left, hero stat right */}
                   <div className="flex items-start justify-between gap-4 mb-5">

@@ -3,7 +3,16 @@
  * Confidential and Proprietary C3 Materials.
  */
 
-export type Domain = 'FP&A' | 'Sales Ops' | 'Engineering' | 'GTM' | 'Customer Success' | 'Cross-functional';
+export type Domain = string;
+
+export const BUILTIN_DOMAINS: readonly Domain[] = [
+  'FP&A',
+  'Sales Ops',
+  'Engineering',
+  'GTM',
+  'Customer Success',
+  'Cross-functional',
+] as const;
 
 export type SolutionStatus = 'Queued' | 'Building' | 'Shipped';
 

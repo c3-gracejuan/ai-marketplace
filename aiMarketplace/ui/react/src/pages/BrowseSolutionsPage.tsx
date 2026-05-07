@@ -6,11 +6,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { listSolutions } from '@/api/marketplace';
-import { Solution, Domain, SolutionStatus, TeamMember } from '@/types/marketplace';
+import { Solution, Domain, SolutionStatus, TeamMember, BUILTIN_DOMAINS } from '@/types/marketplace';
 import SolutionCard from '@/components/marketplace/SolutionCard';
 import { CardGridSkeleton } from '@/components/marketplace/CardGridSkeleton';
 
-const DOMAINS: Domain[] = ['FP&A', 'Sales Ops', 'Engineering', 'GTM', 'Customer Success', 'Cross-functional'];
+const DOMAINS: readonly Domain[] = BUILTIN_DOMAINS;
 // 'Queued' is intentionally omitted — queued solutions are pre-commitment and
 // surface only after they're picked up as 'Building'.
 const STATUSES: SolutionStatus[] = ['Shipped', 'Building'];

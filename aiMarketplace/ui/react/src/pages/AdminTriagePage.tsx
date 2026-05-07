@@ -3,8 +3,8 @@
  * Confidential and Proprietary C3 Materials.
  */
 
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronUp, AlertCircle, Info, Wrench } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { ChevronDown, ChevronUp, AlertCircle, Info, Wrench, Plus, X } from 'lucide-react';
 import {
   listForTriage,
   decideRequest,
@@ -13,14 +13,12 @@ import {
   assignBuilders,
   listTeamMembers,
 } from '@/api/marketplace';
-import { Request, RequestStatus, Solution, TeamMember, Domain } from '@/types/marketplace';
+import { Request, RequestStatus, Solution, TeamMember, Domain, BUILTIN_DOMAINS } from '@/types/marketplace';
 import StatusPill from '@/components/marketplace/StatusPill';
 import { TriageListSkeleton } from '@/components/marketplace/CardGridSkeleton';
 
 const TRIAGE_DECISIONS: RequestStatus[] = ['Triaging', 'Accepted', 'Deferred', 'Rejected'];
 const NON_TRIAGE_STATUSES = new Set<RequestStatus>(['Accepted', 'Deferred', 'Rejected']);
-
-const ALL_DOMAINS: Domain[] = ['FP&A', 'Sales Ops', 'Engineering', 'GTM', 'Customer Success', 'Cross-functional'];
 
 const RESPONSE_TEMPLATES: Partial<Record<RequestStatus, (title: string) => string>> = {
   Deferred: (title) =>
@@ -56,7 +54,7 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
         onKeyDown={(e) => e.key === 'Enter' && setExpanded((v) => !v)}
       >
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-primary text-sm truncate">{request.title}</p>
+          <p className="font-semibold text-primary text-base truncate">{request.title}</p>
           <p className="text-xs text-secondary mt-0.5">{request.requesterName}</p>
         </div>
 
@@ -71,18 +69,18 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
             <div className="flex flex-col gap-4">
               <div>
-                <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Problem</p>
+                <p className="text-xs font-medium text-secondary uppercase tracking-wide mb-1">Problem</p>
                 <p className="text-sm text-primary leading-relaxed">{request.problem}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-1">Submitted by</p>
+                <p className="text-xs font-medium text-secondary uppercase tracking-wide mb-1">Submitted by</p>
                 <p className="text-sm text-primary">{request.requesterName}</p>
               </div>
             </div>
 
             <div className="flex flex-col gap-4">
               <div>
-                <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-2">Decision</p>
+                <p className="text-xs font-medium text-secondary uppercase tracking-wide mb-2">Decision</p>
                 <select
                   value={decision}
                   onChange={(e) => {
@@ -99,7 +97,7 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
               </div>
               <div>
                 <div className="flex items-center gap-1 mb-2">
-                  <p className="text-xs font-semibold text-secondary uppercase tracking-wide">Response to requester</p>
+                  <p className="text-xs font-medium text-secondary uppercase tracking-wide">Response to requester</p>
                   <Info className="w-3.5 h-3.5 text-secondary" />
                 </div>
                 <textarea
@@ -112,7 +110,7 @@ function RequestRow({ request, onUpdate }: RequestRowProps) {
               </div>
               <button
                 onClick={() => onUpdate(request.id, decision, response)}
-                className="self-start inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg text-sm transition-colors"
+                className="self-start inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors"
               >
                 Publish decision
               </button>
@@ -134,9 +132,12 @@ interface QueuedSolutionRowProps {
 function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolutionRowProps) {
   const [expanded, setExpanded] = useState(false);
   const [solutionDescription, setSolutionDescription] = useState(solution.solutionDescription);
-  const [hoursSaved, setHoursSaved] = useState(solution.hoursSaved?.toString() ?? '');
-  const [dollarsSaved, setDollarsSaved] = useState(solution.dollarsSaved?.toString() ?? '');
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>(solution.domain);
+  const [customDomains, setCustomDomains] = useState<Domain[]>(
+    solution.domain.filter((d) => !BUILTIN_DOMAINS.includes(d)),
+  );
+  const [addingDomain, setAddingDomain] = useState(false);
+  const [newDomainInput, setNewDomainInput] = useState('');
   const [selectedBuilderIds, setSelectedBuilderIds] = useState<string[]>(solution.builders.map((b) => b.id));
   const [savingDraft, setSavingDraft] = useState(false);
   const [assigning, setAssigning] = useState(false);
@@ -144,10 +145,40 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
 
   const originating = solution.originatingRequests[0];
 
+  const allDomainOptions = useMemo<Domain[]>(() => {
+    const seen = new Set<string>();
+    const merged: Domain[] = [];
+    for (const d of [...BUILTIN_DOMAINS, ...customDomains]) {
+      if (!seen.has(d)) {
+        seen.add(d);
+        merged.push(d);
+      }
+    }
+    return merged;
+  }, [customDomains]);
+
   const toggleDomain = (d: Domain) =>
     setSelectedDomains((prev) => (prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]));
   const toggleBuilder = (id: string) =>
     setSelectedBuilderIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+
+  const submitNewDomain = () => {
+    const trimmed = newDomainInput.trim();
+    if (!trimmed) return;
+    if (!allDomainOptions.includes(trimmed)) {
+      setCustomDomains((prev) => [...prev, trimmed]);
+    }
+    if (!selectedDomains.includes(trimmed)) {
+      setSelectedDomains((prev) => [...prev, trimmed]);
+    }
+    setNewDomainInput('');
+    setAddingDomain(false);
+  };
+
+  const cancelNewDomain = () => {
+    setNewDomainInput('');
+    setAddingDomain(false);
+  };
 
   const canAssign =
     solutionDescription.trim().length > 0 &&
@@ -161,8 +192,6 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
       const updated = await updateSolutionDraft({
         solutionId: solution.id,
         solutionDescription,
-        hoursSaved: hoursSaved ? parseInt(hoursSaved, 10) || 0 : 0,
-        dollarsSaved: dollarsSaved ? parseInt(dollarsSaved, 10) || 0 : 0,
         domain: selectedDomains,
       });
       onChange(updated);
@@ -181,8 +210,6 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
       await updateSolutionDraft({
         solutionId: solution.id,
         solutionDescription,
-        hoursSaved: hoursSaved ? parseInt(hoursSaved, 10) || 0 : 0,
-        dollarsSaved: dollarsSaved ? parseInt(dollarsSaved, 10) || 0 : 0,
         domain: selectedDomains,
       });
       await assignBuilders(solution.id, selectedBuilderIds);
@@ -204,7 +231,7 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
         onKeyDown={(e) => e.key === 'Enter' && setExpanded((v) => !v)}
       >
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-primary text-sm truncate">{solution.title}</p>
+          <p className="font-semibold text-primary text-base truncate">{solution.title}</p>
           {originating && (
             <p className="text-xs text-secondary mt-0.5">
               From {originating.requesterName}
@@ -220,96 +247,122 @@ function QueuedSolutionRow({ solution, team, onChange, onAssigned }: QueuedSolut
       {expanded && (
         <div className="px-5 pb-5 border-t border-weak bg-secondary">
           <div className="mt-4 mb-5 text-xs text-secondary leading-relaxed">
-            <strong className="text-primary">Inherited problem:</strong> {solution.problem}
+            <span className="font-medium uppercase tracking-wide text-secondary">Inherited problem:</span> {solution.problem}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="flex flex-col gap-4">
-              <div>
-                <p className="block text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
-                  Solution description <span className="text-red-500">*</span>
-                </p>
-                <textarea
-                  value={solutionDescription}
-                  onChange={(e) => setSolutionDescription(e.target.value)}
-                  rows={4}
-                  placeholder="What's being built. Include the approach, key components, integrations."
-                  className="w-full rounded-lg border border-weak bg-primary text-primary px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary resize-none"
-                />
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col">
+              <p className="block text-xs font-medium text-secondary uppercase tracking-wide mb-3">
+                Solution description <span className="text-red-500">*</span>
+              </p>
+              <textarea
+                value={solutionDescription}
+                onChange={(e) => setSolutionDescription(e.target.value)}
+                placeholder="What's being built. Include the approach, key components, integrations."
+                className="flex-1 min-h-[180px] w-full rounded-lg border border-weak bg-primary text-primary px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary resize-none"
+              />
+            </div>
 
-              <div>
-                <p className="block text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
-                  Domain <span className="text-red-500">*</span>
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {ALL_DOMAINS.map((d) => (
+            <div className="flex flex-col gap-5">
+            <div>
+              <p className="block text-xs font-medium text-secondary uppercase tracking-wide mb-3">
+                Domain <span className="text-red-500">*</span>
+              </p>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {allDomainOptions.map((d) => {
+                  const active = selectedDomains.includes(d);
+                  return (
                     <button
                       key={d}
                       type="button"
+                      aria-pressed={active}
                       onClick={() => toggleDomain(d)}
-                      className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                        selectedDomains.includes(d)
-                          ? 'bg-blue-600 text-white border-blue-600'
-                          : 'bg-primary text-primary border-weak hover:border-blue-300'
-                      }`}
+                      className={
+                        'inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ' +
+                        (active
+                          ? 'bg-blue-600 text-white border-blue-600 dark:bg-blue-500 dark:border-blue-500'
+                          : 'bg-transparent text-secondary border-weak hover:text-primary hover:border-strong')
+                      }
                     >
                       {d}
                     </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <p className="block text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
-                  Builders <span className="text-red-500">*</span>
-                </p>
-                <div className="flex flex-col gap-1.5">
-                  {team.map((m) => (
-                    <label key={m.id} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedBuilderIds.includes(m.id)}
-                        onChange={() => toggleBuilder(m.id)}
-                        className="w-3.5 h-3.5 rounded accent-blue-600"
-                      />
-                      <span className="text-sm text-primary">{m.name}</span>
-                      <span className="text-xs text-secondary">· {m.role}</span>
-                    </label>
-                  ))}
-                </div>
+                  );
+                })}
+                {addingDomain ? (
+                  <span className="inline-flex items-center gap-1">
+                    <input
+                      ref={(el) => el?.focus()}
+                      type="text"
+                      value={newDomainInput}
+                      onChange={(e) => setNewDomainInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          submitNewDomain();
+                        } else if (e.key === 'Escape') {
+                          cancelNewDomain();
+                        }
+                      }}
+                      placeholder="New domain"
+                      className="rounded-full border border-weak bg-primary text-primary px-2.5 py-1 text-xs w-32 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary"
+                    />
+                    <button
+                      type="button"
+                      onClick={submitNewDomain}
+                      disabled={!newDomainInput.trim()}
+                      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border bg-blue-600 text-white border-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cancelNewDomain}
+                      aria-label="Cancel"
+                      className="inline-flex items-center justify-center w-6 h-6 rounded-full text-secondary hover:text-primary hover:bg-secondary transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setAddingDomain(true)}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border border-dashed border-weak text-secondary hover:text-primary hover:border-strong transition-colors"
+                  >
+                    <Plus className="w-3 h-3" />
+                    Add domain
+                  </button>
+                )}
               </div>
             </div>
 
-            <div className="flex flex-col gap-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <p className="block text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
-                    Hours saved
-                  </p>
-                  <input
-                    type="number"
-                    value={hoursSaved}
-                    onChange={(e) => setHoursSaved(e.target.value)}
-                    placeholder="0"
-                    min={0}
-                    className="w-full rounded-lg border border-weak bg-primary text-primary px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary"
-                  />
-                </div>
-                <div>
-                  <p className="block text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
-                    Dollars saved
-                  </p>
-                  <input
-                    type="number"
-                    value={dollarsSaved}
-                    onChange={(e) => setDollarsSaved(e.target.value)}
-                    placeholder="0"
-                    min={0}
-                    className="w-full rounded-lg border border-weak bg-primary text-primary px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-secondary"
-                  />
-                </div>
+            <div>
+              <p className="block text-xs font-medium text-secondary uppercase tracking-wide mb-3">
+                Builders <span className="text-red-500">*</span>
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {team.map((m) => {
+                  const active = selectedBuilderIds.includes(m.id);
+                  return (
+                    <button
+                      key={m.id}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => toggleBuilder(m.id)}
+                      className={
+                        'inline-flex items-center gap-1.5 pl-0.5 pr-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors ' +
+                        (active
+                          ? 'bg-blue-600 text-white border-blue-600 dark:bg-blue-500 dark:border-blue-500'
+                          : 'bg-transparent text-secondary border-weak hover:text-primary hover:border-strong')
+                      }
+                    >
+                      <img src={m.avatarUrl} alt="" className="w-5 h-5 rounded-full shrink-0" />
+                      {m.name}
+                    </button>
+                  );
+                })}
               </div>
+            </div>
             </div>
           </div>
 
@@ -395,7 +448,7 @@ export default function AdminTriagePage() {
         <div className="max-w-5xl mx-auto flex items-center gap-2 text-sm text-amber-700 dark:text-amber-300">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>
-            <strong>Demo mode:</strong> Auth is mocked. In production, this view is restricted to SWAT admins.
+            <span className="font-semibold">Demo mode:</span> Auth is mocked. In production, this view is restricted to SWAT admins.
           </span>
         </div>
       </div>
@@ -412,7 +465,7 @@ export default function AdminTriagePage() {
       <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col gap-12">
         <section>
           <div className="flex items-baseline gap-3 mb-5">
-            <h2 className="text-lg font-semibold text-primary">Triage queue</h2>
+            <h2 className="text-xl font-semibold text-primary">Triage queue</h2>
             <span className="text-sm text-secondary">
               {reqs.length} request{reqs.length !== 1 ? 's' : ''} awaiting decision
             </span>
@@ -432,7 +485,7 @@ export default function AdminTriagePage() {
 
         <section>
           <div className="flex items-baseline gap-3 mb-5">
-            <h2 className="text-lg font-semibold text-primary">Queued solutions</h2>
+            <h2 className="text-xl font-semibold text-primary">Queued solutions</h2>
             <span className="text-sm text-secondary">
               {queued.length} solution{queued.length !== 1 ? 's' : ''} awaiting assignment
             </span>

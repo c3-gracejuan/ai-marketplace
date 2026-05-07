@@ -99,7 +99,7 @@ export default function SubmitRequestPage() {
   return (
     <div className="min-h-full bg-primary">
       {/* Header */}
-      <div className="border-b border-weak px-6 py-6">
+      <div className="border-b border-weak px-6 py-8">
         <div className="max-w-3xl mx-auto">
           <button
             onClick={() => navigate(-1)}
@@ -108,8 +108,8 @@ export default function SubmitRequestPage() {
             <ChevronLeft className="w-4 h-4" />
             Back
           </button>
-          <h1 className="text-2xl font-bold text-primary">Submit a Request</h1>
-          <p className="text-secondary mt-1">Three fields. We&apos;ll follow up for the rest.</p>
+          <h1 className="text-3xl font-bold text-primary">Submit a Request</h1>
+          <p className="text-secondary mt-2">Three fields. We&apos;ll follow up for the rest.</p>
         </div>
       </div>
 
